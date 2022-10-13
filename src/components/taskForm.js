@@ -1,11 +1,11 @@
-import { createElement, addClass } from "./helper.js";
-import "./stylesheets/style.css";
+import { createElement, addClass } from "../helper.js";
+import "../stylesheets/style.css";
 
 function createTaskFormButton(text) {
   let button = createElement("button");
 
   button.textContent = text;
-  addClass(button, text + "-button");
+  button.setAttribute('type', 'button');
 
   return button;
 }
@@ -40,7 +40,7 @@ function createTaskDescriptionField() {
   return descriptionContainer;
 }
 
-function createTaskForm() {
+function taskForm() {
   let formContainer = createElement("div"),
     taskItemForm = createElement("form"),
     headerField = createTaskHeaderField(),
@@ -49,11 +49,14 @@ function createTaskForm() {
     cancelFormButton = createTaskFormButton("Cancel"),
     addTaskFormButton = createTaskFormButton("Add task");
 
+  addClass(cancelFormButton, "form-cancel-button");
+  addClass(addTaskFormButton, "form-add-task-button");
+
   buttonContainer.append(cancelFormButton, addTaskFormButton);
-  taskItemForm.append(headerField, descriptionField);
+  taskItemForm.append(headerField, descriptionField, buttonContainer);
   formContainer.append(taskItemForm);
 
   return formContainer;
 }
 
-export { createTaskForm };
+export { taskForm };
