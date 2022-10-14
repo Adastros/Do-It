@@ -1,5 +1,5 @@
 import { taskController } from "./components/taskController.js";
-import { createAddTaskButton } from "./components/addTaskButton.js";
+import { addTaskButton } from "./components/addTaskButton.js";
 import { addClass, createElement } from "./helper.js";
 import "./stylesheets/style.css";
 
@@ -9,14 +9,15 @@ function initControllers() {
 
 function renderPage() {
   let taskListContainer = createElement("div"),
-    addTaskButton = createAddTaskButton();
+    addTaskButtonOnLoad = addTaskButton();
 
-  taskListContainer.append(addTaskButton);
+  addClass(taskListContainer, "task-list");
+
+  taskListContainer.append(addTaskButtonOnLoad);
   document.body.append(taskListContainer);
 }
 
 (function initApp() {
-  console.log("hello");
   renderPage();
   initControllers();
 })();

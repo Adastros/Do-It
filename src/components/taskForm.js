@@ -5,7 +5,7 @@ function createTaskFormButton(text) {
   let button = createElement("button");
 
   button.textContent = text;
-  button.setAttribute('type', 'button');
+  button.setAttribute("type", "button");
 
   return button;
 }
@@ -51,6 +51,10 @@ function taskForm() {
 
   addClass(cancelFormButton, "form-cancel-button");
   addClass(addTaskFormButton, "form-add-task-button");
+  addClass(taskItemForm, "task-form");
+  addClass(formContainer, "form-container");
+
+  taskItemForm.setAttribute("novalidate", "");
 
   buttonContainer.append(cancelFormButton, addTaskFormButton);
   taskItemForm.append(headerField, descriptionField, buttonContainer);

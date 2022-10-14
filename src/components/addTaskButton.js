@@ -1,7 +1,7 @@
 import { addClass, createElement } from "../helper.js";
 import "../stylesheets/style.css";
 
-function createAddTaskButton() {
+function addTaskButton() {
   let taskButton = createElement("button");
 
   taskButton.textContent = "Add task";
@@ -10,4 +10,4 @@ function createAddTaskButton() {
   return taskButton;
 }
 
-export { createAddTaskButton };
+export { addTaskButton };
