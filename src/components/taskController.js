@@ -13,14 +13,35 @@ function setTaskEditable() {
 
     // Activate listeners for form buttons
     cancelTaskEdit();
+    addTaskToTaskList();
   });
 }
 
 function cancelTaskEdit() {
   let cancelButton = document.querySelector(".form-cancel-button");
 
-  cancelButton.addEventListener("click", (e) => {
+  cancelButton.addEventListener("click", () => {
     let taskList = document.querySelector(".task-list");
+
+    taskList.removeChild(taskList.firstChild);
+    taskList.append(addTaskButton());
+
+    setTaskEditable();
+  });
+}
+
+function addTaskToTaskList() {
+  let formAddTaskButton = document.querySelector(".form-add-task-button");
+
+  formAddTaskButton.addEventListener("click", () => {
+    let taskList = document.querySelector(".task-list"),
+      taskHeaderValue = document.querySelector("#form-task-header").value,
+      taskDescriptionValue = document.querySelector(
+        "#form-task-description"
+      ).value;
+      
+    console.log(taskHeaderValue);
+    console.log(taskDescriptionValue);
 
     taskList.removeChild(taskList.firstChild);
     taskList.append(addTaskButton());
