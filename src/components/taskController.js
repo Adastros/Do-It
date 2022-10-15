@@ -1,15 +1,16 @@
 import { taskForm } from "./taskForm.js";
 import { addTaskButton } from "./addTaskButton.js";
+import { taskItem } from "./taskItem.js";
 import "../stylesheets/style.css";
 
 function setTaskEditable() {
   let addTaskButton = document.querySelector(".add-task-button");
 
   addTaskButton.addEventListener("click", (e) => {
-    let parent = e.currentTarget.parentNode;
+    let taskList = document.querySelector(".task-list");
 
-    parent.append(taskForm());
-    parent.removeChild(addTaskButton);
+    taskList.append(taskForm());
+    taskList.removeChild(addTaskButton);
 
     // Activate listeners for form buttons
     cancelTaskEdit();
@@ -21,12 +22,15 @@ function cancelTaskEdit() {
   let cancelButton = document.querySelector(".form-cancel-button");
 
   cancelButton.addEventListener("click", () => {
-    let taskList = document.querySelector(".task-list");
+    let taskList = document.querySelector(".task-list"),
+      taskFormContainer = document.querySelector(".task-form-container");
 
-    taskList.removeChild(taskList.firstChild);
-    taskList.append(addTaskButton());
+    taskList.removeChild(taskFormContainer);
 
-    setTaskEditable();
+    if (!taskList.contains(document.querySelector(".add-task-button"))) {
+      taskList.append(addTaskButton());
+      setTaskEditable();
+    }
   });
 }
 
@@ -35,16 +39,17 @@ function addTaskToTaskList() {
 
   formAddTaskButton.addEventListener("click", () => {
     let taskList = document.querySelector(".task-list"),
+      taskFormContainer = document.querySelector(".task-form-container"),
       taskHeaderValue = document.querySelector("#form-task-header").value,
       taskDescriptionValue = document.querySelector(
         "#form-task-description"
       ).value;
-      
-    console.log(taskHeaderValue);
-    console.log(taskDescriptionValue);
 
-    taskList.removeChild(taskList.firstChild);
-    taskList.append(addTaskButton());
+    taskList.removeChild(taskFormContainer);
+    taskList.append(
+      taskItem(taskHeaderValue, taskDescriptionValue),
+      addTaskButton()
+    );
 
     setTaskEditable();
   });

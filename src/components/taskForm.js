@@ -52,7 +52,7 @@ function taskForm() {
   addClass(cancelFormButton, "form-cancel-button");
   addClass(addTaskFormButton, "form-add-task-button");
   addClass(taskItemForm, "task-form");
-  addClass(formContainer, "form-container");
+  addClass(formContainer, "task-form-container");
 
   taskItemForm.setAttribute("novalidate", "");
 
