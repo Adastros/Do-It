@@ -8,7 +8,7 @@ function initControllers() {
 }
 
 function renderPage() {
-  let taskListContainer = createElement("div"),
+  let taskListContainer = createElement("ul"),
     addTaskButtonOnLoad = addTaskButton();
 
   addClass(taskListContainer, "task-list");

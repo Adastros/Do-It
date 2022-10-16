@@ -43,11 +43,12 @@ function addTaskToTaskList() {
       taskHeaderValue = document.querySelector("#form-task-header").value,
       taskDescriptionValue = document.querySelector(
         "#form-task-description"
-      ).value;
+      ).value,
+      taskItemNumber = document.getElementsByClassName("task-item").length + 1;
 
     taskList.removeChild(taskFormContainer);
     taskList.append(
-      taskItem(taskHeaderValue, taskDescriptionValue),
+      taskItem(taskHeaderValue, taskDescriptionValue, taskItemNumber),
       addTaskButton()
     );
 
