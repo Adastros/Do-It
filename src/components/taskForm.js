@@ -19,6 +19,7 @@ function createTaskHeaderField() {
 
   headerLabel.setAttribute("for", "form-task-header");
   headerInputField.setAttribute("id", "form-task-header");
+  headerInputField.setAttribute("required", "");
 
   headerContainer.append(headerLabel, headerInputField);
 
@@ -54,6 +55,7 @@ function taskForm() {
   addClass(taskItemForm, "task-form");
   addClass(formContainer, "task-form-container");
 
+  addTaskFormButton.setAttribute("disabled", "");
   taskItemForm.setAttribute("novalidate", "");
 
   buttonContainer.append(cancelFormButton, addTaskFormButton);

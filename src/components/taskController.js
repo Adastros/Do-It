@@ -15,6 +15,7 @@ function setTaskEditable() {
     // Activate listeners for form buttons
     cancelTaskEdit();
     addTaskToTaskList();
+    isFormTaskHeaderEmpty();
   });
 }
 
@@ -53,6 +54,20 @@ function addTaskToTaskList() {
     );
 
     setTaskEditable();
+  });
+}
+
+// Aggressively checks if task header field is empty and disables "Add task button" if empty
+function isFormTaskHeaderEmpty() {
+  let formTaskHeader = document.querySelector("#form-task-header"),
+    formAddTaskButton = document.querySelector(".form-add-task-button");
+
+  formTaskHeader.addEventListener("input", (e) => {
+    if (e.currentTarget.validity.valid) {
+      formAddTaskButton.removeAttribute("disabled", "");
+    } else {
+      formAddTaskButton.setAttribute("disabled", "");
+    }
   });
 }
 
