@@ -2,6 +2,7 @@ import { taskForm } from "./taskForm.js";
 import { addTaskButton } from "./addTaskButton.js";
 import { taskItem } from "./taskItem.js";
 import "../stylesheets/style.css";
+import { addClass, removeClass } from "../helper.js";
 
 function setTaskEditable() {
   let addTaskButton = document.querySelector(".add-task-button");
@@ -71,9 +72,23 @@ function isFormTaskHeaderEmpty() {
   });
 }
 
+function toggleTaskStatus(checkbox, taskItemNumber) {
+  checkbox.addEventListener("click", () => {
+    let taskItem = document.querySelector(
+      `[data-task-item = '${taskItemNumber}']`
+    );
+
+    if (taskItem.classList.contains("completed")) {
+      removeClass(taskItem, "completed");
+    } else {
+      addClass(taskItem, "completed");
+    }
+  });
+}
+
 function taskController() {
   // initialize event listener on app load
   setTaskEditable();
 }
 
-export { taskController };
+export { taskController, toggleTaskStatus };
