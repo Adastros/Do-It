@@ -75,13 +75,16 @@ function isFormTaskHeaderEmpty() {
 function toggleTaskStatus(checkbox, taskItemNumber) {
   checkbox.addEventListener("click", () => {
     let taskItem = document.querySelector(
-      `[data-task-item = '${taskItemNumber}']`
-    );
+        `[data-task-item = '${taskItemNumber}']`
+      ),
+      checkmark = checkbox.firstChild;
 
     if (taskItem.classList.contains("completed")) {
       removeClass(taskItem, "completed");
+      addClass(checkmark, "fade-in-out");
     } else {
       addClass(taskItem, "completed");
+      removeClass(checkmark, "fade-in-out");
     }
   });
 }

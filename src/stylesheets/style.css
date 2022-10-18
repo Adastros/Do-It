@@ -6,3 +6,20 @@ li {
   text-decoration: line-through;
   color: grey;
 }
+
+.checkbox {
+    height: 16px;
+    width: 16px;
+    border: 2px solid blue;
+    border-radius: 25%;
+    text-align: center;
+}
+
+.fade-in-out {
+    opacity: 0;
+    transition: opacity 0.5s;
+}
+
+.fade-in-out:hover {
+    opacity: 1;
+}
