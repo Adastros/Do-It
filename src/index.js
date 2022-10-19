@@ -8,13 +8,13 @@ function initControllers() {
 }
 
 function renderPage() {
-  let taskListContainer = createElement("ul"),
+  let taskList = createElement("div"),
     addTaskButtonOnLoad = addTaskButton();
 
-  addClass(taskListContainer, "task-list");
+  addClass(taskList, "task-list");
 
-  taskListContainer.append(addTaskButtonOnLoad);
-  document.body.append(taskListContainer);
+  taskList.append(addTaskButtonOnLoad);
+  document.body.append(taskList);
 }
 
 (function initApp() {

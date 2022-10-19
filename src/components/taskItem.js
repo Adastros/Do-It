@@ -2,7 +2,7 @@ import { checkbox } from "./checkbox.js";
 import { addClass, createElement } from "../helper.js";
 
 function taskItem(taskHeaderValue, taskDescriptionValue, taskItemNumber) {
-  let taskItem = createElement("li"),
+  let taskItem = createElement("div"),
     taskInformationContainer = createElement("div"),
     taskHeaderElement = createElement("h3"),
     taskDescriptionElement = createElement("p");
@@ -11,6 +11,8 @@ function taskItem(taskHeaderValue, taskDescriptionValue, taskItemNumber) {
   taskDescriptionElement.textContent = taskDescriptionValue;
 
   addClass(taskItem, "task-item");
+  addClass(taskHeaderElement, "task-header");
+  addClass(taskDescriptionElement, "task-description");
   taskItem.dataset.taskItem = taskItemNumber;
 
   taskInformationContainer.append(taskHeaderElement, taskDescriptionElement);

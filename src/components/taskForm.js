@@ -20,6 +20,7 @@ function createTaskHeaderField() {
   headerLabel.setAttribute("for", "form-task-header");
   headerInputField.setAttribute("id", "form-task-header");
   headerInputField.setAttribute("required", "");
+  addClass(headerInputField, "form-task-header");
 
   headerContainer.append(headerLabel, headerInputField);
 
