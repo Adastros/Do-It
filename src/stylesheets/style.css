@@ -8,6 +8,13 @@ body {
   min-height: 100vh;
 }
 
+header {
+  display: flex;
+  justify-content: space-between;
+  padding: 1rem;
+  border-bottom: 1px solid black;
+}
+
 textarea {
   resize: none;
   overflow: auto;
@@ -16,6 +23,26 @@ textarea {
 img {
   width: 100%;
   display: block;
+}
+
+.app-logo-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.app-logo-container > img {
+  height: 2.25rem;
+  width: min-content;
+}
+
+.app-logo-container > h2 {
+  font-size: 2.25rem;
+}
+
+.menu-button, .view-button {
+  height: 35px;
+  width: 35px;
 }
 
 .add-task-button {
