@@ -5,12 +5,14 @@ function listViewButton() {
   let listViewButton = createElement("button"),
     icon = createElement("img");
 
+  listViewButton.textContent = "List View";
+
   icon.setAttribute("src", listIcon);
   icon.setAttribute("alt", "List icon");
 
   addClass(listViewButton, "view-button");
 
-  listViewButton.append(icon);
+  listViewButton.prepend(icon);
 
   return listViewButton;
 }

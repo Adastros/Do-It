@@ -9,6 +9,7 @@ body {
 }
 
 header {
+  /* position: relative; */
   display: flex;
   justify-content: space-between;
   padding: 1rem;
@@ -40,9 +41,41 @@ img {
   font-size: 2.25rem;
 }
 
-.menu-button, .view-button {
+.menu-button {
   height: 35px;
   width: 35px;
+  /* position: absolute;
+  top: 50%;
+  left: 1rem;
+  transform: translate(0, -50%); */
+}
+
+.theme-button {
+  height: 35px;
+  width: 35px;
+}
+
+.view-button {
+  height: 2rem;
+  display: flex;
+  align-items: center;
+  padding: 0.25rem;
+  gap: 0.1rem;
+}
+
+.view-button > img {
+  height: 100%;
+  width: min-content;
+}
+
+.view-options {
+  /* position: absolute;
+  top: 50%;
+  right: 1rem;
+  transform: translate(0, -50%); */
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
 }
 
 .add-task-button {

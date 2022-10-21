@@ -5,7 +5,7 @@ import { addClass, createElement } from "../helper.js";
 function viewOptions() {
   let viewOptions = createElement("div");
 
-  addClass(viewOptions, "viewOptions");
+  addClass(viewOptions, "view-options");
 
   viewOptions.append(boardViewButton(), listViewButton());
 
