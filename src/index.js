@@ -2,6 +2,7 @@ import { appHeader } from "./components/appHeader.js";
 import { taskController } from "./components/taskController.js";
 import { addTaskButton } from "./components/addTaskButton.js";
 import { addClass, createElement } from "./helper.js";
+import { menubar } from "./components/menubar.js";
 import "./stylesheets/style.css";
 
 function initControllers() {
@@ -17,7 +18,7 @@ function renderPage() {
   addClass(taskList, "task-list");
 
   taskList.append(addTaskButtonOnLoad);
-  mainTag.append(taskList);
+  mainTag.append(menubar(), taskList);
   bodyTag.append(appHeader(), mainTag);
 }
 
