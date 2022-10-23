@@ -23,6 +23,8 @@ header {
 main {
   flex: 1;
   display: flex;
+  transform: translateX(0);
+  transition: transform 0.25s;
 }
 
 textarea {
@@ -88,10 +90,10 @@ img {
 }
 
 .menu-bar {
-  height: 100%;
-  width: 150px;
+  width: 200px;
   display: flex;
   flex-direction: column;
+  border-right: 1px solid black;
 }
 
 .menu-tabs {
@@ -182,4 +184,13 @@ img {
 
 .fade-in-out:hover {
   opacity: 1;
+}
+
+.closed {
+  transform: translateX(-200px);
+}
+
+.hide {
+  visibility: hidden;
+  overflow: hidden;
 }

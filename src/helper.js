@@ -10,4 +10,8 @@ function removeClass(element, cssClass) {
   element.classList.remove(cssClass);
 }
 
-export { createElement, addClass, removeClass};
+function toggleClass(element, cssClass) {
+  element.classList.toggle(cssClass);
+}
+
+export { createElement, addClass, removeClass, toggleClass };

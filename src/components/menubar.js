@@ -7,6 +7,7 @@ function menubar() {
     linebreak = createElement("div");
 
   addClass(menubar, "menu-bar");
+  //addClass(menubar, "open");
   addClass(linebreak, "linebreak");
 
   menubar.append(menuTabs(), linebreak, projectSection());

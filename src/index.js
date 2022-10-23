@@ -1,5 +1,6 @@
 import { appHeader } from "./components/appHeader.js";
 import { taskController } from "./components/taskController.js";
+import { menuController } from "./components/menuController";
 import { addTaskButton } from "./components/addTaskButton.js";
 import { addClass, createElement } from "./helper.js";
 import { menubar } from "./components/menubar.js";
@@ -7,6 +8,7 @@ import "./stylesheets/style.css";
 
 function initControllers() {
   taskController();
+  menuController();
 }
 
 function renderPage() {
