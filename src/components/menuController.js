@@ -1,3 +1,4 @@
+import { newProjectOverlayForm } from "./newProjectOverlayForm.js";
 import { toggleClass } from "../helper.js";
 
 // Event Listeners expect a function reference instead of the function itself.
@@ -41,8 +42,18 @@ function toggleMenubarVisibility() {
   });
 }
 
+function displayNewProjectOverlayForm() {
+  let newProjectButton = document.querySelector(".new-project-button");
+
+  newProjectButton.addEventListener("click", () => {
+    let bodyTag = document.body;
+    bodyTag.append(newProjectOverlayForm());
+  });
+}
+
 function menuController() {
   toggleMenubarVisibility();
+  displayNewProjectOverlayForm();
 }
 
 export { menuController };
