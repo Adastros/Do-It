@@ -1,7 +1,8 @@
 import { taskForm } from "./taskForm.js";
 import { addTaskButton } from "./addTaskButton.js";
 import { taskItem } from "./taskItem.js";
-import { addClass, removeClass } from "../helper.js";
+import { missingValueAggressiveValidation } from "./formValidationControls.js";
+import { addClass, removeClass, toggleClass } from "../helper.js";
 
 function setTaskEditable() {
   let addTaskButton = document.querySelector(".add-task-button");
@@ -12,14 +13,17 @@ function setTaskEditable() {
     taskList.append(taskForm());
     taskList.removeChild(addTaskButton);
 
+    let formTaskHeader = document.querySelector("#form-task-header"),
+      formAddTaskButton = document.querySelector(".form-add-task-button");
+
     // Activate listeners for form buttons
-    cancelTaskEdit();
-    addTaskToTaskList();
-    isFormTaskHeaderEmpty();
+    cancelTaskEditListener();
+    addTaskToTaskListListener();
+    missingValueAggressiveValidation(formTaskHeader, formAddTaskButton);
   });
 }
 
-function cancelTaskEdit() {
+function cancelTaskEditListener() {
   let cancelButton = document.querySelector(".form-cancel-button");
 
   cancelButton.addEventListener("click", () => {
@@ -35,7 +39,7 @@ function cancelTaskEdit() {
   });
 }
 
-function addTaskToTaskList() {
+function addTaskToTaskListListener() {
   let formAddTaskButton = document.querySelector(".form-add-task-button");
 
   formAddTaskButton.addEventListener("click", () => {
@@ -78,13 +82,8 @@ function toggleTaskStatus(checkbox, taskItemNumber) {
       ),
       checkmark = checkbox.firstChild;
 
-    if (taskItem.classList.contains("completed")) {
-      removeClass(taskItem, "completed");
-      addClass(checkmark, "fade-in-out");
-    } else {
-      addClass(taskItem, "completed");
-      removeClass(checkmark, "fade-in-out");
-    }
+    toggleClass(taskItem, "completed");
+    toggleClass(checkmark, "fade-in-out");
   });
 }
 
