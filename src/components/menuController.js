@@ -1,5 +1,6 @@
 import { newProjectOverlayForm } from "./newProjectOverlayForm.js";
 import { tab } from "./tab.js";
+import { missingValueAggressiveValidation } from "./formValidationControls.js";
 import { toggleClass } from "../helper.js";
 
 // Event Listeners expect a function reference instead of the function itself.
@@ -47,12 +48,16 @@ function displayNewProjectOverlayForm() {
   let newProjectButton = document.querySelector(".new-project-button");
 
   newProjectButton.addEventListener("click", () => {
-    let bodyTag = document.body;
+    document.body.append(newProjectOverlayForm());
 
-    bodyTag.append(newProjectOverlayForm());
-    
+    let newProjectNameNode = document.querySelector("#new-project-name"),
+      newProjectAddButton = document.querySelector(
+        ".new-project-form-add-button"
+      );
+
     cancelNewProjectButtonListener();
     addNewProjectButtonListener();
+    missingValueAggressiveValidation(newProjectNameNode, newProjectAddButton);
   });
 }
 
@@ -80,7 +85,7 @@ function addNewProjectButtonListener() {
       projectDescription = document.querySelector(
         "#new-project-description"
       ).value,
-      projectTab = tab(projectName, projectDescription);
+      projectTab = tab(projectName, "project-tab");
 
     projectList.append(projectTab);
 

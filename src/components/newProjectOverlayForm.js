@@ -26,7 +26,6 @@ function projectNameFormField() {
   projectNameInput.setAttribute("required", "");
 
   addClass(projectNameContainer, "new-project-name-form-field");
-  addClass(projectNameContainer, "new-project-name-form-field");
 
   projectNameContainer.append(projectNameLabel, projectNameInput);
 
@@ -74,6 +73,7 @@ function projectFormButtons() {
     );
 
   addClass(buttonsContainer, "new-project-form-buttons");
+  addNewProjectButton.setAttribute("disabled", "");
   buttonsContainer.append(cancelNewProjectButton, addNewProjectButton);
 
   return buttonsContainer;
