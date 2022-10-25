@@ -1,3 +1,4 @@
+import { textButton } from "./textButton.js";
 import { addClass, createElement } from "../helper.js";
 
 function formHeader() {
@@ -54,20 +55,13 @@ function projectDescriptionFormField() {
   return projectDescriptionContainer;
 }
 
-function createButton(text, cssClass) {
-  let button = createElement("button");
-
-  button.textContent = text;
-  button.setAttribute("type", "button");
-  addClass(button, cssClass);
-
-  return button;
-}
-
 function projectFormButtons() {
   let buttonsContainer = createElement("div"),
-    cancelNewProjectButton = createButton("Cancel", "new-project-form-cancel-button"),
-    addNewProjectButton = createButton(
+    cancelNewProjectButton = textButton(
+      "Cancel",
+      "new-project-form-cancel-button"
+    ),
+    addNewProjectButton = textButton(
       "Add New Project",
       "new-project-form-add-button"
     );

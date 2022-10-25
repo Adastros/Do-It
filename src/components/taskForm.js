@@ -1,14 +1,5 @@
+import { textButton } from "./textButton.js";
 import { createElement, addClass } from "../helper.js";
-import "../stylesheets/style.css";
-
-function createTaskFormButton(text) {
-  let button = createElement("button");
-
-  button.textContent = text;
-  button.setAttribute("type", "button");
-
-  return button;
-}
 
 function createTaskHeaderField() {
   let headerContainer = createElement("div"),
@@ -48,11 +39,9 @@ function taskForm() {
     headerField = createTaskHeaderField(),
     descriptionField = createTaskDescriptionField(),
     buttonContainer = createElement("div"),
-    cancelFormButton = createTaskFormButton("Cancel"),
-    addTaskFormButton = createTaskFormButton("Add task");
+    cancelFormButton = textButton("Cancel", "form-cancel-button"),
+    addTaskFormButton = textButton("Add task", "form-add-task-button");
 
-  addClass(cancelFormButton, "form-cancel-button");
-  addClass(addTaskFormButton, "form-add-task-button");
   addClass(taskItemForm, "task-form");
   addClass(formContainer, "task-form-container");
 
