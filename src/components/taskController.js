@@ -1,7 +1,6 @@
 import { taskForm } from "./taskForm.js";
 import { addTaskButton } from "./addTaskButton.js";
 import { taskItem } from "./taskItem.js";
-import "../stylesheets/style.css";
 import { addClass, removeClass } from "../helper.js";
 
 function setTaskEditable() {

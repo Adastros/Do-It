@@ -4,9 +4,9 @@ function formHeader() {
   let headerContainer = createElement("div"),
     header = createElement("h2");
 
-  header.textContent = "Add Project";
+  header.textContent = "New Project";
 
-  addClass(headerContainer, "add-project-header-container");
+  addClass(headerContainer, "new-project-header-container");
   headerContainer.append(header);
 
   return headerContainer;
@@ -18,16 +18,15 @@ function projectNameFormField() {
     projectNameInput = createElement("input");
 
   projectNameLabel.textContent = "Project Name:";
-  projectNameLabel.setAttribute("for", "project-name");
-  projectNameInput.setAttribute("id", "project-name");
+  projectNameLabel.setAttribute("for", "new-project-name");
+  projectNameInput.setAttribute("id", "new-project-name");
   projectNameInput.setAttribute("type", "text");
-  projectNameInput.setAttribute("name", "projectName");
-  projectNameInput.setAttribute("placeholder", "Project Name");
+  projectNameInput.setAttribute("name", "newProjectName");
   projectNameInput.setAttribute("maxlength", "150");
   projectNameInput.setAttribute("required", "");
 
-  addClass(projectNameContainer, "project-name-form-field");
-  addClass(projectNameContainer, "project-name-form-field");
+  addClass(projectNameContainer, "new-project-name-form-field");
+  addClass(projectNameContainer, "new-project-name-form-field");
 
   projectNameContainer.append(projectNameLabel, projectNameInput);
 
@@ -40,13 +39,13 @@ function projectDescriptionFormField() {
     projectDescriptionTextarea = createElement("textarea");
 
   projectDescriptionLabel.textContent = "Project Description:";
-  projectDescriptionLabel.setAttribute("for", "project-description");
-  projectDescriptionTextarea.setAttribute("id", "project-description");
-  projectDescriptionTextarea.setAttribute("name", "projectDescription");
+  projectDescriptionLabel.setAttribute("for", "new-project-description");
+  projectDescriptionTextarea.setAttribute("id", "new-project-description");
+  projectDescriptionTextarea.setAttribute("name", "newProjectDescription");
   projectDescriptionTextarea.setAttribute("rows", "3");
   projectDescriptionTextarea.setAttribute("maxlength", "300");
 
-  addClass(projectDescriptionContainer, "project-description-form-field");
+  addClass(projectDescriptionContainer, "new-project-description-form-field");
 
   projectDescriptionContainer.append(
     projectDescriptionLabel,
@@ -56,21 +55,25 @@ function projectDescriptionFormField() {
   return projectDescriptionContainer;
 }
 
-function createButton(text) {
+function createButton(text, cssClass) {
   let button = createElement("button");
 
   button.textContent = text;
   button.setAttribute("type", "button");
+  addClass(button, cssClass);
 
   return button;
 }
 
 function projectFormButtons() {
   let buttonsContainer = createElement("div"),
-    cancelFormButton = createButton("Cancel"),
-    addTaskFormButton = createButton("Add task");
+    cancelFormButton = createButton("Cancel", "new-project-form-cancel-button"),
+    addTaskFormButton = createButton(
+      "Add New Project",
+      "new-project-form-add-button"
+    );
 
-  addClass(buttonsContainer, "project-form-buttons");
+  addClass(buttonsContainer, "new-project-form-buttons");
   buttonsContainer.append(cancelFormButton, addTaskFormButton);
 
   return buttonsContainer;
