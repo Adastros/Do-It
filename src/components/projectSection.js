@@ -1,5 +1,5 @@
 import { newProjectButton } from "./newProjectButton.js";
-import { projectTabs } from "./projectTabs.js";
+import { projectList } from "./projectList.js";
 import { addClass, createElement } from "../helper.js";
 
 function projectSection() {
@@ -13,7 +13,7 @@ function projectSection() {
   addClass(projectSection, "project-section");
 
   projectHeader.append(heading, newProjectButton());
-  projectSection.append(projectHeader, projectTabs());
+  projectSection.append(projectHeader, projectList());
 
   return projectSection;
 }

@@ -1,4 +1,5 @@
 import { newProjectOverlayForm } from "./newProjectOverlayForm.js";
+import { tab } from "./tab.js";
 import { toggleClass } from "../helper.js";
 
 // Event Listeners expect a function reference instead of the function itself.
@@ -47,7 +48,43 @@ function displayNewProjectOverlayForm() {
 
   newProjectButton.addEventListener("click", () => {
     let bodyTag = document.body;
+
     bodyTag.append(newProjectOverlayForm());
+    
+    cancelNewProjectButtonListener();
+    addNewProjectButtonListener();
+  });
+}
+
+function cancelNewProjectButtonListener() {
+  let cancelButton = document.querySelector(".new-project-form-cancel-button");
+
+  cancelButton.addEventListener("click", () => {
+    let bodyTag = document.body,
+      newProjectOverlay = document.querySelector(".new-project-overlay");
+
+    bodyTag.removeChild(newProjectOverlay);
+  });
+}
+
+function addNewProjectButtonListener() {
+  let addNewProjectButton = document.querySelector(
+    ".new-project-form-add-button"
+  );
+
+  addNewProjectButton.addEventListener("click", () => {
+    let bodyTag = document.body,
+      newProjectOverlay = document.querySelector(".new-project-overlay"),
+      projectList = document.querySelector(".project-list"),
+      projectName = document.querySelector("#new-project-name").value,
+      projectDescription = document.querySelector(
+        "#new-project-description"
+      ).value,
+      projectTab = tab(projectName, projectDescription);
+
+    projectList.append(projectTab);
+
+    bodyTag.removeChild(newProjectOverlay);
   });
 }
 

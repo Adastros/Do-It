@@ -67,14 +67,14 @@ function createButton(text, cssClass) {
 
 function projectFormButtons() {
   let buttonsContainer = createElement("div"),
-    cancelFormButton = createButton("Cancel", "new-project-form-cancel-button"),
-    addTaskFormButton = createButton(
+    cancelNewProjectButton = createButton("Cancel", "new-project-form-cancel-button"),
+    addNewProjectButton = createButton(
       "Add New Project",
       "new-project-form-add-button"
     );
 
   addClass(buttonsContainer, "new-project-form-buttons");
-  buttonsContainer.append(cancelFormButton, addTaskFormButton);
+  buttonsContainer.append(cancelNewProjectButton, addNewProjectButton);
 
   return buttonsContainer;
 }
@@ -86,6 +86,7 @@ function newProjectForm() {
   newProjectForm.setAttribute("action", "");
   newProjectForm.setAttribute("method", "post");
   newProjectForm.setAttribute("name", "newProjectForm");
+  newProjectForm.setAttribute("novalidate", "");
 
   addClass(newProjectForm, "new-project-form");
 
