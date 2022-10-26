@@ -1,6 +1,6 @@
-import { toggleTaskStatus } from "./taskController.js";
-import { addClass, createElement } from "../helper.js";
-import checkmarkIcon from "../icons/check.svg";
+import { toggleTaskStatus } from "../controls/taskController.js";
+import { addClass, createElement } from "../helper/helper.js";
+import checkmarkIcon from "../../icons/check.svg";
 
 function checkbox(taskItemNumber) {
   let checkboxContainer = createElement("div"),

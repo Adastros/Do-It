@@ -1,7 +1,7 @@
-import { newProjectOverlayForm } from "./newProjectOverlayForm.js";
-import { tab } from "./tab.js";
+import { newProjectOverlayForm } from "../project/newProjectOverlayForm.js";
+import { tab } from "../menubar/tab.js";
 import { missingValueAggressiveValidation } from "./formValidationControls.js";
-import { toggleClass } from "../helper.js";
+import { toggleClass } from "../helper/helper.js";
 
 // Event Listeners expect a function reference instead of the function itself.
 // To avoid calling function immediately, either bind 'this', create an

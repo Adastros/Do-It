@@ -1,4 +1,4 @@
-import { addClass, createElement } from "../helper.js";
+import { addClass, createElement } from "../helper/helper.js";
 
 function textButton(text, ...cssClass) {
   let button = createElement("button");

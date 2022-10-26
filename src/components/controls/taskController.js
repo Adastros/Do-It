@@ -1,8 +1,8 @@
-import { taskForm } from "./taskForm.js";
-import { addTaskButton } from "./addTaskButton.js";
-import { taskItem } from "./taskItem.js";
+import { taskForm } from "../task/taskForm.js";
+import { addTaskButton } from "../task/addTaskButton.js";
+import { taskItem } from "../task/taskItem.js";
 import { missingValueAggressiveValidation } from "./formValidationControls.js";
-import { addClass, removeClass, toggleClass } from "../helper.js";
+import { addClass, removeClass, toggleClass } from "../helper/helper.js";
 
 function setTaskEditable() {
   let addTaskButton = document.querySelector(".add-task-button");

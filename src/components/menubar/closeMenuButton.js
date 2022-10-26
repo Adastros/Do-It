@@ -1,5 +1,5 @@
-import { addClass, createElement } from "../helper.js";
-import closeMenuIcon from "../icons/close.svg";
+import { addClass, createElement } from "../helper/helper.js";
+import closeMenuIcon from "../../icons/close.svg";
 
 function closeMenuButton() {
   let closeMenuButton = createElement("button"),

@@ -1,5 +1,5 @@
-import { textButton } from "./textButton.js";
-import { addClass, createElement } from "../helper.js";
+import { textButton } from "../generalButtons/textButton.js";
+import { addClass, createElement } from "../helper/helper.js";
 
 function formHeader() {
   let headerContainer = createElement("div"),

@@ -1,5 +1,5 @@
-import { textButton } from "./textButton.js";
-import { createElement, addClass } from "../helper.js";
+import { textButton } from "../generalButtons/textButton.js";
+import { createElement, addClass } from "../helper/helper.js";
 
 function createTaskHeaderField() {
   let headerContainer = createElement("div"),

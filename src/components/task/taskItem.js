@@ -1,5 +1,5 @@
 import { checkbox } from "./checkbox.js";
-import { addClass, createElement } from "../helper.js";
+import { addClass, createElement } from "../helper/helper.js";
 
 function taskItem(taskHeaderValue, taskDescriptionValue, taskItemNumber) {
   let taskItem = createElement("div"),

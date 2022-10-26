@@ -1,9 +1,8 @@
 import { appLogo } from "./appLogo.js";
-import { iconButton } from "./iconButton.js";
-import { viewOptions } from "./viewOptions.js";
-import { addClass, createElement } from "../helper.js";
-import menuIcon from "../icons/menu.svg";
-import lightIcon from "../icons/light-theme.svg";
+import { iconButton } from "../generalButtons/iconButton.js";
+import { addClass, createElement } from "../helper/helper.js";
+import menuIcon from "../../icons/menu.svg";
+import lightIcon from "../../icons/light-theme.svg";
 
 function appHeader() {
   let appHeader = createElement("header"),

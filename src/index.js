@@ -1,9 +1,9 @@
-import { appHeader } from "./components/appHeader.js";
-import { taskController } from "./components/taskController.js";
-import { menuController } from "./components/menuController";
-import { addTaskButton } from "./components/addTaskButton.js";
-import { addClass, createElement } from "./helper.js";
-import { menubar } from "./components/menubar.js";
+import { appHeader } from "./components/header/appHeader.js";
+import { taskController } from "./components/controls/taskController.js";
+import { menuController } from "./components/controls/menuController";
+import { addTaskButton } from "./components/task/addTaskButton.js";
+import { addClass, createElement } from "./components/helper/helper.js";
+import { menubar } from "./components/menubar/menubar.js";
 import "./stylesheets/style.css";
 
 function initControllers() {

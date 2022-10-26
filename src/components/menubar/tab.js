@@ -1,4 +1,4 @@
-import { addClass, createElement } from "../helper.js";
+import { addClass, createElement } from "../helper/helper.js";
 
 function tab(text, cssClass) {
   let tab = createElement("div");

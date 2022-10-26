@@ -1,5 +1,5 @@
-import { addClass, createElement } from "../helper.js";
-import logoImg from "../image/Todo-ist Logo.svg";
+import { addClass, createElement } from "../helper/helper.js";
+import logoImg from "../../image/Todo-ist Logo.svg";
 
 function appLogo() {
   let appLogoContainer = createElement("div"),

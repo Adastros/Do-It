@@ -1,5 +1,5 @@
-import { addClass, createElement } from "../helper.js";
-import listIcon from "../icons/view-list.svg";
+import { addClass, createElement } from "../helper/helper.js";
+import listIcon from "../../icons/view-list.svg";
 
 function listViewButton() {
   let listViewButton = createElement("button"),

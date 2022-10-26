@@ -1,6 +1,6 @@
-import { boardViewButton } from "../components/boardViewButton.js";
-import { listViewButton } from "../components/listViewButton.js";
-import { addClass, createElement } from "../helper.js";
+import { boardViewButton } from "./boardViewButton.js";
+import { listViewButton } from "./listViewButton.js";
+import { addClass, createElement } from "../helper/helper.js";
 
 function viewOptions() {
   let viewOptions = createElement("div");

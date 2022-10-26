@@ -1,7 +1,7 @@
-import { iconButton } from "./iconButton.js";
+import { iconButton } from "../generalButtons/iconButton.js";
 import { projectList } from "./projectList.js";
-import { addClass, createElement } from "../helper.js";
-import plusIcon from "../icons/plus.svg";
+import { addClass, createElement } from "../helper/helper.js";
+import plusIcon from "../../icons/plus.svg";
 
 function projectSection() {
   let projectSection = createElement("div"),

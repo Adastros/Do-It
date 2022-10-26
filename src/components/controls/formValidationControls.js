@@ -1,4 +1,4 @@
-import { addClass, removeClass } from "../helper.js";
+import { addClass, removeClass } from "../helper/helper.js";
 
 // Aggressively checks and disables the add button if if form field is empty
 function missingValueAggressiveValidation(eventListenerNode, buttonToDisable) {

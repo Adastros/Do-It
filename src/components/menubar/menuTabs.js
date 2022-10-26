@@ -1,5 +1,5 @@
 import { tab } from "./tab.js";
-import { addClass, createElement } from "../helper.js";
+import { addClass, createElement } from "../helper/helper.js";
 
 function menuTabs() {
   let menuTabs = createElement("div"),

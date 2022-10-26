@@ -1,5 +1,5 @@
-import { addClass, createElement } from "../helper.js";
-import boardIcon from "../icons/view-board.svg";
+import { addClass, createElement } from "../helper/helper.js";
+import boardIcon from "../../icons/view-board.svg";
 
 function boardViewButton() {
   let boardViewButton = createElement("button"),
