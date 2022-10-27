@@ -1,4 +1,4 @@
-import { appHeader } from "./components/header/appHeader.js";
+import { appHeader } from "./components/appHeader/appHeader.js";
 import { taskController } from "./components/controls/taskController.js";
 import { menuController } from "./components/controls/menuController";
 import { addTaskButton } from "./components/task/addTaskButton.js";
