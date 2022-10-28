@@ -1,6 +1,6 @@
-import { taskForm } from "../task/taskForm.js";
-import { addTaskButton } from "../task/addTaskButton.js";
-import { taskItem } from "../task/taskItem.js";
+import { taskForm } from "../appMainContent/task/taskForm.js";
+import { addTaskButton } from "../appMainContent/task/addTaskButton.js";
+import { taskItem } from "../appMainContent/task/taskItem.js";
 import { missingValueAggressiveValidation } from "./formValidationControls.js";
 import { addClass, removeClass, toggleClass } from "../helper/helper.js";
 
@@ -8,10 +8,10 @@ function setTaskEditable() {
   let addTaskButton = document.querySelector(".add-task-button");
 
   addTaskButton.addEventListener("click", (e) => {
-    let taskList = document.querySelector(".task-list");
+    let taskViewer = document.querySelector(".task-viewer");
 
-    taskList.append(taskForm());
-    taskList.removeChild(addTaskButton);
+    taskViewer.append(taskForm());
+    taskViewer.removeChild(addTaskButton);
 
     let formTaskHeader = document.querySelector("#form-task-header"),
       formAddTaskButton = document.querySelector(".form-add-task-button");
@@ -27,13 +27,13 @@ function cancelTaskEditListener() {
   let cancelButton = document.querySelector(".form-cancel-button");
 
   cancelButton.addEventListener("click", () => {
-    let taskList = document.querySelector(".task-list"),
+    let taskViewer = document.querySelector(".task-viewer"),
       taskFormContainer = document.querySelector(".task-form-container");
 
-    taskList.removeChild(taskFormContainer);
+    taskViewer.removeChild(taskFormContainer);
 
-    if (!taskList.contains(document.querySelector(".add-task-button"))) {
-      taskList.append(addTaskButton());
+    if (!taskViewer.contains(document.querySelector(".add-task-button"))) {
+      taskViewer.append(addTaskButton());
       setTaskEditable();
     }
   });
@@ -43,7 +43,7 @@ function addTaskToTaskListListener() {
   let formAddTaskButton = document.querySelector(".form-add-task-button");
 
   formAddTaskButton.addEventListener("click", () => {
-    let taskList = document.querySelector(".task-list"),
+    let taskViewer = document.querySelector(".task-viewer"),
       taskFormContainer = document.querySelector(".task-form-container"),
       taskHeaderValue = document.querySelector("#form-task-header").value,
       taskDescriptionValue = document.querySelector(
@@ -51,8 +51,8 @@ function addTaskToTaskListListener() {
       ).value,
       taskItemNumber = document.getElementsByClassName("task-item").length + 1;
 
-    taskList.removeChild(taskFormContainer);
-    taskList.append(
+    taskViewer.removeChild(taskFormContainer);
+    taskViewer.append(
       taskItem(taskHeaderValue, taskDescriptionValue, taskItemNumber),
       addTaskButton()
     );
