@@ -72,6 +72,27 @@ function cancelNewProjectButtonListener() {
   });
 }
 
+function addProjectTabListener(
+  projectName,
+  projectDescription,
+  projectTabClass
+) {
+  let projectTab = document.querySelector("." + projectTabClass);
+
+  projectTab.addEventListener("click", () => {
+    updateMainContentHeading(projectName);
+    updateMainContentProjectDescription(projectDescription);
+  });
+}
+
+function updateMainContentProjectDescription(projectDescription) {
+  let projectDescriptionHeaderSection = document.querySelector(
+    ".main-content-project-description"
+  );
+
+  projectDescriptionHeaderSection.textContent = projectDescription;
+}
+
 function addNewProjectButtonListener() {
   let addNewProjectButton = document.querySelector(
     ".new-project-form-add-button"
@@ -85,7 +106,9 @@ function addNewProjectButtonListener() {
       projectDescription = document.querySelector(
         "#new-project-description"
       ).value,
-      projectTab = tab(projectName, "project-tab"),
+      projectSpecificClass =
+        "project-" + projectName.toLowerCase().replace(/\s/g, "-"),
+      projectTab = tab(projectName, "project-tab", projectSpecificClass),
       mainContentHeading = document.querySelector(".main-content-heading"),
       mainContentProjectDescription = document.querySelector(
         ".main-content-project-description"
@@ -95,6 +118,11 @@ function addNewProjectButtonListener() {
     mainContentHeading.textContent = projectName;
 
     projectList.append(projectTab);
+    addProjectTabListener(
+      projectName,
+      projectDescription,
+      projectSpecificClass
+    );
 
     bodyTag.removeChild(newProjectOverlay);
   });
@@ -111,6 +139,7 @@ function inboxTabListener() {
 
   inboxTab.addEventListener("click", () => {
     updateMainContentHeading("Inbox");
+    updateMainContentProjectDescription("");
   });
 }
 
@@ -119,14 +148,16 @@ function todayTabListener() {
 
   todayTab.addEventListener("click", () => {
     updateMainContentHeading("Today");
+    updateMainContentProjectDescription("");
   });
 }
 
 function upcomingTabListener() {
   let upcomingTab = document.querySelector(".menu-tab-upcoming");
-  
+
   upcomingTab.addEventListener("click", () => {
     updateMainContentHeading("Upcoming");
+    updateMainContentProjectDescription("");
   });
 }
 
@@ -135,6 +166,7 @@ function completedTabListener() {
 
   completedTab.addEventListener("click", () => {
     updateMainContentHeading("Completed");
+    updateMainContentProjectDescription("");
   });
 }
 
