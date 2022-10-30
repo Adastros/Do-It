@@ -3,10 +3,11 @@ import { addClass, createElement } from "../helper/helper.js";
 
 function menuTabs() {
   let menuTabs = createElement("div"),
-    tabArr = ["Inbox", "Today", "This Week", "Completed"];
+    tabArr = ["Inbox", "Today", "Upcoming", "Completed"];
 
   for (let i = 0; i < 4; i++) {
-    menuTabs.append(tab(tabArr[i], 'tab'));
+    let tabSpecificClass = "menu-tab-" + tabArr[i].toLowerCase();
+    menuTabs.append(tab(tabArr[i], "tab", tabSpecificClass));
   }
 
   addClass(menuTabs, "menu-tabs");

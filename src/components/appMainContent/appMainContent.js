@@ -9,7 +9,7 @@ function appMainContent() {
   addClass(linebreak, "linebreak");
   addClass(appMainContent, "main-content");
 
-  appMainContent.append(mainContentHeader(), taskViewer());
+  appMainContent.append(mainContentHeader(), linebreak, taskViewer());
 
   return appMainContent;
 }

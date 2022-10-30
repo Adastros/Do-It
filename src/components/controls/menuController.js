@@ -95,13 +95,59 @@ function addNewProjectButtonListener() {
     mainContentHeading.textContent = projectName;
 
     projectList.append(projectTab);
-    
+
     bodyTag.removeChild(newProjectOverlay);
   });
 }
 
+function updateMainContentHeading(text) {
+  let mainContentHeading = document.querySelector(".main-content-heading");
+
+  mainContentHeading.textContent = text;
+}
+
+function inboxTabListener() {
+  let inboxTab = document.querySelector(".menu-tab-inbox");
+
+  inboxTab.addEventListener("click", () => {
+    updateMainContentHeading("Inbox");
+  });
+}
+
+function todayTabListener() {
+  let todayTab = document.querySelector(".menu-tab-today");
+
+  todayTab.addEventListener("click", () => {
+    updateMainContentHeading("Today");
+  });
+}
+
+function upcomingTabListener() {
+  let upcomingTab = document.querySelector(".menu-tab-upcoming");
+  
+  upcomingTab.addEventListener("click", () => {
+    updateMainContentHeading("Upcoming");
+  });
+}
+
+function completedTabListener() {
+  let completedTab = document.querySelector(".menu-tab-completed");
+
+  completedTab.addEventListener("click", () => {
+    updateMainContentHeading("Completed");
+  });
+}
+
+function initMenuTabListeners() {
+  inboxTabListener();
+  todayTabListener();
+  upcomingTabListener();
+  completedTabListener();
+}
+
 function menuController() {
   toggleMenubarVisibility();
+  initMenuTabListeners();
   displayNewProjectOverlayForm();
 }
 
