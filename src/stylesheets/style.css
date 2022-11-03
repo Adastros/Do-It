@@ -193,9 +193,16 @@ img {
 .task-item {
   width: 100%;
   display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  padding: 0.25rem 1rem;
+  border: 1px solid black;
+}
+
+.checkBoxTaskInfoContainer {
+  display: flex;
   align-items: center;
   gap: 1rem;
-  border: 1px solid black;
 }
 
 .task-header {
@@ -213,6 +220,11 @@ img {
   border: 2px solid blue;
   border-radius: 25%;
   text-align: center;
+}
+
+.task-edit-button {
+  height: 25px;
+  width: 25px;
 }
 
 .completed {

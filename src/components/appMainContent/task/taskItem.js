@@ -1,22 +1,22 @@
 import { checkbox } from "./checkbox.js";
+import { taskInfo } from "./taskInfo.js";
+import { taskItemActions } from "./taskItemActions.js";
 import { addClass, createElement } from "../../helper/helper.js";
 
 function taskItem(taskHeaderValue, taskDescriptionValue, taskItemNumber) {
   let taskItem = createElement("div"),
-    taskInformationContainer = createElement("div"),
-    taskHeaderElement = createElement("h3"),
-    taskDescriptionElement = createElement("p");
+    checkBoxTaskInfoContainer = createElement("div");
 
-  taskHeaderElement.textContent = taskHeaderValue;
-  taskDescriptionElement.textContent = taskDescriptionValue;
-
+  addClass(checkBoxTaskInfoContainer, "checkBoxTaskInfoContainer");
   addClass(taskItem, "task-item");
-  addClass(taskHeaderElement, "task-header");
-  addClass(taskDescriptionElement, "task-description");
+
   taskItem.dataset.taskItem = taskItemNumber;
 
-  taskInformationContainer.append(taskHeaderElement, taskDescriptionElement);
-  taskItem.append(checkbox(taskItemNumber), taskInformationContainer);
+  checkBoxTaskInfoContainer.append(
+    checkbox(taskItemNumber),
+    taskInfo(taskHeaderValue, taskDescriptionValue)
+  );
+  taskItem.append(checkBoxTaskInfoContainer, taskItemActions(taskItemNumber));
 
   return taskItem;
 }
