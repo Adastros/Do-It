@@ -23,7 +23,7 @@ function removeMenubarTransitionendListener(mainContent) {
 }
 
 function toggleMenubarVisibility() {
-  let menuButton = document.querySelector(".menu-button"),
+  let menuButton = document.querySelector("header").firstElementChild,
     menubar = document.querySelector(".menu-bar"),
     mainContent = document.querySelector("main");
 
