@@ -68,6 +68,11 @@ img {
   width: 27px;
 }
 
+.icon-button-extra-small {
+  height: 20px;
+  width: 20px;
+}
+
 .view-button {
   height: 2rem;
   display: flex;
@@ -128,11 +133,6 @@ img {
 .project-section {
   display: flex;
   flex-direction: column;
-}
-
-.new-project-button {
-  height: 20px;
-  width: 20px;
 }
 
 .project-tab {
