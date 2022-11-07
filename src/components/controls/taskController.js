@@ -1,27 +1,27 @@
 import { taskForm } from "../appMainContent/task/taskForm.js";
-import { addTaskButton } from "../appMainContent/task/addTaskButton.js";
+import { addNewTaskButton } from "../appMainContent/task/addNewTaskButton.js";
 import { taskItem } from "../appMainContent/task/taskItem.js";
 import { missingValueAggressiveValidation } from "./formValidationControls.js";
-import { addClass, removeClass, toggleClass } from "../helper/helper.js";
+import { toggleClass } from "../helper/helper.js";
 
 function addNewTaskButtonListener() {
-  let addTaskButton = document.querySelector(".add-task-button");
+  let addNewTaskButton = document.querySelector(".add-new-task-button");
 
-  addTaskButton.addEventListener("click", () => {
+  addNewTaskButton.addEventListener("click", () => {
     let taskViewer = document.querySelector(".task-viewer"),
-      taskFormComponent = taskForm();
+      newTaskForm = taskForm();
 
-    taskViewer.append(taskFormComponent);
-    taskViewer.removeChild(addTaskButton);
+    taskViewer.append(newTaskForm);
+    taskViewer.removeChild(addNewTaskButton);
 
-    let formTaskHeader = taskFormComponent.querySelector("#form-task-header"),
-      formAddTaskButton = taskFormComponent.querySelector(
+    let formTaskHeader = newTaskForm.querySelector("#form-task-header"),
+      formAddTaskButton = newTaskForm.querySelector(
         ".form-add-or-save-task-button"
       );
 
     // Activate listeners for form buttons
-    cancelTaskEditListener(taskFormComponent);
-    addTaskToTaskViewerListener(taskFormComponent);
+    cancelTaskEditListener(newTaskForm);
+    addTaskToTaskViewerListener(newTaskForm);
     missingValueAggressiveValidation(formTaskHeader, formAddTaskButton);
   });
 }
@@ -46,7 +46,7 @@ function cancelTaskEditListener(taskForm, taskItemNumber) {
     }
 
     taskForm.remove();
-    doesNewTaskButtonExist();
+    checkNewTaskButtonExist();
   });
 }
 
@@ -74,7 +74,7 @@ function addTaskToTaskViewerListener(taskForm, taskItemNumber) {
       taskForm.nextSibling
     );
     taskForm.remove();
-    doesNewTaskButtonExist();
+    checkNewTaskButtonExist();
   });
 }
 
@@ -97,7 +97,7 @@ function AddEditButtonListener(editButton, taskItemNumber) {
       formAddTaskButton = taskFormToInsert.querySelector(
         ".form-add-or-save-task-button"
       );
-    console.log(taskHeaderValue);
+    
     taskViewer.insertBefore(taskFormToInsert, taskItemToEdit.nextSibling);
     taskViewer.removeChild(taskItemToEdit);
 
@@ -119,11 +119,11 @@ function toggleTaskStatus(checkbox, taskItemNumber) {
   });
 }
 
-function doesNewTaskButtonExist() {
+function checkNewTaskButtonExist() {
   let taskViewer = document.querySelector(".task-viewer");
 
   if (!taskViewer.contains(document.querySelector(".add-task-button"))) {
-    taskViewer.append(addTaskButton());
+    taskViewer.append(addNewTaskButton());
     addNewTaskButtonListener();
   }
 }

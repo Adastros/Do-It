@@ -1,4 +1,4 @@
-import { addTaskButton } from "./task/addTaskButton.js";
+import { addNewTaskButton } from "./task/addNewTaskButton.js";
 import { addClass, createElement } from "../helper/helper.js";
 
 function taskViewer() {
@@ -6,7 +6,7 @@ function taskViewer() {
 
   addClass(taskViewer, "task-viewer");
 
-  taskViewer.append(addTaskButton());
+  taskViewer.append(addNewTaskButton());
 
   return taskViewer;
 }
