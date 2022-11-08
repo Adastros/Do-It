@@ -31,13 +31,12 @@ function cancelTaskEditListener(taskForm, taskItemNumber) {
 
   formCancelButton.addEventListener("click", () => {
     let taskViewer = document.querySelector(".task-viewer"),
-      taskHeaderValue = taskForm.querySelector("#form-task-header").value,
-      taskDescriptionValue = taskForm.querySelector(
-        "#form-task-description"
-      ).value;
+      taskHeaderValue = taskForm.dataset.previousTaskHeaderValue,
+      taskDescriptionValue = taskForm.dataset.previousTaskDescriptionValue;
 
     // Checks to see if user is editing a task by checking if a
-    // taskItemNumber exists.
+    // taskItemNumber exists and reverts the task information back
+    // to its original data.
     if (taskItemNumber !== undefined) {
       taskViewer.insertBefore(
         taskItem(taskHeaderValue, taskDescriptionValue, taskItemNumber),
@@ -97,7 +96,14 @@ function AddEditButtonListener(editButton, taskItemNumber) {
       formAddTaskButton = taskFormToInsert.querySelector(
         ".form-add-or-save-task-button"
       );
-    
+
+    // Store the previous task header and descriptions in a data- attribute.
+    // If the user cancels the edit action, revert the task data back
+    // to its original state.
+    taskFormToInsert.dataset.previousTaskHeaderValue = taskHeaderValue;
+    taskFormToInsert.dataset.previousTaskDescriptionValue =
+      taskDescriptionValue;
+
     taskViewer.insertBefore(taskFormToInsert, taskItemToEdit.nextSibling);
     taskViewer.removeChild(taskItemToEdit);
 
