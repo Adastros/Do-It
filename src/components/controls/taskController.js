@@ -128,7 +128,7 @@ function toggleTaskStatus(checkbox, taskItemNumber) {
 function checkNewTaskButtonExist() {
   let taskViewer = document.querySelector(".task-viewer");
 
-  if (!taskViewer.contains(document.querySelector(".add-task-button"))) {
+  if (!taskViewer.contains(document.querySelector(".add-new-task-button"))) {
     taskViewer.append(addNewTaskButton());
     addNewTaskButtonListener();
   }
