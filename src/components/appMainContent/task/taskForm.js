@@ -1,3 +1,4 @@
+import { taskPriorityDropdown } from "./taskPriorityDropdown.js";
 import { textButton } from "../../generalButtons/textButton.js";
 import { createElement, addClass } from "../../helper/helper.js";
 
@@ -50,21 +51,27 @@ function taskForm(
     taskItemForm = createElement("form"),
     headerField = createTaskHeaderField(taskHeaderValue),
     descriptionField = createTaskDescriptionField(taskDescriptionValue),
-    buttonContainer = createElement("div"),
+    taskFormActionsContainer = createElement("div"),
+    taskFormButtonsContainer = createElement("div"),
     cancelFormButton = textButton("Cancel", "form-cancel-button"),
     addOrSaveTaskButton = textButton(
       addOrSaveTaskButtonText,
       "form-add-or-save-task-button"
     );
 
+  addClass(taskFormActionsContainer, "task-form-actions-container");
   addClass(taskItemForm, "task-form");
   addClass(formContainer, "task-form-container");
 
   addOrSaveTaskButton.setAttribute("disabled", "");
   taskItemForm.setAttribute("novalidate", "");
 
-  buttonContainer.append(cancelFormButton, addOrSaveTaskButton);
-  taskItemForm.append(headerField, descriptionField, buttonContainer);
+  taskFormButtonsContainer.append(cancelFormButton, addOrSaveTaskButton);
+  taskFormActionsContainer.append(
+    taskPriorityDropdown(),
+    taskFormButtonsContainer
+  );
+  taskItemForm.append(headerField, descriptionField, taskFormActionsContainer);
   formContainer.append(taskItemForm);
 
   return formContainer;

@@ -32,14 +32,20 @@ function cancelTaskEditListener(taskForm, taskItemNumber) {
   formCancelButton.addEventListener("click", () => {
     let taskViewer = document.querySelector(".task-viewer"),
       taskHeaderValue = taskForm.dataset.previousTaskHeaderValue,
-      taskDescriptionValue = taskForm.dataset.previousTaskDescriptionValue;
+      taskDescriptionValue = taskForm.dataset.previousTaskDescriptionValue,
+      taskPriorityValue = taskForm.dataset.previousTaskPriorityValue;
 
     // Checks to see if user is editing a task by checking if a
     // taskItemNumber exists and reverts the task information back
     // to its original data.
     if (taskItemNumber !== undefined) {
       taskViewer.insertBefore(
-        taskItem(taskHeaderValue, taskDescriptionValue, taskItemNumber),
+        taskItem(
+          taskHeaderValue,
+          taskDescriptionValue,
+          taskItemNumber,
+          taskPriorityValue
+        ),
         taskForm.nextSibling
       );
     }
@@ -59,17 +65,23 @@ function addTaskToTaskViewerListener(taskForm, taskItemNumber) {
       taskHeaderValue = taskForm.querySelector("#form-task-header").value,
       taskDescriptionValue = taskForm.querySelector(
         "#form-task-description"
-      ).value;
+      ).value,
+      priorityValue = taskForm.querySelector("#task-priority-dropdown").value;
 
     // Only enters if the user is creating a new task.
-    // Otherwise, the user is editing and saving a task and a
-    // new task item # is not needed.
+    // Otherwise, the user is editing and saving a task.
+    // A new task item # is not needed.
     if (!taskItemNumber) {
       taskItemNumber = document.getElementsByClassName("task-item").length;
     }
 
     taskViewer.insertBefore(
-      taskItem(taskHeaderValue, taskDescriptionValue, taskItemNumber),
+      taskItem(
+        taskHeaderValue,
+        taskDescriptionValue,
+        taskItemNumber,
+        priorityValue
+      ),
       taskForm.nextSibling
     );
     taskForm.remove();
@@ -87,6 +99,9 @@ function AddEditButtonListener(editButton, taskItemNumber) {
         taskItemToEdit.querySelector(".task-header").textContent,
       taskDescriptionValue =
         taskItemToEdit.querySelector(".task-description").textContent,
+      priorityValue = taskItemToEdit
+        .querySelector(".date-and-priority-indicator-container")
+        .lastElementChild.textContent.slice(10),    // returns any characters after "Priority: ";
       taskFormToInsert = taskForm(
         "Save",
         taskHeaderValue,
@@ -103,6 +118,7 @@ function AddEditButtonListener(editButton, taskItemNumber) {
     taskFormToInsert.dataset.previousTaskHeaderValue = taskHeaderValue;
     taskFormToInsert.dataset.previousTaskDescriptionValue =
       taskDescriptionValue;
+    taskFormToInsert.dataset.previousTaskPriorityValue = priorityValue;
 
     taskViewer.insertBefore(taskFormToInsert, taskItemToEdit.nextSibling);
     taskViewer.removeChild(taskItemToEdit);
