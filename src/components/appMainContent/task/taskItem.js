@@ -7,18 +7,21 @@ function taskItem(
   taskHeaderValue,
   taskDescriptionValue,
   taskItemNumber,
-  priorityValue
+  priorityValue,
+  dueDateValue
 ) {
   let taskItem = createElement("div"),
     primaryTaskInfoAndActionsContainer = createElement("div"),
     checkBoxAndTaskInfoContainer = createElement("div"),
-    dateAndPriorityIndicatorContainer = createElement("div"),
-    priorityIndicator = createElement("p");
+    dueDateAndPriorityIndicatorContainer = createElement("div"),
+    priorityIndicator = createElement("p"),
+    dueDateIndicator = createElement("p");
 
   priorityIndicator.textContent = "Priority: " + priorityValue;
+  dueDateIndicator.textContent = "Due Date: " + dueDateValue;
 
   addClass(
-    dateAndPriorityIndicatorContainer,
+    dueDateAndPriorityIndicatorContainer,
     "date-and-priority-indicator-container"
   );
   addClass(
@@ -30,7 +33,10 @@ function taskItem(
 
   taskItem.dataset.taskItem = taskItemNumber;
 
-  dateAndPriorityIndicatorContainer.append(priorityIndicator);
+  dueDateAndPriorityIndicatorContainer.append(
+    dueDateIndicator,
+    priorityIndicator
+  );
   checkBoxAndTaskInfoContainer.append(
     checkbox(taskItemNumber),
     taskInfo(taskHeaderValue, taskDescriptionValue)
@@ -41,7 +47,7 @@ function taskItem(
   );
   taskItem.append(
     primaryTaskInfoAndActionsContainer,
-    dateAndPriorityIndicatorContainer
+    dueDateAndPriorityIndicatorContainer
   );
 
   return taskItem;

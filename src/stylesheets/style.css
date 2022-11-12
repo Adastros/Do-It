@@ -234,6 +234,8 @@ img {
 }
 
 .date-and-priority-indicator-container {
+  display: flex;
+  gap: 0.5rem;
   font-size: 75%;
 }
 
@@ -241,6 +243,17 @@ img {
   display: flex;
   justify-content: space-between;
   align-items: center;
+}
+
+.task-form-date-and-priority-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.task-due-date-field {
+  display: flex;
+  gap: 0.5rem;
 }
 
 .task-form-buttons-container {

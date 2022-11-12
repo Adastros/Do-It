@@ -1,3 +1,4 @@
+import { format } from "date-fns";
 import { taskForm } from "../appMainContent/task/taskForm.js";
 import { addNewTaskButton } from "../appMainContent/task/addNewTaskButton.js";
 import { taskItem } from "../appMainContent/task/taskItem.js";
@@ -31,9 +32,10 @@ function cancelTaskEditListener(taskForm, taskItemNumber) {
 
   formCancelButton.addEventListener("click", () => {
     let taskViewer = document.querySelector(".task-viewer"),
-      taskHeaderValue = taskForm.dataset.previousTaskHeaderValue,
-      taskDescriptionValue = taskForm.dataset.previousTaskDescriptionValue,
-      taskPriorityValue = taskForm.dataset.previousTaskPriorityValue;
+      taskHeaderValue = taskForm.dataset.currentTaskHeaderValue,
+      taskDescriptionValue = taskForm.dataset.currentTaskDescriptionValue,
+      taskPriorityValue = taskForm.dataset.currentTaskPriorityValue,
+      taskDueDateValue = taskForm.dataset.currentTaskDueDate;
 
     // Checks to see if user is editing a task by checking if a
     // taskItemNumber exists and reverts the task information back
@@ -44,7 +46,8 @@ function cancelTaskEditListener(taskForm, taskItemNumber) {
           taskHeaderValue,
           taskDescriptionValue,
           taskItemNumber,
-          taskPriorityValue
+          taskPriorityValue,
+          taskDueDateValue
         ),
         taskForm.nextSibling
       );
@@ -61,12 +64,28 @@ function addTaskToTaskViewerListener(taskForm, taskItemNumber) {
   );
 
   formAddOrSaveTaskButton.addEventListener("click", () => {
-    let taskViewer = document.querySelector(".task-viewer"),
-      taskHeaderValue = taskForm.querySelector("#form-task-header").value,
+    let taskViewer = document.querySelector(".task-viewer");
+
+    // Get the data from the task form that will be used to populate the new
+    // task item.
+    let taskHeaderValue = taskForm.querySelector("#form-task-header").value,
       taskDescriptionValue = taskForm.querySelector(
         "#form-task-description"
       ).value,
-      priorityValue = taskForm.querySelector("#task-priority-dropdown").value;
+      taskPriorityValue = taskForm.querySelector(
+        "#task-priority-dropdown"
+      ).value,
+      // reconverts it into a more widely recognizable date form (e.g.: November 11, 2022)
+      // the '-' are replaced with '/' due to an issue where formatting the date with '-'
+      // causes the date to be one day behind the desired date
+      taskDueDateValue = format(
+        new Date(
+          taskForm
+            .querySelector("#task-due-date-input")
+            .value.replace(/-/g, "/")
+        ),
+        "PP"
+      );
 
     // Only enters if the user is creating a new task.
     // Otherwise, the user is editing and saving a task.
@@ -80,7 +99,8 @@ function addTaskToTaskViewerListener(taskForm, taskItemNumber) {
         taskHeaderValue,
         taskDescriptionValue,
         taskItemNumber,
-        priorityValue
+        taskPriorityValue,
+        taskDueDateValue
       ),
       taskForm.nextSibling
     );
@@ -91,40 +111,53 @@ function addTaskToTaskViewerListener(taskForm, taskItemNumber) {
 
 function AddEditButtonListener(editButton, taskItemNumber) {
   editButton.addEventListener("click", () => {
+    // Locate the task item to edit
     let taskViewer = document.querySelector(".task-viewer"),
       taskItemToEdit = taskViewer.querySelector(
         `[data-task-item="${taskItemNumber}"]`
-      ),
-      taskHeaderValue =
+      );
+
+    // Get the current task data for the task item that will be edited
+    let currentTaskHeaderValue =
         taskItemToEdit.querySelector(".task-header").textContent,
-      taskDescriptionValue =
+      currentTaskDescriptionValue =
         taskItemToEdit.querySelector(".task-description").textContent,
-      priorityValue = taskItemToEdit
+      currentTaskPriorityValue = taskItemToEdit
         .querySelector(".date-and-priority-indicator-container")
-        .lastElementChild.textContent.slice(10),    // returns any characters after "Priority: ";
-      taskFormToInsert = taskForm(
-        "Save",
-        taskHeaderValue,
-        taskDescriptionValue
-      ),
-      formTaskHeader = taskFormToInsert.querySelector("#form-task-header"),
-      formAddTaskButton = taskFormToInsert.querySelector(
+        .lastElementChild.textContent.slice(10), // returns any characters after "Priority: "
+      currentTaskDueDate = taskItemToEdit
+        .querySelector(".date-and-priority-indicator-container")
+        .firstElementChild.textContent.slice(10); // return any character after "Due Date: "
+
+    // Set the task edit form
+    let taskEditForm = taskForm(
+      "Save",
+      currentTaskHeaderValue,
+      currentTaskDescriptionValue,
+      currentTaskDueDate
+    );
+
+    // Validate the task edit form header and toggle state of save button
+    let formTaskHeader = taskEditForm.querySelector("#form-task-header"),
+      formAddTaskButton = taskEditForm.querySelector(
         ".form-add-or-save-task-button"
       );
 
-    // Store the previous task header and descriptions in a data- attribute.
+    // Store the current task data below in a data- attribute.
     // If the user cancels the edit action, revert the task data back
     // to its original state.
-    taskFormToInsert.dataset.previousTaskHeaderValue = taskHeaderValue;
-    taskFormToInsert.dataset.previousTaskDescriptionValue =
-      taskDescriptionValue;
-    taskFormToInsert.dataset.previousTaskPriorityValue = priorityValue;
+    taskEditForm.dataset.currentTaskHeaderValue = currentTaskHeaderValue;
+    taskEditForm.dataset.currentTaskDescriptionValue =
+      currentTaskDescriptionValue;
+    taskEditForm.dataset.currentTaskPriorityValue = currentTaskPriorityValue;
+    taskEditForm.dataset.currentTaskDueDate = currentTaskDueDate;
 
-    taskViewer.insertBefore(taskFormToInsert, taskItemToEdit.nextSibling);
+    taskViewer.insertBefore(taskEditForm, taskItemToEdit.nextSibling);
     taskViewer.removeChild(taskItemToEdit);
 
-    cancelTaskEditListener(taskFormToInsert, taskItemNumber);
-    addTaskToTaskViewerListener(taskFormToInsert, taskItemNumber);
+    // Set listeners for task edit form
+    cancelTaskEditListener(taskEditForm, taskItemNumber);
+    addTaskToTaskViewerListener(taskEditForm, taskItemNumber);
     missingValueAggressiveValidation(formTaskHeader, formAddTaskButton);
   });
 }

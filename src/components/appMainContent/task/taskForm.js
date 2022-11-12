@@ -1,3 +1,4 @@
+import { taskDueDateField } from "./taskDueDateField.js";
 import { taskPriorityDropdown } from "./taskPriorityDropdown.js";
 import { textButton } from "../../generalButtons/textButton.js";
 import { createElement, addClass } from "../../helper/helper.js";
@@ -45,13 +46,15 @@ function createTaskDescriptionField(taskDescriptionValue) {
 function taskForm(
   addOrSaveTaskButtonText = "Add Task",
   taskHeaderValue,
-  taskDescriptionValue
+  taskDescriptionValue,
+  taskDueDate
 ) {
   let formContainer = createElement("div"),
     taskItemForm = createElement("form"),
     headerField = createTaskHeaderField(taskHeaderValue),
     descriptionField = createTaskDescriptionField(taskDescriptionValue),
     taskFormActionsContainer = createElement("div"),
+    taskDateAndPriorityContainer = createElement("div"),
     taskFormButtonsContainer = createElement("div"),
     cancelFormButton = textButton("Cancel", "form-cancel-button"),
     addOrSaveTaskButton = textButton(
@@ -59,6 +62,10 @@ function taskForm(
       "form-add-or-save-task-button"
     );
 
+  addClass(
+    taskDateAndPriorityContainer,
+    "task-form-date-and-priority-container"
+  );
   addClass(taskFormActionsContainer, "task-form-actions-container");
   addClass(taskItemForm, "task-form");
   addClass(formContainer, "task-form-container");
@@ -66,9 +73,13 @@ function taskForm(
   addOrSaveTaskButton.setAttribute("disabled", "");
   taskItemForm.setAttribute("novalidate", "");
 
+  taskDateAndPriorityContainer.append(
+    taskDueDateField(taskDueDate),
+    taskPriorityDropdown()
+  );
   taskFormButtonsContainer.append(cancelFormButton, addOrSaveTaskButton);
   taskFormActionsContainer.append(
-    taskPriorityDropdown(),
+    taskDateAndPriorityContainer,
     taskFormButtonsContainer
   );
   taskItemForm.append(headerField, descriptionField, taskFormActionsContainer);
