@@ -3,13 +3,7 @@ import { taskInfo } from "./taskInfo.js";
 import { taskItemActions } from "./taskItemActions.js";
 import { addClass, createElement } from "../../helper/helper.js";
 
-function taskItem(
-  taskHeaderValue,
-  taskDescriptionValue,
-  taskItemNumber,
-  priorityValue,
-  dueDateValue
-) {
+function taskItem(taskItemObj, taskItemNumber) {
   let taskItem = createElement("div"),
     primaryTaskInfoAndActionsContainer = createElement("div"),
     checkBoxAndTaskInfoContainer = createElement("div"),
@@ -17,8 +11,8 @@ function taskItem(
     priorityIndicator = createElement("p"),
     dueDateIndicator = createElement("p");
 
-  priorityIndicator.textContent = "Priority: " + priorityValue;
-  dueDateIndicator.textContent = "Due Date: " + dueDateValue;
+  priorityIndicator.textContent = "Priority: " + taskItemObj.priorityValue;
+  dueDateIndicator.textContent = "Due Date: " + taskItemObj.dueDateValue;
 
   addClass(
     dueDateAndPriorityIndicatorContainer,
@@ -39,7 +33,7 @@ function taskItem(
   );
   checkBoxAndTaskInfoContainer.append(
     checkbox(taskItemNumber),
-    taskInfo(taskHeaderValue, taskDescriptionValue)
+    taskInfo(taskItemObj.headerValue, taskItemObj.descriptionValue)
   );
   primaryTaskInfoAndActionsContainer.append(
     checkBoxAndTaskInfoContainer,

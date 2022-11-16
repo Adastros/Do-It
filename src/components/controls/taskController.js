@@ -2,6 +2,7 @@ import { format } from "date-fns";
 import { taskForm } from "../appMainContent/task/taskForm.js";
 import { addNewTaskButton } from "../appMainContent/task/addNewTaskButton.js";
 import { taskItem } from "../appMainContent/task/taskItem.js";
+import { saveTaskItem } from "./webStorageController.js";
 import { missingValueAggressiveValidation } from "./formValidationControls.js";
 import { toggleClass } from "../helper/helper.js";
 
@@ -64,28 +65,9 @@ function addTaskToTaskViewerListener(taskForm, taskItemNumber) {
   );
 
   formAddOrSaveTaskButton.addEventListener("click", () => {
-    let taskViewer = document.querySelector(".task-viewer");
-
-    // Get the data from the task form that will be used to populate the new
-    // task item.
-    let taskHeaderValue = taskForm.querySelector("#form-task-header").value,
-      taskDescriptionValue = taskForm.querySelector(
-        "#form-task-description"
-      ).value,
-      taskPriorityValue = taskForm.querySelector(
-        "#task-priority-dropdown"
-      ).value,
-      // reconverts it into a more widely recognizable date form (e.g.: November 11, 2022)
-      // the '-' are replaced with '/' due to an issue where formatting the date with '-'
-      // causes the date to be one day behind the desired date
-      taskDueDateValue = format(
-        new Date(
-          taskForm
-            .querySelector("#task-due-date-input")
-            .value.replace(/-/g, "/")
-        ),
-        "PP"
-      );
+    let taskViewer = document.querySelector(".task-viewer"),
+      taskItemObj = createTaskItemObj(taskForm),
+      taskItemKey = "taskItemNumber" + taskItemNumber;
 
     // Only enters if the user is creating a new task.
     // Otherwise, the user is editing and saving a task.
@@ -94,14 +76,10 @@ function addTaskToTaskViewerListener(taskForm, taskItemNumber) {
       taskItemNumber = document.getElementsByClassName("task-item").length;
     }
 
+    saveTaskItem(taskItemKey, taskItemObj);
+
     taskViewer.insertBefore(
-      taskItem(
-        taskHeaderValue,
-        taskDescriptionValue,
-        taskItemNumber,
-        taskPriorityValue,
-        taskDueDateValue
-      ),
+      taskItem(taskItemObj, taskItemNumber),
       taskForm.nextSibling
     );
     taskForm.remove();
@@ -181,6 +159,23 @@ function checkNewTaskButtonExist() {
     taskViewer.append(addNewTaskButton());
     addNewTaskButtonListener();
   }
+}
+
+function createTaskItemObj(taskForm) {
+  return {
+    headerValue: taskForm.querySelector("#form-task-header").value,
+    descriptionValue: taskForm.querySelector("#form-task-description").value,
+    priorityValue: taskForm.querySelector("#task-priority-dropdown").value,
+    // reconverts it into a more widely recognizable date form (e.g.: November 11, 2022)
+    // the '-' are replaced with '/' due to an issue where formatting the date with '-'
+    // causes the date to be one day behind the desired date
+    dueDateValue: format(
+      new Date(
+        taskForm.querySelector("#task-due-date-input").value.replace(/-/g, "/")
+      ),
+      "PP"
+    ),
+  };
 }
 
 function taskController() {
