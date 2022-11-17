@@ -3,14 +3,14 @@ import { taskPriorityDropdown } from "./taskPriorityDropdown.js";
 import { textButton } from "../../generalButtons/textButton.js";
 import { createElement, addClass } from "../../helper/helper.js";
 
-function createTaskHeaderField(taskHeaderValue) {
+function createTaskHeaderField(headerValue) {
   let headerContainer = createElement("div"),
     headerLabel = createElement("label"),
     headerInputField = createElement("textarea");
 
   headerLabel.textContent = "Task Name";
-  if (taskHeaderValue) {
-    headerInputField.textContent = taskHeaderValue;
+  if (headerValue) {
+    headerInputField.textContent = headerValue;
   }
 
   headerLabel.setAttribute("for", "form-task-header");
@@ -23,14 +23,14 @@ function createTaskHeaderField(taskHeaderValue) {
   return headerContainer;
 }
 
-function createTaskDescriptionField(taskDescriptionValue) {
+function createTaskDescriptionField(descriptionValue) {
   let descriptionContainer = createElement("div"),
     descriptionLabel = createElement("label"),
     descriptionInputField = createElement("textarea");
 
   descriptionLabel.textContent = "Description";
-  if (taskDescriptionValue) {
-    descriptionInputField.textContent = taskDescriptionValue;
+  if (descriptionValue) {
+    descriptionInputField.textContent = descriptionValue;
   }
 
   descriptionLabel.setAttribute("for", "form-task-description");
@@ -43,16 +43,13 @@ function createTaskDescriptionField(taskDescriptionValue) {
 
 // The addOrSaveTaskButtonText argument is used to determine if the
 // taskForm should state "save" or "add task" for one of the buttons.
-function taskForm(
-  addOrSaveTaskButtonText = "Add Task",
-  taskHeaderValue,
-  taskDescriptionValue,
-  taskDueDate
-) {
+function taskForm(addOrSaveTaskButtonText, currentTaskItemObj) {
   let formContainer = createElement("div"),
     taskItemForm = createElement("form"),
-    headerField = createTaskHeaderField(taskHeaderValue),
-    descriptionField = createTaskDescriptionField(taskDescriptionValue),
+    headerField = createTaskHeaderField(currentTaskItemObj.headerValue),
+    descriptionField = createTaskDescriptionField(
+      currentTaskItemObj.descriptionValue
+    ),
     taskFormActionsContainer = createElement("div"),
     taskDateAndPriorityContainer = createElement("div"),
     taskFormButtonsContainer = createElement("div"),
@@ -74,7 +71,7 @@ function taskForm(
   taskItemForm.setAttribute("novalidate", "");
 
   taskDateAndPriorityContainer.append(
-    taskDueDateField(taskDueDate),
+    taskDueDateField(currentTaskItemObj.dueDateValue),
     taskPriorityDropdown()
   );
   taskFormButtonsContainer.append(cancelFormButton, addOrSaveTaskButton);

@@ -2,7 +2,7 @@ import { format } from "date-fns";
 import { taskForm } from "../appMainContent/task/taskForm.js";
 import { addNewTaskButton } from "../appMainContent/task/addNewTaskButton.js";
 import { taskItem } from "../appMainContent/task/taskItem.js";
-import { saveTaskItem } from "./webStorageController.js";
+import { saveTaskItem, getTaskItem } from "./webStorageController.js";
 import { missingValueAggressiveValidation } from "./formValidationControls.js";
 import { toggleClass } from "../helper/helper.js";
 
@@ -11,7 +11,7 @@ function addNewTaskButtonListener() {
 
   addNewTaskButton.addEventListener("click", () => {
     let taskViewer = document.querySelector(".task-viewer"),
-      newTaskForm = taskForm();
+      newTaskForm = taskForm("Add Task", createTaskItemObj());
 
     taskViewer.append(newTaskForm);
     taskViewer.removeChild(addNewTaskButton);
@@ -32,24 +32,16 @@ function cancelTaskEditListener(taskForm, taskItemNumber) {
   let formCancelButton = taskForm.querySelector(".form-cancel-button");
 
   formCancelButton.addEventListener("click", () => {
-    let taskViewer = document.querySelector(".task-viewer"),
-      taskHeaderValue = taskForm.dataset.currentTaskHeaderValue,
-      taskDescriptionValue = taskForm.dataset.currentTaskDescriptionValue,
-      taskPriorityValue = taskForm.dataset.currentTaskPriorityValue,
-      taskDueDateValue = taskForm.dataset.currentTaskDueDate;
-
+    let taskViewer = document.querySelector(".task-viewer");
+    
     // Checks to see if user is editing a task by checking if a
     // taskItemNumber exists and reverts the task information back
     // to its original data.
     if (taskItemNumber !== undefined) {
+      let currentTaskItemObj = getTaskItem("taskItemNumber" + taskItemNumber);
+
       taskViewer.insertBefore(
-        taskItem(
-          taskHeaderValue,
-          taskDescriptionValue,
-          taskItemNumber,
-          taskPriorityValue,
-          taskDueDateValue
-        ),
+        taskItem(currentTaskItemObj, taskItemNumber),
         taskForm.nextSibling
       );
     }
@@ -65,9 +57,8 @@ function addTaskToTaskViewerListener(taskForm, taskItemNumber) {
   );
 
   formAddOrSaveTaskButton.addEventListener("click", () => {
-    // Only enters if the user is creating a new task.
-    // Otherwise, the user is editing and saving a task.
-    // A new task item # is not needed.
+    // Only enters if the user is creating a new task. This is where the taskItemNumber is created.
+    // Otherwise, the user is editing and saving a task. A new task item # is not needed.
     if (!taskItemNumber) {
       taskItemNumber = document.getElementsByClassName("task-item").length;
     }
@@ -95,40 +86,16 @@ function AddEditButtonListener(editButton, taskItemNumber) {
         `[data-task-item="${taskItemNumber}"]`
       );
 
-    // Get the current task data for the task item that will be edited
-    let currentTaskHeaderValue =
-        taskItemToEdit.querySelector(".task-header").textContent,
-      currentTaskDescriptionValue =
-        taskItemToEdit.querySelector(".task-description").textContent,
-      currentTaskPriorityValue = taskItemToEdit
-        .querySelector(".date-and-priority-indicator-container")
-        .lastElementChild.textContent.slice(10), // returns any characters after "Priority: "
-      currentTaskDueDate = taskItemToEdit
-        .querySelector(".date-and-priority-indicator-container")
-        .firstElementChild.textContent.slice(10); // return any character after "Due Date: "
+    let currentTaskItemObj = getTaskItem("taskItemNumber" + taskItemNumber);
 
     // Set the task edit form
-    let taskEditForm = taskForm(
-      "Save",
-      currentTaskHeaderValue,
-      currentTaskDescriptionValue,
-      currentTaskDueDate
-    );
+    let taskEditForm = taskForm("Save", currentTaskItemObj);
 
     // Validate the task edit form header and toggle state of save button
     let formTaskHeader = taskEditForm.querySelector("#form-task-header"),
       formAddTaskButton = taskEditForm.querySelector(
         ".form-add-or-save-task-button"
       );
-
-    // Store the current task data below in a data- attribute.
-    // If the user cancels the edit action, revert the task data back
-    // to its original state.
-    taskEditForm.dataset.currentTaskHeaderValue = currentTaskHeaderValue;
-    taskEditForm.dataset.currentTaskDescriptionValue =
-      currentTaskDescriptionValue;
-    taskEditForm.dataset.currentTaskPriorityValue = currentTaskPriorityValue;
-    taskEditForm.dataset.currentTaskDueDate = currentTaskDueDate;
 
     taskViewer.insertBefore(taskEditForm, taskItemToEdit.nextSibling);
     taskViewer.removeChild(taskItemToEdit);
@@ -162,20 +129,30 @@ function checkNewTaskButtonExist() {
 }
 
 function createTaskItemObj(taskForm) {
-  return {
-    headerValue: taskForm.querySelector("#form-task-header").value,
-    descriptionValue: taskForm.querySelector("#form-task-description").value,
-    priorityValue: taskForm.querySelector("#task-priority-dropdown").value,
-    // reconverts it into a more widely recognizable date form (e.g.: November 11, 2022)
-    // the '-' are replaced with '/' due to an issue where formatting the date with '-'
-    // causes the date to be one day behind the desired date
-    dueDateValue: format(
-      new Date(
-        taskForm.querySelector("#task-due-date-input").value.replace(/-/g, "/")
+  if (!taskForm) {
+    return {
+      headerValue: "",
+      descriptionValue: "",
+      priorityValue: "",
+    };
+  } else {
+    return {
+      headerValue: taskForm.querySelector("#form-task-header").value,
+      descriptionValue: taskForm.querySelector("#form-task-description").value,
+      priorityValue: taskForm.querySelector("#task-priority-dropdown").value,
+      // reconverts it into a more widely recognizable date form (e.g.: November 11, 2022)
+      // the '-' are replaced with '/' due to an issue where formatting the date with '-'
+      // causes the date to be one day behind the desired date
+      dueDateValue: format(
+        new Date(
+          taskForm
+            .querySelector("#task-due-date-input")
+            .value.replace(/-/g, "/")
+        ),
+        "PP"
       ),
-      "PP"
-    ),
-  };
+    };
+  }
 }
 
 function taskController() {

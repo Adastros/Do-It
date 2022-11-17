@@ -1,7 +1,7 @@
 import { format } from "date-fns";
 import { addClass, createElement } from "../../helper/helper.js";
 
-function taskDueDateField(taskDueDate) {
+function taskDueDateField(dueDate) {
   let taskDueDateField = createElement("div"),
     dateInputLabel = createElement("label"),
     dateInput = createElement("input");
@@ -14,10 +14,10 @@ function taskDueDateField(taskDueDate) {
 
   // If editing a task, set the date value shown to the due date of the
   // task. Otherwise, set the due date to the current date by default.
-  if (taskDueDate) {
+  if (dueDate) {
     dateInput.setAttribute(
       "value",
-      `${format(new Date(taskDueDate), "yyyy-MM-dd")}`
+      `${format(new Date(dueDate), "yyyy-MM-dd")}`
     );
   } else {
     dateInput.setAttribute("value", `${format(new Date(), "yyyy-MM-dd")}`);

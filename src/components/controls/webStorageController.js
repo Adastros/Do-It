@@ -3,6 +3,8 @@ function saveTaskItem(taskItemKey, taskItemObj) {
   localStorage.setItem(taskItemKey, JSON.stringify(taskItemObj));
 }
 
-// function getTaskItem()
+function getTaskItem(taskItemKey) {
+  return JSON.parse(localStorage.getItem(taskItemKey));
+}
 
-export { saveTaskItem };
+export { saveTaskItem, getTaskItem };
