@@ -65,16 +65,16 @@ function addTaskToTaskViewerListener(taskForm, taskItemNumber) {
   );
 
   formAddOrSaveTaskButton.addEventListener("click", () => {
-    let taskViewer = document.querySelector(".task-viewer"),
-      taskItemObj = createTaskItemObj(taskForm),
-      taskItemKey = "taskItemNumber" + taskItemNumber;
-
     // Only enters if the user is creating a new task.
     // Otherwise, the user is editing and saving a task.
     // A new task item # is not needed.
     if (!taskItemNumber) {
       taskItemNumber = document.getElementsByClassName("task-item").length;
     }
+
+    let taskViewer = document.querySelector(".task-viewer"),
+      taskItemObj = createTaskItemObj(taskForm),
+      taskItemKey = "taskItemNumber" + taskItemNumber;
 
     saveTaskItem(taskItemKey, taskItemObj);
 
