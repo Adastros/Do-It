@@ -28,20 +28,20 @@ function addNewTaskButtonListener() {
   });
 }
 
-function cancelTaskEditListener(taskForm, taskItemNumber) {
+function cancelTaskEditListener(taskForm, taskItemId) {
   let formCancelButton = taskForm.querySelector(".form-cancel-button");
 
   formCancelButton.addEventListener("click", () => {
     let taskViewer = document.querySelector(".task-viewer");
-    
+
+    // Reverts the task information back to its original data.
     // Checks to see if user is editing a task by checking if a
-    // taskItemNumber exists and reverts the task information back
-    // to its original data.
-    if (taskItemNumber !== undefined) {
-      let currentTaskItemObj = getTaskItem("taskItemNumber" + taskItemNumber);
+    // taskItemId exists.
+    if (taskItemId) {
+      let currentTaskItemObj = getTaskItem("taskItemId:" + taskItemId);
 
       taskViewer.insertBefore(
-        taskItem(currentTaskItemObj, taskItemNumber),
+        taskItem(currentTaskItemObj, taskItemId),
         taskForm.nextSibling
       );
     }
@@ -51,26 +51,27 @@ function cancelTaskEditListener(taskForm, taskItemNumber) {
   });
 }
 
-function addTaskToTaskViewerListener(taskForm, taskItemNumber) {
+function addTaskToTaskViewerListener(taskForm, taskItemId) {
   let formAddOrSaveTaskButton = taskForm.querySelector(
     ".form-add-or-save-task-button"
   );
 
   formAddOrSaveTaskButton.addEventListener("click", () => {
-    // Only enters if the user is creating a new task. This is where the taskItemNumber is created.
+    let taskViewer = document.querySelector(".task-viewer"),
+      taskItemObj = createTaskItemObj(taskForm);
+
+    // This is where the taskItemId is created. Only enters if the user is creating a new task. 
     // Otherwise, the user is editing and saving a task. A new task item # is not needed.
-    if (!taskItemNumber) {
-      taskItemNumber = document.getElementsByClassName("task-item").length;
+    if (!taskItemId) {
+      taskItemId = createTaskItemIdNumber(taskForm);
     }
 
-    let taskViewer = document.querySelector(".task-viewer"),
-      taskItemObj = createTaskItemObj(taskForm),
-      taskItemKey = "taskItemNumber" + taskItemNumber;
+    let taskItemKey = "taskItemId:" + taskItemId;
 
     saveTaskItem(taskItemKey, taskItemObj);
 
     taskViewer.insertBefore(
-      taskItem(taskItemObj, taskItemNumber),
+      taskItem(taskItemObj, taskItemId),
       taskForm.nextSibling
     );
     taskForm.remove();
@@ -78,20 +79,21 @@ function addTaskToTaskViewerListener(taskForm, taskItemNumber) {
   });
 }
 
-function AddEditButtonListener(editButton, taskItemNumber) {
+function AddEditButtonListener(editButton, taskItemId) {
   editButton.addEventListener("click", () => {
     // Locate the task item to edit
     let taskViewer = document.querySelector(".task-viewer"),
       taskItemToEdit = taskViewer.querySelector(
-        `[data-task-item="${taskItemNumber}"]`
+        `[data-task-item-id="${taskItemId}"]`
       );
 
-    let currentTaskItemObj = getTaskItem("taskItemNumber" + taskItemNumber);
+    let currentTaskItemObj = getTaskItem("taskItemId:" + taskItemId);
 
     // Set the task edit form
     let taskEditForm = taskForm("Save", currentTaskItemObj);
 
-    // Validate the task edit form header and toggle state of save button
+    // Get the task edit form header and save button to validate and 
+    // toggle button status, respectively.
     let formTaskHeader = taskEditForm.querySelector("#form-task-header"),
       formAddTaskButton = taskEditForm.querySelector(
         ".form-add-or-save-task-button"
@@ -101,16 +103,16 @@ function AddEditButtonListener(editButton, taskItemNumber) {
     taskViewer.removeChild(taskItemToEdit);
 
     // Set listeners for task edit form
-    cancelTaskEditListener(taskEditForm, taskItemNumber);
-    addTaskToTaskViewerListener(taskEditForm, taskItemNumber);
+    cancelTaskEditListener(taskEditForm, taskItemId);
+    addTaskToTaskViewerListener(taskEditForm, taskItemId);
     missingValueAggressiveValidation(formTaskHeader, formAddTaskButton);
   });
 }
 
-function toggleTaskStatus(checkbox, taskItemNumber) {
+function toggleTaskStatus(checkbox, taskItemId) {
   checkbox.addEventListener("click", () => {
     let taskItem = document.querySelector(
-        `[data-task-item = '${taskItemNumber}']`
+        `[data-task-item-id = '${taskItemId}']`
       ),
       checkmark = checkbox.firstChild;
 
@@ -126,6 +128,19 @@ function checkNewTaskButtonExist() {
     taskViewer.append(addNewTaskButton());
     addNewTaskButtonListener();
   }
+}
+
+// Format: MMDDYYYY-[task item # for the specified date]
+// task item # starts at 0.
+function createTaskItemIdNumber(taskForm) {
+  let idDatePortion = taskForm
+      .querySelector("#task-due-date-input")
+      .value.replace(/-/g, ""),
+    idDateRegex = new RegExp(idDatePortion, "g"),
+    matchedDateKeys = Object.keys(localStorage).toString().match(idDateRegex),
+    idTaskItemNumber = matchedDateKeys ? matchedDateKeys.length : 0;
+
+  return idDatePortion + idTaskItemNumber;
 }
 
 function createTaskItemObj(taskForm) {

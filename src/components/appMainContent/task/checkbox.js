@@ -2,7 +2,7 @@ import { toggleTaskStatus } from "../../controls/taskController.js";
 import { addClass, createElement } from "../../helper/helper.js";
 import checkmarkIcon from "../../../icons/check.svg";
 
-function checkbox(taskItemNumber) {
+function checkbox(taskItemId) {
   let checkboxContainer = createElement("div"),
     checkbox = createElement("div"),
     checkmark = createElement("img");
@@ -12,7 +12,7 @@ function checkbox(taskItemNumber) {
 
   addClass(checkbox, "checkbox");
   addClass(checkmark, "fade-in-out");
-  toggleTaskStatus(checkbox, taskItemNumber);
+  toggleTaskStatus(checkbox, taskItemId);
 
   checkbox.append(checkmark);
   checkboxContainer.append(checkbox);

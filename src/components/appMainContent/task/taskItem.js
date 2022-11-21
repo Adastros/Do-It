@@ -3,7 +3,7 @@ import { taskInfo } from "./taskInfo.js";
 import { taskItemActions } from "./taskItemActions.js";
 import { addClass, createElement } from "../../helper/helper.js";
 
-function taskItem(taskItemObj, taskItemNumber) {
+function taskItem(taskItemObj, taskItemId) {
   let taskItem = createElement("div"),
     primaryTaskInfoAndActionsContainer = createElement("div"),
     checkBoxAndTaskInfoContainer = createElement("div"),
@@ -25,19 +25,19 @@ function taskItem(taskItemObj, taskItemNumber) {
   addClass(checkBoxAndTaskInfoContainer, "check-box-and-task-info-container");
   addClass(taskItem, "task-item");
 
-  taskItem.dataset.taskItem = taskItemNumber;
+  taskItem.dataset.taskItemId = taskItemId;
 
   dueDateAndPriorityIndicatorContainer.append(
     dueDateIndicator,
     priorityIndicator
   );
   checkBoxAndTaskInfoContainer.append(
-    checkbox(taskItemNumber),
+    checkbox(taskItemId),
     taskInfo(taskItemObj.headerValue, taskItemObj.descriptionValue)
   );
   primaryTaskInfoAndActionsContainer.append(
     checkBoxAndTaskInfoContainer,
-    taskItemActions(taskItemNumber)
+    taskItemActions(taskItemId)
   );
   taskItem.append(
     primaryTaskInfoAndActionsContainer,
