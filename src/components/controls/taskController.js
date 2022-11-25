@@ -38,7 +38,7 @@ function cancelTaskEditListener(taskForm, taskItemId) {
     // Checks to see if user is editing a task by checking if a
     // taskItemId exists.
     if (taskItemId) {
-      let currentTaskItemObj = getTaskItem("taskItemId:" + taskItemId);
+      let currentTaskItemObj = getTaskItem(taskItemId);
 
       taskViewer.insertBefore(
         taskItem(currentTaskItemObj, taskItemId),
@@ -60,13 +60,13 @@ function addTaskToTaskViewerListener(taskForm, taskItemId) {
     let taskViewer = document.querySelector(".task-viewer"),
       taskItemObj = createTaskItemObj(taskForm);
 
-    // This is where the taskItemId is created. Only enters if the user is creating a new task. 
+    // This is where the taskItemId is created. Only enters if the user is creating a new task.
     // Otherwise, the user is editing and saving a task. A new task item # is not needed.
     if (!taskItemId) {
-      taskItemId = createTaskItemIdNumber(taskForm);
+      taskItemId = createTaskItemIdNumber();
     }
 
-    let taskItemKey = "taskItemId:" + taskItemId;
+    let taskItemKey = taskItemId;
 
     saveTaskItem(taskItemKey, taskItemObj);
 
@@ -87,12 +87,12 @@ function AddEditButtonListener(editButton, taskItemId) {
         `[data-task-item-id="${taskItemId}"]`
       );
 
-    let currentTaskItemObj = getTaskItem("taskItemId:" + taskItemId);
+    let currentTaskItemObj = getTaskItem(taskItemId);
 
     // Set the task edit form
     let taskEditForm = taskForm("Save", currentTaskItemObj);
 
-    // Get the task edit form header and save button to validate and 
+    // Get the task edit form header and save button to validate and
     // toggle button status, respectively.
     let formTaskHeader = taskEditForm.querySelector("#form-task-header"),
       formAddTaskButton = taskEditForm.querySelector(
@@ -130,17 +130,18 @@ function checkNewTaskButtonExist() {
   }
 }
 
-// Format: MMDDYYYY-[task item # for the specified date]
-// task item # starts at 0.
-function createTaskItemIdNumber(taskForm) {
-  let idDatePortion = taskForm
-      .querySelector("#task-due-date-input")
-      .value.replace(/-/g, ""),
-    idDateRegex = new RegExp(idDatePortion, "g"),
-    matchedDateKeys = Object.keys(localStorage).toString().match(idDateRegex),
-    idTaskItemNumber = matchedDateKeys ? matchedDateKeys.length : 0;
+// Random assigns a eight digit integer for the task ID.
+function createTaskItemIdNumber() {
+  let min = 0,
+    max = 100000000,
+    taskId;
 
-  return idDatePortion + idTaskItemNumber;
+  do {
+    // The maximum is exclusive and the minimum is inclusive
+    taskId = Math.floor(Math.random() * (max - min) + min);
+  } while (Object.keys(localStorage).includes(`${taskId}`));
+
+  return taskId;
 }
 
 function createTaskItemObj(taskForm) {
