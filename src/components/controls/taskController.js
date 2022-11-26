@@ -57,8 +57,7 @@ function addTaskToTaskViewerListener(taskForm, taskItemId) {
   );
 
   formAddOrSaveTaskButton.addEventListener("click", () => {
-    let taskViewer = document.querySelector(".task-viewer"),
-      taskItemObj = createTaskItemObj(taskForm);
+    let taskItemObj = createTaskItemObj(taskForm);
 
     // This is where the taskItemId is created. Only enters if the user is creating a new task.
     // Otherwise, the user is editing and saving a task. A new task item # is not needed.
@@ -66,17 +65,31 @@ function addTaskToTaskViewerListener(taskForm, taskItemId) {
       taskItemId = createTaskItemIdNumber();
     }
 
-    let taskItemKey = taskItemId;
-
-    saveTaskItem(taskItemKey, taskItemObj);
-
-    taskViewer.insertBefore(
-      taskItem(taskItemObj, taskItemId),
-      taskForm.nextSibling
-    );
+    saveTaskItem(taskItemId, taskItemObj);
+    addTaskToTaskViewer(taskItemId, taskItemObj, taskForm);
     taskForm.remove();
     checkNewTaskButtonExist();
   });
+}
+
+// If taskItemObj isn't provided, it's assumed the taskItemId is. This
+// will occur if the user is switching between menu tabs where the app
+// must sort through local storage data to fill taskViewer.
+function addTaskToTaskViewer(
+  taskItemId,
+  taskItemObj = getTaskItem(taskItemId),
+  nextElementSibling
+) {
+  let taskViewer = document.querySelector(".task-viewer");
+
+  if (!nextElementSibling) {
+    nextElementSibling = taskViewer.firstChild;
+  }
+
+  taskViewer.insertBefore(
+    taskItem(taskItemObj, taskItemId),
+    nextElementSibling
+  );
 }
 
 function AddEditButtonListener(editButton, taskItemId) {
@@ -145,6 +158,8 @@ function createTaskItemIdNumber() {
 }
 
 function createTaskItemObj(taskForm) {
+  // When creating the first task in task viewer, assign empty values to
+  // the object so that taskForm will display empty fields.
   if (!taskForm) {
     return {
       headerValue: "",
@@ -171,9 +186,26 @@ function createTaskItemObj(taskForm) {
   }
 }
 
+function removeAllTasks() {
+  let taskViewer = document.querySelector(".task-viewer");
+  
+  if (!(taskViewer.childElementCount - 1)) return;
+
+  while (taskViewer.firstElementChild.nextElementSibling) {
+    taskViewer.firstElementChild.remove();
+  }
+}
+
 function taskController() {
   // initialize event listener on app load
   addNewTaskButtonListener();
 }
 
-export { taskController, toggleTaskStatus, AddEditButtonListener };
+export {
+  taskController,
+  toggleTaskStatus,
+  AddEditButtonListener,
+  addTaskToTaskViewerListener,
+  addTaskToTaskViewer,
+  removeAllTasks,
+};

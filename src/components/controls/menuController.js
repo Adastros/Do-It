@@ -1,7 +1,10 @@
 import { newProjectOverlayForm } from "../project/newProjectOverlayForm.js";
 import { tab } from "../menubar/tab.js";
 import { missingValueAggressiveValidation } from "./formValidationControls.js";
-import { addClass, createElement, toggleClass } from "../helper/helper.js";
+import { addTaskToTaskViewer, removeAllTasks } from "./taskController.js";
+import { getTaskItem } from "./webStorageController.js";
+import { format, addDays, differenceInCalendarDays } from "date-fns";
+import { toggleClass } from "../helper/helper.js";
 
 // Event Listeners expect a function reference instead of the function itself.
 // To avoid calling function immediately, either bind 'this', create an
@@ -134,53 +137,80 @@ function updateMainContentHeading(text) {
   mainContentHeading.textContent = text;
 }
 
-function inboxTabListener() {
-  let inboxTab = document.querySelector(".menu-tab-inbox");
-
-  inboxTab.addEventListener("click", () => {
-    updateMainContentHeading("Inbox");
-    updateMainContentProjectDescription("");
+function sortByInboxTasks(filteredLocalStorageData) {
+  filteredLocalStorageData.forEach((key) => {
+    addTaskToTaskViewer(key);
   });
 }
 
-function todayTabListener() {
-  let todayTab = document.querySelector(".menu-tab-today");
+function sortByTodaysTasks(filteredLocalStorageData) {
+  let todaysDate = format(new Date(), "PP");
 
-  todayTab.addEventListener("click", () => {
-    updateMainContentHeading("Today");
-    updateMainContentProjectDescription("");
+  filteredLocalStorageData.forEach((key) => {
+    if (key === "previousMenuTab") {
+    }
+    let taskItemObj = getTaskItem(key);
+
+    if (taskItemObj.dueDateValue === todaysDate) {
+      addTaskToTaskViewer(key);
+    }
   });
 }
 
-function upcomingTabListener() {
-  let upcomingTab = document.querySelector(".menu-tab-upcoming");
+function sortByUpcomingTasks(filteredLocalStorageData) {
+  let todaysDate = new Date(),
+    weekFromTodaysDate = addDays(todaysDate, 6);
 
-  upcomingTab.addEventListener("click", () => {
-    updateMainContentHeading("Upcoming");
-    updateMainContentProjectDescription("");
+  filteredLocalStorageData.forEach((key) => {
+    let taskItemObj = getTaskItem(key),
+      taskDueDate = new Date(taskItemObj.dueDateValue);
+
+    if (differenceInCalendarDays(taskDueDate, weekFromTodaysDate) < 7) {
+      addTaskToTaskViewer(key);
+    }
   });
 }
 
-function completedTabListener() {
-  let completedTab = document.querySelector(".menu-tab-completed");
-
-  completedTab.addEventListener("click", () => {
-    updateMainContentHeading("Completed");
-    updateMainContentProjectDescription("");
+function sortTasksByMenuTab(tabName) {
+  let filteredLocalStorageData = Object.keys(localStorage).filter((key) => {
+    return /\d{8}/.test(key);
   });
+
+  switch (tabName) {
+    case "Inbox":
+      sortByInboxTasks(filteredLocalStorageData);
+      break;
+    case "Today":
+      sortByTodaysTasks(filteredLocalStorageData);
+      break;
+    case "Upcoming":
+      sortByUpcomingTasks(filteredLocalStorageData);
+      break;
+    default:
+      return;
+  }
+
+  localStorage.previousMenuTab = tabName;
 }
 
-function initMenuTabListeners() {
-  inboxTabListener();
-  todayTabListener();
-  upcomingTabListener();
-  completedTabListener();
+function createMenuTabListener(menuTab) {
+  menuTab.addEventListener("click", () => {
+    let tabName = menuTab.textContent;
+
+    updateMainContentHeading(tabName);
+    updateMainContentProjectDescription("");
+
+    //If the user re-clicks the current tab, do not clear and re-sort task viewer.
+    if (localStorage.previousMenuTab !== tabName) {
+      removeAllTasks();
+      sortTasksByMenuTab(tabName);
+    }
+  });
 }
 
 function menuController() {
   toggleMenubarVisibility();
-  initMenuTabListeners();
   displayNewProjectOverlayForm();
 }
 
-export { menuController };
+export { menuController, createMenuTabListener };
