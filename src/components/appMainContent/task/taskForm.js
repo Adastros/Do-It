@@ -72,7 +72,7 @@ function taskForm(addOrSaveTaskButtonText, currentTaskItemObj) {
 
   taskDateAndPriorityContainer.append(
     taskDueDateField(currentTaskItemObj.dueDateValue),
-    taskPriorityDropdown()
+    taskPriorityDropdown(currentTaskItemObj.priorityValue)
   );
   taskFormButtonsContainer.append(cancelFormButton, addOrSaveTaskButton);
   taskFormActionsContainer.append(

@@ -9,9 +9,12 @@ function taskItem(taskItemObj, taskItemId) {
     checkBoxAndTaskInfoContainer = createElement("div"),
     dueDateAndPriorityIndicatorContainer = createElement("div"),
     priorityIndicator = createElement("p"),
-    dueDateIndicator = createElement("p");
+    dueDateIndicator = createElement("p"),
+    upperCasePriorityValue =
+      taskItemObj.priorityValue.charAt(0).toUpperCase() +
+      taskItemObj.priorityValue.slice(1);
 
-  priorityIndicator.textContent = "Priority: " + taskItemObj.priorityValue;
+  priorityIndicator.textContent = "Priority: " + upperCasePriorityValue;
   dueDateIndicator.textContent = "Due Date: " + taskItemObj.dueDateValue;
 
   addClass(

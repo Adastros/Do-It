@@ -1,34 +1,31 @@
-import { addClass, createElement } from "../../helper/helper.js";
+import { createElement } from "../../helper/helper.js";
 
-function taskPriorityDropdown() {
+function taskPriorityDropdown(priorityValue) {
   let taskPriorityDropdown = createElement("div"),
     label = createElement("label"),
     dropdown = createElement("select"),
-    noPriorityOption = createElement("option"),
-    lowPriorityOption = createElement("option"),
-    mediumPriorityOption = createElement("option"),
-    highPriorityOption = createElement("option");
+    priorityOptionArr = ["None", "Low", "Medium", "High"];
 
   label.textContent = "Priority:";
   label.setAttribute("for", "task-priority-dropdown");
   dropdown.id = "task-priority-dropdown";
 
-  noPriorityOption.textContent = "None";
-  lowPriorityOption.textContent = "Low";
-  mediumPriorityOption.textContent = "Medium";
-  highPriorityOption.textContent = "High";
+  for (let i = 0; i < 4; i++) {
+    let priorityOption = createElement("option"),
+      lowerCaseOptionStr = priorityOptionArr[i].toLowerCase();
 
-  noPriorityOption.setAttribute("value", "none");
-  lowPriorityOption.setAttribute("value", "low");
-  mediumPriorityOption.setAttribute("value", "medium");
-  highPriorityOption.setAttribute("value", "high");
+    priorityOption.textContent = priorityOptionArr[i];
+    priorityOption.setAttribute("value", `${lowerCaseOptionStr}`);
 
-  dropdown.append(
-    noPriorityOption,
-    lowPriorityOption,
-    mediumPriorityOption,
-    highPriorityOption
-  );
+    // If editing a task, select the option in the dropdown that
+    // matches the current priority value
+    if (priorityValue.toLowerCase() === lowerCaseOptionStr) {
+      priorityOption.setAttribute("selected", "");
+    }
+
+    dropdown.append(priorityOption);
+  }
+
   taskPriorityDropdown.append(label, dropdown);
 
   return taskPriorityDropdown;
