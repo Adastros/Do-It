@@ -208,6 +208,8 @@ function sortTasksByMenuTab(tabName) {
 
   switch (tabName) {
     case "Inbox":
+      // Create the task priority boards first before sorting tasks
+      createTaskPriorityBoards();
       sortByInboxTasks(taskDataObj, priorityKeyArr);
       break;
     case "Today":
@@ -223,8 +225,9 @@ function sortTasksByMenuTab(tabName) {
   localStorage.previousMenuTab = tabName;
 }
 
-function createTaskPriorityBoards(taskViewer) {
-  let priorityBoardHeaderArr = ["High", "Medium", "Low", "None"],
+function createTaskPriorityBoards() {
+  let taskViewer = document.querySelector(".task-viewer"),
+    priorityBoardHeaderArr = ["High", "Medium", "Low", "None"],
     priorityKeys = [
       "highPriorityTasks",
       "mediumPriorityTasks",
@@ -239,9 +242,6 @@ function createTaskPriorityBoards(taskViewer) {
 
 function sortByInboxTasks(taskDataObj, priorityKeyArr) {
   let taskViewer = document.querySelector(".task-viewer");
-
-  // Create the task priority boards first before sorting tasks
-  createTaskPriorityBoards(taskViewer);
 
   priorityKeyArr.forEach((priorityKey) => {
     let taskPriorityBoard = taskViewer.querySelector(
@@ -306,7 +306,10 @@ function sortByUpcomingTasks(taskDataObj, priorityKeyArr) {
 }
 
 function taskController() {
-  // initialize event listener on app load
+  // Sort tasks by priority for the Inbox menu tab on page load
+  sortTasksByMenuTab("Inbox");
+
+  // initialize event listener on page load
   addNewTaskButtonListener();
 }
 
