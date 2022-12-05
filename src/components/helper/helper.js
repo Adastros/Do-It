@@ -14,4 +14,14 @@ function toggleClass(element, cssClass) {
   element.classList.toggle(cssClass);
 }
 
-export { createElement, addClass, removeClass, toggleClass };
+function capitalizeFirstLetter(word) {
+  return word.charAt(0).toUpperCase() + word.slice(1);
+}
+
+export {
+  createElement,
+  addClass,
+  removeClass,
+  toggleClass,
+  capitalizeFirstLetter,
+};

@@ -43,6 +43,11 @@ img {
   display: block;
 }
 
+.task-priority-board {
+  display: flex;
+  flex-direction: column;
+}
+
 .app-logo-container {
   display: flex;
   align-items: center;

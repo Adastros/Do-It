@@ -4,11 +4,27 @@ import { taskController } from "./components/controls/taskController.js";
 import { menuController } from "./components/controls/menuController";
 import { createElement } from "./components/helper/helper.js";
 import { menubar } from "./components/menubar/menubar.js";
-import { saveTaskItem } from "./components/controls/webStorageController.js";
+import {
+  getData,
+  saveData,
+} from "./components/controls/webStorageController.js";
 import "./stylesheets/style.css";
 
+function taskData() {
+  return JSON.stringify({
+    highPriorityTasks: {},
+    mediumPriorityTasks: {},
+    lowPriorityTasks: {},
+    noPriorityTasks: {},
+  });
+}
+
 function initLocalStorageGlobalVariables() {
-  saveTaskItem("previousMenuTab", "");
+  saveData("previousMenuTab", "");
+
+  if (!getData("taskData")) {
+    saveData("taskData", taskData());
+  }
 }
 
 function initControllers() {

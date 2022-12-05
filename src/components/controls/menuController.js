@@ -1,9 +1,7 @@
 import { newProjectOverlayForm } from "../project/newProjectOverlayForm.js";
 import { tab } from "../menubar/tab.js";
 import { missingValueAggressiveValidation } from "./formValidationControls.js";
-import { addTaskToTaskViewer, removeAllTasks } from "./taskController.js";
-import { getTaskItem } from "./webStorageController.js";
-import { format, addDays, differenceInCalendarDays } from "date-fns";
+import { clearTaskViewer, sortTasksByMenuTab } from "./taskController.js";
 import { toggleClass } from "../helper/helper.js";
 
 // Event Listeners expect a function reference instead of the function itself.
@@ -137,62 +135,6 @@ function updateMainContentHeading(text) {
   mainContentHeading.textContent = text;
 }
 
-function sortByInboxTasks(filteredLocalStorageData) {
-  filteredLocalStorageData.forEach((key) => {
-    addTaskToTaskViewer(key);
-  });
-}
-
-function sortByTodaysTasks(filteredLocalStorageData) {
-  let todaysDate = format(new Date(), "PP");
-
-  filteredLocalStorageData.forEach((key) => {
-    if (key === "previousMenuTab") {
-    }
-    let taskItemObj = getTaskItem(key);
-
-    if (taskItemObj.dueDateValue === todaysDate) {
-      addTaskToTaskViewer(key);
-    }
-  });
-}
-
-function sortByUpcomingTasks(filteredLocalStorageData) {
-  let todaysDate = new Date(),
-    weekFromTodaysDate = addDays(todaysDate, 6);
-
-  filteredLocalStorageData.forEach((key) => {
-    let taskItemObj = getTaskItem(key),
-      taskDueDate = new Date(taskItemObj.dueDateValue);
-
-    if (differenceInCalendarDays(taskDueDate, weekFromTodaysDate) < 7) {
-      addTaskToTaskViewer(key);
-    }
-  });
-}
-
-function sortTasksByMenuTab(tabName) {
-  let filteredLocalStorageData = Object.keys(localStorage).filter((key) => {
-    return /\d{8}/.test(key);
-  });
-
-  switch (tabName) {
-    case "Inbox":
-      sortByInboxTasks(filteredLocalStorageData);
-      break;
-    case "Today":
-      sortByTodaysTasks(filteredLocalStorageData);
-      break;
-    case "Upcoming":
-      sortByUpcomingTasks(filteredLocalStorageData);
-      break;
-    default:
-      return;
-  }
-
-  localStorage.previousMenuTab = tabName;
-}
-
 function createMenuTabListener(menuTab) {
   menuTab.addEventListener("click", () => {
     let tabName = menuTab.textContent;
@@ -202,7 +144,7 @@ function createMenuTabListener(menuTab) {
 
     //If the user re-clicks the current tab, do not clear and re-sort task viewer.
     if (localStorage.previousMenuTab !== tabName) {
-      removeAllTasks();
+      clearTaskViewer();
       sortTasksByMenuTab(tabName);
     }
   });
