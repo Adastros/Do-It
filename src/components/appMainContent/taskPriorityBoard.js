@@ -1,4 +1,3 @@
-import { addNewTaskButton } from "./task/addNewTaskButton";
 import { createElement, addClass } from "../helper/helper";
 
 function taskPriorityBoard(boardHeader, priorityKey) {
@@ -9,15 +8,13 @@ function taskPriorityBoard(boardHeader, priorityKey) {
 
   boardHeaderElement.textContent = boardHeader + " Priority";
 
-  // An identifier that is used when sorting through task data 
+  // An identifier that is used when sorting through task data
   // to append tasks based on priority.
   taskPriorityBoard.dataset.priorityKey = priorityKey;
 
   addClass(taskList, "task-list");
   addClass(linebreak, "linebreak");
   addClass(taskPriorityBoard, "task-priority-board");
-
-  taskList.append(addNewTaskButton());
 
   taskPriorityBoard.append(boardHeaderElement, linebreak, taskList);
 

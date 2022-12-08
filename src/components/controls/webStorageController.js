@@ -60,4 +60,4 @@ function getTaskPriority(priorityValue) {
   return priorityKey;
 }
 
-export { saveData, getData, saveTaskItem, getTaskItem };
+export { saveData, getData, saveTaskItem, getTaskItem, getTaskPriority };

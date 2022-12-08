@@ -1,9 +1,13 @@
 import { format, addDays, differenceInDays } from "date-fns";
 import { taskForm } from "../appMainContent/task/taskForm.js";
-import { addNewTaskButton } from "../appMainContent/task/addNewTaskButton.js";
 import { taskItem } from "../appMainContent/task/taskItem.js";
 import { taskPriorityBoard } from "../appMainContent/taskPriorityBoard.js";
-import { saveTaskItem, getTaskItem, getData } from "./webStorageController.js";
+import {
+  saveTaskItem,
+  getTaskItem,
+  getData,
+  getTaskPriority,
+} from "./webStorageController.js";
 import { missingValueAggressiveValidation } from "./formValidationControls.js";
 import { toggleClass } from "../helper/helper.js";
 
@@ -11,11 +15,9 @@ function addNewTaskButtonListener() {
   let addNewTaskButton = document.querySelector(".add-new-task-button");
 
   addNewTaskButton.addEventListener("click", () => {
-    let taskViewer = document.querySelector(".task-viewer"),
-      newTaskForm = taskForm("Add Task", createTaskItemObj());
+    let newTaskForm = taskForm("Add Task", createTaskItemObj());
 
-    taskViewer.append(newTaskForm);
-    taskViewer.removeChild(addNewTaskButton);
+    document.body.append(newTaskForm);
 
     let formTaskHeader = newTaskForm.querySelector("#form-task-header"),
       formAddTaskButton = newTaskForm.querySelector(
@@ -23,13 +25,13 @@ function addNewTaskButtonListener() {
       );
 
     // Activate listeners for form buttons
-    cancelTaskEditListener(newTaskForm);
-    addTaskToTaskViewerListener(newTaskForm);
+    cancelTaskFormListener(newTaskForm);
+    addOrSaveTaskButtonListener(newTaskForm);
     missingValueAggressiveValidation(formTaskHeader, formAddTaskButton);
   });
 }
 
-function cancelTaskEditListener(taskForm, taskItemId) {
+function cancelTaskFormListener(taskForm, taskItemId) {
   let formCancelButton = taskForm.querySelector(".form-cancel-button");
 
   formCancelButton.addEventListener("click", () => {
@@ -42,76 +44,60 @@ function cancelTaskEditListener(taskForm, taskItemId) {
       let currentTaskItemObj = getTaskItem(taskItemId);
 
       taskViewer.insertBefore(
-        taskItem(currentTaskItemObj, taskItemId),
+        taskItem(taskItemId, currentTaskItemObj),
         taskForm.nextSibling
       );
     }
 
     taskForm.remove();
-    checkNewTaskButtonExist();
   });
 }
 
-function addTaskToTaskViewerListener(taskForm, taskItemId) {
+function addOrSaveTaskButtonListener(taskForm, taskItemId) {
   let formAddOrSaveTaskButton = taskForm.querySelector(
     ".form-add-or-save-task-button"
   );
 
   formAddOrSaveTaskButton.addEventListener("click", () => {
-    let taskItemObj = createTaskItemObj(taskForm);
+    let taskItemObj = createTaskItemObj(taskForm),
+      currentTaskBoardView = document.querySelector(".main-content-heading");
 
-    // This is where the taskItemId is created. Only enters if the user is creating a new task.
-    // Otherwise, the user is editing and saving a task. A new task item # is not needed.
     if (!taskItemId) {
+      // This is where the taskItemId is created. Only enters if the user is creating a new task.
+      // Otherwise, the user is editing and saving a task. A new task item # is not needed.
       taskItemId = createTaskItemIdNumber();
+    } else {
+      // If the user edits and saves a task, remove the task before replacing it
+      // with an updated version of it
+      document.querySelector(`[data-task-item-id = '${taskItemId}']`).remove();
     }
 
     saveTaskItem(taskItemId, taskItemObj);
-    addTaskToTaskViewer(taskItemId, taskForm, taskItemObj);
+    insertTaskBasedOnView(taskItemId, taskItemObj, currentTaskBoardView);
     taskForm.remove();
-    checkNewTaskButtonExist();
   });
 }
 
-// If taskItemObj isn't provided, it's assumed the taskItemId is. This
-// will occur if the user is switching between menu tabs where the app
-// must sort through local storage data to fill taskViewer.
-function addTaskToTaskViewer(
-  taskItemId,
-  nextElementSibling,
-  taskItemObj,
-  elementToAddTaskTo
-) {
-  if (!nextElementSibling) {
-    nextElementSibling = document.querySelector(".task-viewer").firstChild;
-  }
-
+// Adds tasks to the relevant board based on the page view
+function addTaskToBoard(taskItemId, taskItemObj, taskBoard) {
   if (!taskItemObj) {
     taskItemObj = getTaskItem(taskItemId);
   }
 
-  if (!elementToAddTaskTo) {
-    elementToAddTaskTo = document.querySelector(".task-viewer");
+  if (!taskBoard) {
+    taskBoard = document.querySelector(".task-viewer");
   }
 
-  elementToAddTaskTo.insertBefore(
-    taskItem(taskItemObj, taskItemId),
-    nextElementSibling
-  );
+  taskBoard.append(taskItem(taskItemId, taskItemObj));
 }
 
 function AddEditButtonListener(editButton, taskItemId) {
   editButton.addEventListener("click", () => {
-    // Locate the task item to edit
-    let taskViewer = document.querySelector(".task-viewer"),
-      taskItemToEdit = taskViewer.querySelector(
-        `[data-task-item-id="${taskItemId}"]`
-      );
-
     let currentTaskItemObj = getTaskItem(taskItemId);
 
-    // Set the task edit form
+    // Create the task edit form and render it on the screen
     let taskEditForm = taskForm("Save", currentTaskItemObj);
+    document.body.append(taskEditForm);
 
     // Get the task edit form header and save button to validate and
     // toggle button status, respectively.
@@ -120,12 +106,9 @@ function AddEditButtonListener(editButton, taskItemId) {
         ".form-add-or-save-task-button"
       );
 
-    taskViewer.insertBefore(taskEditForm, taskItemToEdit.nextSibling);
-    taskViewer.removeChild(taskItemToEdit);
-
     // Set listeners for task edit form
-    cancelTaskEditListener(taskEditForm, taskItemId);
-    addTaskToTaskViewerListener(taskEditForm, taskItemId);
+    cancelTaskFormListener(taskEditForm, taskItemId);
+    addOrSaveTaskButtonListener(taskEditForm, taskItemId);
     missingValueAggressiveValidation(formTaskHeader, formAddTaskButton);
   });
 }
@@ -140,15 +123,6 @@ function toggleTaskStatus(checkbox, taskItemId) {
     toggleClass(taskItem, "completed");
     toggleClass(checkmark, "fade-in-out");
   });
-}
-
-function checkNewTaskButtonExist() {
-  let taskViewer = document.querySelector(".task-viewer");
-
-  if (!taskViewer.contains(document.querySelector(".add-new-task-button"))) {
-    taskViewer.append(addNewTaskButton());
-    addNewTaskButtonListener();
-  }
 }
 
 // Random assigns a eight digit integer for the task ID.
@@ -202,7 +176,7 @@ function clearTaskViewer() {
   }
 }
 
-function sortTasksByMenuTab(tabName) {
+function getSortAllTasksMethod(tabName) {
   let taskDataObj = JSON.parse(getData("taskData")),
     priorityKeyArr = Object.keys(taskDataObj);
 
@@ -210,13 +184,13 @@ function sortTasksByMenuTab(tabName) {
     case "Inbox":
       // Create the task priority boards first before sorting tasks
       createTaskPriorityBoards();
-      sortByInboxTasks(taskDataObj, priorityKeyArr);
+      sortAllTasksByInbox(taskDataObj, priorityKeyArr);
       break;
     case "Today":
-      sortByTodaysTasks(taskDataObj, priorityKeyArr);
+      sortAllTasksByToday(taskDataObj, priorityKeyArr);
       break;
     case "Upcoming":
-      sortByUpcomingTasks(taskDataObj, priorityKeyArr);
+      sortAllTasksByUpcoming(taskDataObj, priorityKeyArr);
       break;
     default:
       return;
@@ -240,7 +214,7 @@ function createTaskPriorityBoards() {
   });
 }
 
-function sortByInboxTasks(taskDataObj, priorityKeyArr) {
+function sortAllTasksByInbox(taskDataObj, priorityKeyArr) {
   let taskViewer = document.querySelector(".task-viewer");
 
   priorityKeyArr.forEach((priorityKey) => {
@@ -248,24 +222,20 @@ function sortByInboxTasks(taskDataObj, priorityKeyArr) {
       `[data-priority-key="${priorityKey}"]`
     );
 
-    let priorityBoardTaskList = taskPriorityBoard.querySelector(".task-list"),
-      priorityBoardAddNewTaskButton = taskPriorityBoard.querySelector(
-        ".add-new-task-button"
-      );
+    let priorityBoardTaskList = taskPriorityBoard.querySelector(".task-list");
 
     //Append the tasks to each priority board
     Object.keys(taskDataObj[priorityKey]).forEach((taskItemKey) => {
-      addTaskToTaskViewer(
+      addTaskToBoard(
         taskItemKey,
-        priorityBoardAddNewTaskButton,
-        "",
+        taskDataObj[priorityKey][taskItemKey],
         priorityBoardTaskList
       );
     });
   });
 }
 
-function sortByTodaysTasks(taskDataObj, priorityKeyArr) {
+function sortAllTasksByToday(taskDataObj, priorityKeyArr) {
   let todaysDate = format(new Date(), "PP");
 
   priorityKeyArr.forEach((priorityKey) => {
@@ -273,17 +243,13 @@ function sortByTodaysTasks(taskDataObj, priorityKeyArr) {
       let taskDueDate = taskDataObj[priorityKey][taskItemKey].dueDateValue;
 
       if (taskDueDate === todaysDate) {
-        addTaskToTaskViewer(
-          taskItemKey,
-          "",
-          taskDataObj[priorityKey][taskItemKey]
-        );
+        addTaskToBoard(taskItemKey, taskDataObj[priorityKey][taskItemKey]);
       }
     });
   });
 }
 
-function sortByUpcomingTasks(taskDataObj, priorityKeyArr) {
+function sortAllTasksByUpcoming(taskDataObj, priorityKeyArr) {
   let todaysDate = new Date(),
     weekFromTodaysDate = addDays(todaysDate, 6);
 
@@ -295,32 +261,73 @@ function sortByUpcomingTasks(taskDataObj, priorityKeyArr) {
         dayDifference = differenceInDays(weekFromTodaysDate, taskDueDate);
 
       if (dayDifference < 7 && dayDifference >= 0) {
-        addTaskToTaskViewer(
-          taskItemKey,
-          "",
-          taskDataObj[priorityKey][taskItemKey]
-        );
+        addTaskToBoard(taskItemKey, taskDataObj[priorityKey][taskItemKey]);
       }
     });
   });
 }
 
+function insertTaskBasedOnView(taskItemId, taskItemObj, currentTaskBoardView) {
+  let taskViewer = document.querySelector(".task-viewer");
+
+  switch (currentTaskBoardView.textContent) {
+    case "Inbox":
+      insertTaskForInboxView(taskItemId, taskItemObj, taskViewer);
+      break;
+    case "Today":
+      insertTaskForTodayView(taskItemId, taskItemObj, taskViewer);
+      break;
+    case "Upcoming":
+      insertTaskForUpcomingView(taskItemId, taskItemObj, taskViewer);
+      break;
+    default:
+      return;
+  }
+}
+
+function insertTaskForInboxView(taskItemId, taskItemObj, taskViewer) {
+  let priorityKey = getTaskPriority(taskItemObj.priorityValue),
+    taskBoard = taskViewer.querySelector(
+      `[data-priority-key="${priorityKey}"]`
+    ),
+    taskList = taskBoard.querySelector(".task-list");
+
+  addTaskToBoard(taskItemId, taskItemObj, taskList);
+}
+
+function insertTaskForTodayView(taskItemId, taskItemObj, taskViewer) {
+  let taskDueDate = getTaskPriority(taskItemObj.dueDateValue),
+    todaysDate = format(new Date(), "PP"),
+    taskList = taskViewer.querySelector(".task-list");
+
+  if (taskDueDate === todaysDate) {
+    addTaskToBoard(taskItemId, taskItemObj, taskList);
+  }
+}
+
+function insertTaskForUpcomingView(taskItemId, taskItemObj, taskViewer) {
+  let taskDueDate = getTaskPriority(taskItemObj.dueDateValue),
+    weekFromTodaysDate = addDays(new Date(), 6), // today's date + 6 days
+    dayDifference = differenceInDays(weekFromTodaysDate, taskDueDate),
+    taskList = taskViewer.querySelector(".task-list");
+
+  if (dayDifference < 7 && dayDifference >= 0) {
+    addTaskToBoard(taskItemId, taskItemObj, taskList);
+  }
+}
+
 function taskController() {
   // Sort tasks by priority for the Inbox menu tab on page load
-  sortTasksByMenuTab("Inbox");
+  getSortAllTasksMethod("Inbox");
 
-  // initialize event listener on page load
   addNewTaskButtonListener();
 }
 
 export {
   taskController,
   toggleTaskStatus,
-  addNewTaskButtonListener,
   AddEditButtonListener,
-  addTaskToTaskViewerListener,
-  addTaskToTaskViewer,
+  addOrSaveTaskButtonListener,
   clearTaskViewer,
-  createTaskPriorityBoards,
-  sortTasksByMenuTab,
+  getSortAllTasksMethod,
 };

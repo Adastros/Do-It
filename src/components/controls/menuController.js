@@ -1,7 +1,7 @@
 import { newProjectOverlayForm } from "../project/newProjectOverlayForm.js";
 import { tab } from "../menubar/tab.js";
 import { missingValueAggressiveValidation } from "./formValidationControls.js";
-import { clearTaskViewer, sortTasksByMenuTab } from "./taskController.js";
+import { clearTaskViewer, getSortAllTasksMethod } from "./taskController.js";
 import { toggleClass } from "../helper/helper.js";
 
 // Event Listeners expect a function reference instead of the function itself.
@@ -145,7 +145,7 @@ function createMenuTabListener(menuTab) {
     //If the user re-clicks the current tab, do not clear and re-sort task viewer.
     if (localStorage.previousMenuTab !== tabName) {
       clearTaskViewer();
-      sortTasksByMenuTab(tabName);
+      getSortAllTasksMethod(tabName);
     }
   });
 }

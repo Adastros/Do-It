@@ -44,7 +44,8 @@ function createTaskDescriptionField(descriptionValue) {
 // The addOrSaveTaskButtonText argument is used to determine if the
 // taskForm should state "save" or "add task" for one of the buttons.
 function taskForm(addOrSaveTaskButtonText, currentTaskItemObj) {
-  let formContainer = createElement("div"),
+  let taskFormOverlay = createElement("div"),
+    taskForm = createElement("div"),
     taskItemForm = createElement("form"),
     headerField = createTaskHeaderField(currentTaskItemObj.headerValue),
     descriptionField = createTaskDescriptionField(
@@ -65,7 +66,8 @@ function taskForm(addOrSaveTaskButtonText, currentTaskItemObj) {
   );
   addClass(taskFormActionsContainer, "task-form-actions-container");
   addClass(taskItemForm, "task-form");
-  addClass(formContainer, "task-form-container");
+  addClass(taskForm, "task-form-container");
+  addClass(taskFormOverlay, "task-form-overlay");
 
   addOrSaveTaskButton.setAttribute("disabled", "");
   taskItemForm.setAttribute("novalidate", "");
@@ -80,9 +82,11 @@ function taskForm(addOrSaveTaskButtonText, currentTaskItemObj) {
     taskFormButtonsContainer
   );
   taskItemForm.append(headerField, descriptionField, taskFormActionsContainer);
-  formContainer.append(taskItemForm);
+  taskForm.append(taskItemForm);
 
-  return formContainer;
+  taskFormOverlay.append(taskForm);
+
+  return taskFormOverlay;
 }
 
 export { taskForm };

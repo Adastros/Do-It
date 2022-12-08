@@ -3,7 +3,7 @@ import { taskInfo } from "./taskInfo.js";
 import { taskItemActions } from "./taskItemActions.js";
 import { addClass, createElement } from "../../helper/helper.js";
 
-function taskItem(taskItemObj, taskItemId) {
+function taskItem(taskItemId, taskItemObj) {
   let taskItem = createElement("div"),
     primaryTaskInfoAndActionsContainer = createElement("div"),
     checkBoxAndTaskInfoContainer = createElement("div"),
