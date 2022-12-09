@@ -24,8 +24,6 @@ header {
 main {
   flex: 1;
   display: flex;
-  transform: translateX(0);
-  transition: transform 0.25s;
 }
 
 input {
@@ -107,6 +105,7 @@ img {
   display: flex;
   flex-direction: column;
   border-right: 1px solid black;
+  transition: transform 0.25s;
 }
 
 .menu-tabs {
@@ -178,6 +177,7 @@ img {
   display: flex;
   flex-direction: column;
   align-items: center;
+  transition: transform 0.25s;
 }
 
 .main-content-header {
@@ -295,6 +295,11 @@ img {
 
 .closed {
   transform: translateX(-200px);
+}
+
+/* Moves <div class="main-content>"*/
+.closed + div{
+  transform: translateX(-100px);
 }
 
 .hide {

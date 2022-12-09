@@ -2,7 +2,7 @@ import { newProjectOverlayForm } from "../project/newProjectOverlayForm.js";
 import { tab } from "../menubar/tab.js";
 import { missingValueAggressiveValidation } from "./formValidationControls.js";
 import { clearTaskViewer, getSortAllTasksMethod } from "./taskController.js";
-import { toggleClass } from "../helper/helper.js";
+import { toggleClass, removeClass } from "../helper/helper.js";
 
 // Event Listeners expect a function reference instead of the function itself.
 // To avoid calling function immediately, either bind 'this', create an
@@ -12,12 +12,12 @@ let menubarTransitionendListener = () => {
   toggleClass(menubar, "hide");
 };
 
-function addMenubarTransitionendListener(mainContent) {
-  mainContent.addEventListener("transitionend", menubarTransitionendListener);
+function addMenubarTransitionendListener(menubar) {
+  menubar.addEventListener("transitionend", menubarTransitionendListener);
 }
 
-function removeMenubarTransitionendListener(mainContent) {
-  mainContent.removeEventListener(
+function removeMenubarTransitionendListener(menubar) {
+  menubar.removeEventListener(
     "transitionend",
     menubarTransitionendListener
   );
@@ -29,19 +29,19 @@ function toggleMenubarVisibility() {
     mainContent = document.querySelector("main");
 
   menuButton.addEventListener("click", () => {
-    if (mainContent.classList.contains("closed")) {
+    if (menubar.classList.contains("closed")) {
       // Remove listener before starting transition to avoid triggering the
       // listener to hide the menu when the transition ends.
-      removeMenubarTransitionendListener(mainContent);
+      removeMenubarTransitionendListener(menubar);
 
       // Make menu visible before starting transition to show menu.
-      toggleClass(menubar, "hide");
+      removeClass(menubar, "hide");
     } else {
       // Add listener to set menubar visibility off after it has transitioned
       // outside the viewport.
-      addMenubarTransitionendListener(mainContent);
+      addMenubarTransitionendListener(menubar);
     }
-    toggleClass(mainContent, "closed");
+    toggleClass(menubar, "closed");
   });
 }
 
