@@ -6,6 +6,7 @@ import {
   saveTaskItem,
   getTaskItem,
   getData,
+  deleteTaskItem,
   getTaskPriority,
 } from "./webStorageController.js";
 import { missingValueAggressiveValidation } from "./formValidationControls.js";
@@ -67,9 +68,15 @@ function addOrSaveTaskButtonListener(taskForm, taskItemId) {
       // Otherwise, the user is editing and saving a task. A new task item # is not needed.
       taskItemId = createTaskItemIdNumber();
     } else {
-      // If the user edits and saves a task, remove the task before replacing it
-      // with an updated version of it
-      document.querySelector(`[data-task-item-id = '${taskItemId}']`).remove();
+      // If the user edits and saves a task, remove the task from the DOM and
+      // localStorage before replacing it with an updated version of it
+      let taskToRemove = document.querySelector(
+          `[data-task-item-id = '${taskItemId}']`
+        ),
+        taskToRemoveData = getTaskItem(taskItemId);
+
+      deleteTaskItem(taskToRemoveData.priorityValue, taskItemId);
+      taskToRemove.remove();
     }
 
     saveTaskItem(taskItemId, taskItemObj);
