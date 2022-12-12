@@ -1,7 +1,7 @@
 import { format, addDays, differenceInDays } from "date-fns";
 import { taskForm } from "../appMainContent/task/taskForm.js";
 import { taskItem } from "../appMainContent/task/taskItem.js";
-import { taskPriorityBoard } from "../appMainContent/taskPriorityBoard.js";
+import { secondaryTaskBoard } from "../appMainContent/secondaryTaskBoard.js";
 import {
   saveTaskItem,
   getTaskItem,
@@ -190,6 +190,7 @@ function getSortAllTasksMethod(tabName) {
       sortAllTasksByToday(taskDataObj, priorityKeyArr);
       break;
     case "Upcoming":
+      createDateTaskBoards();
       sortAllTasksByUpcoming(taskDataObj, priorityKeyArr);
       break;
     default:
@@ -210,8 +211,32 @@ function createTaskPriorityBoards() {
     ];
 
   priorityBoardHeaderArr.forEach((boardHeader, i) => {
-    taskViewer.append(taskPriorityBoard(boardHeader, priorityKeys[i]));
+    let priorityBoard = secondaryTaskBoard(boardHeader + " Priority");
+
+    // An identifier that is used when sorting through task data
+    // to append tasks based on priority.
+    priorityBoard.dataset.priorityKey = priorityKeys[i];
+
+    taskViewer.append(priorityBoard);
   });
+}
+
+function createDateTaskBoards() {
+  let date = new Date(), //Today's date
+    taskViewer = document.querySelector(".task-viewer");
+
+  for (let i = 0; i < 7; i++) {
+    let formattedDate = format(date, "MMM d - EEEE");
+
+    if (i === 0) {
+      formattedDate += " - Today";
+    } else if (i === 1) {
+      formattedDate += " - Tomorrow";
+    }
+
+    taskViewer.append(secondaryTaskBoard(formattedDate));
+    date = addDays(date, 1);
+  }
 }
 
 function sortAllTasksByInbox(taskDataObj, priorityKeyArr) {
@@ -249,9 +274,11 @@ function sortAllTasksByToday(taskDataObj, priorityKeyArr) {
   });
 }
 
+// Need to zero out time component to avoid any date calculation/ conversion issues.
 function sortAllTasksByUpcoming(taskDataObj, priorityKeyArr) {
-  let todaysDate = new Date(),
-    weekFromTodaysDate = addDays(todaysDate, 6);
+  let todaysDate = new Date().setHours(0, 0, 0, 0), // Todays date with time component zero'd out
+    weekFromTodaysDate = addDays(todaysDate, 6), // Today's date + 6 days
+    dateTaskBoardsArr = document.getElementsByClassName("secondary-task-board");
 
   priorityKeyArr.forEach((priorityKey) => {
     Object.keys(taskDataObj[priorityKey]).forEach((taskItemKey) => {
@@ -261,7 +288,11 @@ function sortAllTasksByUpcoming(taskDataObj, priorityKeyArr) {
         dayDifference = differenceInDays(weekFromTodaysDate, taskDueDate);
 
       if (dayDifference < 7 && dayDifference >= 0) {
-        addTaskToBoard(taskItemKey, taskDataObj[priorityKey][taskItemKey]);
+        addTaskToBoard(
+          taskItemKey,
+          taskDataObj[priorityKey][taskItemKey],
+          dateTaskBoardsArr[6 - dayDifference]
+        );
       }
     });
   });
@@ -305,14 +336,22 @@ function insertTaskForTodayView(taskItemId, taskItemObj, taskViewer) {
   }
 }
 
-function insertTaskForUpcomingView(taskItemId, taskItemObj, taskViewer) {
-  let taskDueDate = getTaskPriority(taskItemObj.dueDateValue),
-    weekFromTodaysDate = addDays(new Date(), 6), // today's date + 6 days
-    dayDifference = differenceInDays(weekFromTodaysDate, taskDueDate),
-    taskList = taskViewer.querySelector(".task-list");
+// Need to zero out time component to avoid any date calculation/ conversion issues.
+function insertTaskForUpcomingView(taskItemId, taskItemObj) {
+  let todaysDate = new Date().setHours(0, 0, 0, 0), // Todays date with time component zero'd out
+    weekFromTodaysDate = addDays(todaysDate, 6), // today's date + 6 days
+    dayDifference = differenceInDays(
+      weekFromTodaysDate,
+      new Date(taskItemObj.dueDateValue)
+    ),
+    dateTaskBoardsArr = document.getElementsByClassName("secondary-task-board");
 
   if (dayDifference < 7 && dayDifference >= 0) {
-    addTaskToBoard(taskItemId, taskItemObj, taskList);
+    addTaskToBoard(
+      taskItemId,
+      taskItemObj,
+      dateTaskBoardsArr[6 - dayDifference]
+    );
   }
 }
 
