@@ -36,20 +36,6 @@ function cancelTaskFormListener(taskForm, taskItemId) {
   let formCancelButton = taskForm.querySelector(".form-cancel-button");
 
   formCancelButton.addEventListener("click", () => {
-    let taskViewer = document.querySelector(".task-viewer");
-
-    // Reverts the task information back to its original data.
-    // Checks to see if user is editing a task by checking if a
-    // taskItemId exists.
-    if (taskItemId) {
-      let currentTaskItemObj = getTaskItem(taskItemId);
-
-      taskViewer.insertBefore(
-        taskItem(taskItemId, currentTaskItemObj),
-        taskForm.nextSibling
-      );
-    }
-
     taskForm.remove();
   });
 }
