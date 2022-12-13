@@ -57,11 +57,10 @@ function addOrSaveTaskButtonListener(taskForm, taskItemId) {
       // If the user edits and saves a task, remove the task from the DOM and
       // localStorage before replacing it with an updated version of it
       let taskToRemove = document.querySelector(
-          `[data-task-item-id = '${taskItemId}']`
-        ),
-        taskToRemoveData = getTaskItem(taskItemId);
+        `[data-task-item-id = '${taskItemId}']`
+      );
 
-      deleteTaskItem(taskToRemoveData.priorityValue, taskItemId);
+      deleteTaskItem(taskItemId);
       taskToRemove.remove();
     }
 
@@ -103,6 +102,17 @@ function AddEditButtonListener(editButton, taskItemId) {
     cancelTaskFormListener(taskEditForm, taskItemId);
     addOrSaveTaskButtonListener(taskEditForm, taskItemId);
     missingValueAggressiveValidation(formTaskHeader, formAddTaskButton);
+  });
+}
+
+function addDeleteButtonListener(deleteButton, taskItemId) {
+  deleteButton.addEventListener("click", () => {
+    let taskToDelete = document.querySelector(
+      `[data-task-item-id = '${taskItemId}']`
+    );
+
+    deleteTaskItem(taskItemId);
+    taskToDelete.remove();
   });
 }
 
@@ -359,6 +369,7 @@ export {
   taskController,
   toggleTaskStatus,
   AddEditButtonListener,
+  addDeleteButtonListener,
   addOrSaveTaskButtonListener,
   clearTaskViewer,
   getSortAllTasksMethod,

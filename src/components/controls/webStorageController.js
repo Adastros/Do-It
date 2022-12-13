@@ -36,14 +36,19 @@ function getTaskItem(taskItemKey) {
   return taskItem;
 }
 
-// Gets a copy of all task data, deletes a task, and rewrites 
+// Gets a copy of all task data, deletes a task, and rewrites
 // the mutated task data back to localStorage. localStorage.removeItem()
 // was not used since it only removes the first level of keys available to it.
-function deleteTaskItem(priorityValue, taskItemKey) {
+function deleteTaskItem(taskItemKey) {
   let taskDataObj = JSON.parse(getData("taskData")),
-    priorityKey = getTaskPriority(priorityValue);
+    priorityKeys = Object.keys(taskDataObj);
 
-  delete taskDataObj[priorityKey][taskItemKey];
+  for (let i = 0; i < priorityKeys.length; i++) {
+    if (taskDataObj[priorityKeys[i]].hasOwnProperty(taskItemKey)) {
+      delete taskDataObj[priorityKeys[i]][taskItemKey];
+      break;
+    }
+  }
 
   saveData("taskData", JSON.stringify(taskDataObj));
 }
