@@ -1,5 +1,6 @@
 import { format, addDays, differenceInDays } from "date-fns";
 import { taskForm } from "../appMainContent/task/taskForm.js";
+import { confirmDeleteTaskOverlay } from "../appMainContent/task/confirmDeleteTaskOverlay.js";
 import { taskItem } from "../appMainContent/task/taskItem.js";
 import { secondaryTaskBoard } from "../appMainContent/secondaryTaskBoard.js";
 import {
@@ -16,7 +17,10 @@ function addNewTaskButtonListener() {
   let addNewTaskButton = document.querySelector(".add-new-task-button");
 
   addNewTaskButton.addEventListener("click", () => {
-    let newTaskForm = taskForm("Add Task", createTaskItemObj());
+    let newTaskForm = taskForm("Add Task", createTaskItemObj()),
+      newTaskFormCancelButton = newTaskForm.querySelector(
+        ".form-cancel-button"
+      );
 
     document.body.append(newTaskForm);
 
@@ -26,17 +30,15 @@ function addNewTaskButtonListener() {
       );
 
     // Activate listeners for form buttons
-    cancelTaskFormListener(newTaskForm);
+    createCancelButtonListener(newTaskForm, newTaskFormCancelButton);
     addOrSaveTaskButtonListener(newTaskForm);
     missingValueAggressiveValidation(formTaskHeader, formAddTaskButton);
   });
 }
 
-function cancelTaskFormListener(taskForm, taskItemId) {
-  let formCancelButton = taskForm.querySelector(".form-cancel-button");
-
-  formCancelButton.addEventListener("click", () => {
-    taskForm.remove();
+function createCancelButtonListener(formOrOverlay, cancelButton) {
+  cancelButton.addEventListener("click", () => {
+    formOrOverlay.remove();
   });
 }
 
@@ -88,7 +90,11 @@ function AddEditButtonListener(editButton, taskItemId) {
     let currentTaskItemObj = getTaskItem(taskItemId);
 
     // Create the task edit form and render it on the screen
-    let taskEditForm = taskForm("Save", currentTaskItemObj);
+    let taskEditForm = taskForm("Save", currentTaskItemObj),
+      newTaskFormCancelButton = taskEditForm.querySelector(
+        ".form-cancel-button"
+      );
+
     document.body.append(taskEditForm);
 
     // Get the task edit form header and save button to validate and
@@ -99,20 +105,33 @@ function AddEditButtonListener(editButton, taskItemId) {
       );
 
     // Set listeners for task edit form
-    cancelTaskFormListener(taskEditForm, taskItemId);
+    createCancelButtonListener(taskEditForm, newTaskFormCancelButton);
     addOrSaveTaskButtonListener(taskEditForm, taskItemId);
     missingValueAggressiveValidation(formTaskHeader, formAddTaskButton);
   });
 }
 
-function addDeleteButtonListener(deleteButton, taskItemId) {
+function createDeleteConfirmationOverlayListener(deleteButton, taskItemId) {
   deleteButton.addEventListener("click", () => {
+    let taskHeader = getTaskItem(taskItemId).headerValue;
+
+    document.body.append(confirmDeleteTaskOverlay(taskHeader, taskItemId));
+  });
+}
+
+function deleteConfirmationButtonListener(
+  confirmButton,
+  overlayContainer,
+  taskItemId
+) {
+  confirmButton.addEventListener("click", () => {
     let taskToDelete = document.querySelector(
       `[data-task-item-id = '${taskItemId}']`
     );
 
     deleteTaskItem(taskItemId);
     taskToDelete.remove();
+    overlayContainer.remove();
   });
 }
 
@@ -368,8 +387,10 @@ function taskController() {
 export {
   taskController,
   toggleTaskStatus,
+  createCancelButtonListener,
   AddEditButtonListener,
-  addDeleteButtonListener,
+  createDeleteConfirmationOverlayListener,
+  deleteConfirmationButtonListener,
   addOrSaveTaskButtonListener,
   clearTaskViewer,
   getSortAllTasksMethod,

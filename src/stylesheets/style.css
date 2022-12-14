@@ -73,6 +73,10 @@ img {
   width: 20px;
 }
 
+.text-button {
+  padding: 0.25rem 0.5rem;
+}
+
 .view-button {
   height: 2rem;
   display: flex;
@@ -148,7 +152,8 @@ img {
 }
 
 .new-project-overlay,
-.task-form-overlay {
+.task-form-overlay,
+.delete-task-confirmation-overlay {
   height: 100vh;
   width: 100%;
   position: absolute;
@@ -163,12 +168,26 @@ img {
 }
 
 .new-project-form,
-.task-form-container {
+.task-form-container,
+.delete-confirmation-prompt {
   display: flex;
   flex-direction: column;
   background-color: white;
   padding: 1.5rem;
   border-radius: 16px;
+}
+
+.delete-confirmation-prompt {
+  align-items: center;
+  width: 450px;
+}
+
+.delete-prompt-button-container {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  gap: 2rem;
+  margin-top: 3rem;
 }
 
 .new-project-form-buttons {
