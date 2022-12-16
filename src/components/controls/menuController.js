@@ -1,5 +1,6 @@
 import { newProjectOverlayForm } from "../project/newProjectOverlayForm.js";
 import { tab } from "../menubar/tab.js";
+import { secondaryTaskBoard } from "../appMainContent/secondaryTaskBoard.js";
 import { missingValueAggressiveValidation } from "./formValidationControls.js";
 import { clearTaskViewer, getSortAllTasksMethod } from "./taskController.js";
 import { toggleClass, removeClass } from "../helper/helper.js";
@@ -17,10 +18,7 @@ function addMenubarTransitionendListener(menubar) {
 }
 
 function removeMenubarTransitionendListener(menubar) {
-  menubar.removeEventListener(
-    "transitionend",
-    menubarTransitionendListener
-  );
+  menubar.removeEventListener("transitionend", menubarTransitionendListener);
 }
 
 function toggleMenubarVisibility() {

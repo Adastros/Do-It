@@ -1,4 +1,4 @@
-import { toggleTaskStatus } from "../../controls/taskController.js";
+import { setTaskCompleted } from "../../controls/taskController.js";
 import { addClass, createElement } from "../../helper/helper.js";
 import checkmarkIcon from "../../../icons/check.svg";
 
@@ -12,7 +12,7 @@ function checkbox(taskItemId) {
 
   addClass(checkbox, "checkbox");
   addClass(checkmark, "fade-in-out");
-  toggleTaskStatus(checkbox, taskItemId);
+  setTaskCompleted(checkbox, taskItemId);
 
   checkbox.append(checkmark);
   checkboxContainer.append(checkbox);

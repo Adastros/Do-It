@@ -25,6 +25,10 @@ function initLocalStorageGlobalVariables() {
   if (!getData("taskData")) {
     saveData("taskData", taskData());
   }
+
+  if (!getData("completed")) {
+    saveData("completed", "{}");
+  }
 }
 
 function initControllers() {

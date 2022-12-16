@@ -1,3 +1,5 @@
+import { format } from "date-fns";
+
 // Save general data to the user's browser's local storage
 function saveData(key, value) {
   localStorage.setItem(key, value);
@@ -53,6 +55,21 @@ function deleteTaskItem(taskItemKey) {
   saveData("taskData", JSON.stringify(taskDataObj));
 }
 
+function saveTaskToCompleted(taskItemKey) {
+  let completedTaskDataObj = JSON.parse(getData("completed")),
+    taskItemObj = getTaskItem(taskItemKey),
+    todaysDate = format(new Date, "MMM d - EEEE");
+
+  // If this is the first task completed for a given day, create the key based on the
+  // date completed prior to moving the task data over to the completed key
+  if (!completedTaskDataObj.hasOwnProperty(todaysDate)) {
+    completedTaskDataObj[todaysDate] = {};
+  }
+
+  completedTaskDataObj[todaysDate][`${taskItemKey}`] = taskItemObj;
+  saveData("completed", JSON.stringify(completedTaskDataObj));
+}
+
 function getTaskPriority(priorityValue) {
   let priorityKey;
 
@@ -83,5 +100,6 @@ export {
   saveTaskItem,
   getTaskItem,
   deleteTaskItem,
+  saveTaskToCompleted,
   getTaskPriority,
 };

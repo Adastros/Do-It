@@ -8,6 +8,7 @@ import {
   getTaskItem,
   getData,
   deleteTaskItem,
+  saveTaskToCompleted,
   getTaskPriority,
 } from "./webStorageController.js";
 import { missingValueAggressiveValidation } from "./formValidationControls.js";
@@ -135,16 +136,22 @@ function deleteConfirmationButtonListener(
   });
 }
 
-function toggleTaskStatus(checkbox, taskItemId) {
+function setTaskCompleted(checkbox, taskItemId) {
   checkbox.addEventListener("click", () => {
     let taskItem = document.querySelector(
         `[data-task-item-id = '${taskItemId}']`
-      ),
-      checkmark = checkbox.firstChild;
+      );
 
-    toggleClass(taskItem, "completed");
-    toggleClass(checkmark, "fade-in-out");
+    // toggleClass(taskItem, "completed");
+    // toggleClass(checkmark, "fade-in-out");
+    saveTaskToCompleted(taskItemId);
+    deleteTaskItem(taskItemId);
+    taskItem.remove();
   });
+}
+
+function setTaskUncompleted () {
+
 }
 
 // Random assigns a eight digit integer for the task ID.
@@ -215,6 +222,10 @@ function getSortAllTasksMethod(tabName) {
       createDateTaskBoards();
       sortAllTasksByUpcoming(taskDataObj, priorityKeyArr);
       break;
+    // case "Completed":
+    //   createDateCompletedTaskBoards();
+    //   sortAllTasksByCompleted();
+    //   break;
     default:
       return;
   }
@@ -260,6 +271,11 @@ function createDateTaskBoards() {
     date = addDays(date, 1);
   }
 }
+
+// function createDateCompletedTaskBoards() {
+//   let todaysDate = new Date(),
+//     taskViewer = document.querySelector(".task-viewer");
+// }
 
 function sortAllTasksByInbox(taskDataObj, priorityKeyArr) {
   let taskViewer = document.querySelector(".task-viewer");
@@ -386,7 +402,7 @@ function taskController() {
 
 export {
   taskController,
-  toggleTaskStatus,
+  setTaskCompleted,
   createCancelButtonListener,
   AddEditButtonListener,
   createDeleteConfirmationOverlayListener,
