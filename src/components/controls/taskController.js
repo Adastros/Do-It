@@ -1,4 +1,4 @@
-import { format, addDays, differenceInDays } from "date-fns";
+import { format, addDays, differenceInDays, compareDesc } from "date-fns";
 import { taskForm } from "../appMainContent/task/taskForm.js";
 import { confirmDeleteTaskOverlay } from "../appMainContent/task/confirmDeleteTaskOverlay.js";
 import { taskItem } from "../appMainContent/task/taskItem.js";
@@ -12,7 +12,7 @@ import {
   getTaskPriority,
 } from "./webStorageController.js";
 import { missingValueAggressiveValidation } from "./formValidationControls.js";
-import { toggleClass } from "../helper/helper.js";
+import { addClass, removeClass } from "../helper/helper.js";
 
 function addNewTaskButtonListener() {
   let addNewTaskButton = document.querySelector(".add-new-task-button");
@@ -136,22 +136,27 @@ function deleteConfirmationButtonListener(
   });
 }
 
-function setTaskCompleted(checkbox, taskItemId) {
+function toggleTaskCompletion(checkbox, taskItemId) {
   checkbox.addEventListener("click", () => {
     let taskItem = document.querySelector(
-        `[data-task-item-id = '${taskItemId}']`
-      );
+      `[data-task-item-id = '${taskItemId}']`
+    );
 
     // toggleClass(taskItem, "completed");
     // toggleClass(checkmark, "fade-in-out");
+    // if (taskItem.classList.contains("completed")) {
+    //   saveTaskItem(taskItemId, taskItemObj);
+
+    // } else {
+    //   saveTaskToCompleted(taskItemId);
+    //   deleteTaskItem(taskItemId);
+    //   taskItem.remove();
+    // }
+    
     saveTaskToCompleted(taskItemId);
     deleteTaskItem(taskItemId);
     taskItem.remove();
   });
-}
-
-function setTaskUncompleted () {
-
 }
 
 // Random assigns a eight digit integer for the task ID.
@@ -222,10 +227,9 @@ function getSortAllTasksMethod(tabName) {
       createDateTaskBoards();
       sortAllTasksByUpcoming(taskDataObj, priorityKeyArr);
       break;
-    // case "Completed":
-    //   createDateCompletedTaskBoards();
-    //   sortAllTasksByCompleted();
-    //   break;
+    case "Completed":
+      sortAllTasksByCompleted();
+      break;
     default:
       return;
   }
@@ -272,10 +276,55 @@ function createDateTaskBoards() {
   }
 }
 
-// function createDateCompletedTaskBoards() {
-//   let todaysDate = new Date(),
-//     taskViewer = document.querySelector(".task-viewer");
-// }
+function sortAllTasksByCompleted() {
+  let todaysDate = new Date(),
+    completedTaskDataObj = JSON.parse(getData("completed")),
+    orderedCompletionDates = Object.keys(completedTaskDataObj),
+    taskViewer = document.querySelector(".task-viewer");
+
+  // For Testing
+  //
+  // new Date(2022, 11, 4).setHours(0,0,0,0)
+  // test = [
+  //   1671091200000, 1670140800000, 1671955200000, 1670400000000, 1671350400000,
+  // ],
+  // console.log(
+  //   orderedCompletionDates.map((date) => {
+  //     return format(date, "MMM d - EEEE");
+  //   })
+  // );
+  // console.log(Object.keys(completedTaskDataObj));
+  // console.log(orderedCompletionDates);
+
+  // Sort completion dates from most recent to oldest (descending).
+  if (orderedCompletionDates.length > 1) {
+    orderedCompletionDates = orderedCompletionDates.sort(
+      (dateLeft, dateRight) =>
+        compareDesc(new Date(dateLeft), new Date(dateRight))
+    );
+  }
+
+  orderedCompletionDates.forEach((date) => {
+    let formattedDate = format(new Date(date), "MMM d - EEEE"),
+      dateTaskBoard = secondaryTaskBoard(formattedDate);
+
+    Object.keys(completedTaskDataObj[date]).forEach((taskItemId) => {
+      let completedTask = taskItem(
+        taskItemId,
+        completedTaskDataObj[date][taskItemId]
+      );
+
+      addClass(completedTask, "completed");
+      removeClass(
+        completedTask.querySelector(".checkbox").firstElementChild, // checkmark img element
+        "fade-in-out"
+      );
+      dateTaskBoard.append(completedTask);
+    });
+
+    taskViewer.append(dateTaskBoard);
+  });
+}
 
 function sortAllTasksByInbox(taskDataObj, priorityKeyArr) {
   let taskViewer = document.querySelector(".task-viewer");
@@ -402,7 +451,7 @@ function taskController() {
 
 export {
   taskController,
-  setTaskCompleted,
+  toggleTaskCompletion,
   createCancelButtonListener,
   AddEditButtonListener,
   createDeleteConfirmationOverlayListener,

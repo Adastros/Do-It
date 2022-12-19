@@ -58,7 +58,7 @@ function deleteTaskItem(taskItemKey) {
 function saveTaskToCompleted(taskItemKey) {
   let completedTaskDataObj = JSON.parse(getData("completed")),
     taskItemObj = getTaskItem(taskItemKey),
-    todaysDate = format(new Date, "MMM d - EEEE");
+    todaysDate = format(new Date, "PP");
 
   // If this is the first task completed for a given day, create the key based on the
   // date completed prior to moving the task data over to the completed key
