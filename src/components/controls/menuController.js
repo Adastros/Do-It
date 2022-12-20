@@ -3,6 +3,7 @@ import { tab } from "../menubar/tab.js";
 import { secondaryTaskBoard } from "../appMainContent/secondaryTaskBoard.js";
 import { missingValueAggressiveValidation } from "./formValidationControls.js";
 import { clearTaskViewer, getSortAllTasksMethod } from "./taskController.js";
+import { saveData } from "./webStorageController.js";
 import { toggleClass, removeClass } from "../helper/helper.js";
 
 // Event Listeners expect a function reference instead of the function itself.
@@ -98,8 +99,7 @@ function addNewProjectButtonListener() {
   );
 
   addNewProjectButton.addEventListener("click", () => {
-    let bodyTag = document.body,
-      newProjectOverlay = document.querySelector(".new-project-overlay"),
+    let newProjectOverlay = document.querySelector(".new-project-overlay"),
       projectList = document.querySelector(".project-list"),
       projectName = document.querySelector("#new-project-name").value,
       projectDescription = document.querySelector(
@@ -123,7 +123,11 @@ function addNewProjectButtonListener() {
       projectSpecificClass
     );
 
-    bodyTag.removeChild(newProjectOverlay);
+    // create localStorage key using project nam
+    saveData(projectTitle, "{}");
+
+    clearTaskViewer();
+    newProjectOverlay.remove();
   });
 }
 
