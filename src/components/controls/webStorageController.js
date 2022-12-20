@@ -11,26 +11,44 @@ function getData(key) {
 }
 
 // Save task data to the user's browser's local storage
-function saveTaskItem(taskItemKey, taskItemObj) {
-  let priorityKey = getTaskPriority(taskItemObj.priorityValue),
-    taskDataObj = JSON.parse(getData("taskData"));
+function saveTaskItem(localStorageKey, taskItemKey, taskItemObj) {
+  let localStorageDataObj = JSON.parse(getData(localStorageKey));
 
-  // add the new task item to the taskData object
-  taskDataObj[priorityKey][`${taskItemKey}`] = taskItemObj;
-  saveData("taskData", JSON.stringify(taskDataObj));
+  if (localStorageKey === "taskData") {
+    let priorityKey = getTaskPriority(taskItemObj.priorityValue);
+    // add the new task item to the taskData object
+    localStorageDataObj[priorityKey][`${taskItemKey}`] = taskItemObj;
+  } else {
+    let todaysDate = format(new Date(), "PP");
+
+    // If this is the first task completed for a given day, create the key based on the
+    // date completed prior to moving the task data over to the completed key
+    if (!localStorageDataObj.hasOwnProperty(todaysDate)) {
+      localStorageDataObj[todaysDate] = {};
+    }
+
+    localStorageDataObj[todaysDate][`${taskItemKey}`] = taskItemObj;
+  }
+
+  saveData(localStorageKey, JSON.stringify(localStorageDataObj));
 }
 
 // Get task data from the user's browser's local storage
-function getTaskItem(taskItemKey) {
+function getTaskItem(localStorageKey, taskItemKey) {
   let taskItem,
-    taskDataObj = JSON.parse(getData("taskData")),
-    priorityKeyArr = Object.keys(taskDataObj);
+    localStorageDataObj = JSON.parse(getData(localStorageKey)),
+    localStoragePrimaryKeys = Object.keys(localStorageDataObj);
 
-  for (let i = 0; i < priorityKeyArr.length; i++) {
-    let priorityKey = priorityKeyArr[i];
+  for (let i = 0; i < localStoragePrimaryKeys.length; i++) {
+    let localStorageSecondaryKeys = localStoragePrimaryKeys[i];
 
-    if (taskDataObj[priorityKey].hasOwnProperty(`${taskItemKey}`)) {
-      taskItem = taskDataObj[priorityKey][`${taskItemKey}`];
+    if (
+      localStorageDataObj[localStorageSecondaryKeys].hasOwnProperty(
+        `${taskItemKey}`
+      )
+    ) {
+      taskItem =
+        localStorageDataObj[localStorageSecondaryKeys][`${taskItemKey}`];
       break;
     }
   }
@@ -41,33 +59,22 @@ function getTaskItem(taskItemKey) {
 // Gets a copy of all task data, deletes a task, and rewrites
 // the mutated task data back to localStorage. localStorage.removeItem()
 // was not used since it only removes the first level of keys available to it.
-function deleteTaskItem(taskItemKey) {
-  let taskDataObj = JSON.parse(getData("taskData")),
-    priorityKeys = Object.keys(taskDataObj);
+function deleteTaskItem(localStorageKey, taskItemKey) {
+  let localStorageDataObj = JSON.parse(getData(localStorageKey)),
+    localStorageDataObjKeys = Object.keys(localStorageDataObj);
 
-  for (let i = 0; i < priorityKeys.length; i++) {
-    if (taskDataObj[priorityKeys[i]].hasOwnProperty(taskItemKey)) {
-      delete taskDataObj[priorityKeys[i]][taskItemKey];
+  for (let i = 0; i < localStorageDataObjKeys.length; i++) {
+    if (
+      localStorageDataObj[localStorageDataObjKeys[i]].hasOwnProperty(
+        taskItemKey
+      )
+    ) {
+      delete localStorageDataObj[localStorageDataObjKeys[i]][taskItemKey];
       break;
     }
   }
 
-  saveData("taskData", JSON.stringify(taskDataObj));
-}
-
-function saveTaskToCompleted(taskItemKey) {
-  let completedTaskDataObj = JSON.parse(getData("completed")),
-    taskItemObj = getTaskItem(taskItemKey),
-    todaysDate = format(new Date, "PP");
-
-  // If this is the first task completed for a given day, create the key based on the
-  // date completed prior to moving the task data over to the completed key
-  if (!completedTaskDataObj.hasOwnProperty(todaysDate)) {
-    completedTaskDataObj[todaysDate] = {};
-  }
-
-  completedTaskDataObj[todaysDate][`${taskItemKey}`] = taskItemObj;
-  saveData("completed", JSON.stringify(completedTaskDataObj));
+  saveData(localStorageKey, JSON.stringify(localStorageDataObj));
 }
 
 function getTaskPriority(priorityValue) {
@@ -94,12 +101,32 @@ function getTaskPriority(priorityValue) {
   return priorityKey;
 }
 
+function determineLocalStorageKey(currentTaskBoardViewHeading) {
+  let key;
+
+  switch (currentTaskBoardViewHeading) {
+    case "Inbox":
+    case "Today":
+    case "Upcoming":
+      key = "taskData";
+      break;
+    case "Completed":
+      key = "completed";
+      break;
+    default: // Project specific data
+      key = currentTaskBoardViewHeading.toLowerCase();
+      break;
+  }
+
+  return key;
+}
+
 export {
   saveData,
   getData,
   saveTaskItem,
   getTaskItem,
   deleteTaskItem,
-  saveTaskToCompleted,
   getTaskPriority,
+  determineLocalStorageKey,
 };

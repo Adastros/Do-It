@@ -8,8 +8,8 @@ import {
   getTaskItem,
   getData,
   deleteTaskItem,
-  saveTaskToCompleted,
   getTaskPriority,
+  determineLocalStorageKey,
 } from "./webStorageController.js";
 import { missingValueAggressiveValidation } from "./formValidationControls.js";
 import { addClass, removeClass } from "../helper/helper.js";
@@ -60,14 +60,17 @@ function addOrSaveTaskButtonListener(taskForm, taskItemId) {
       // If the user edits and saves a task, remove the task from the DOM and
       // localStorage before replacing it with an updated version of it
       let taskToRemove = document.querySelector(
-        `[data-task-item-id = '${taskItemId}']`
-      );
+          `[data-task-item-id = '${taskItemId}']`
+        ),
+        localStorageKey = determineLocalStorageKey(
+          document.querySelector(".main-content-heading").textContent
+        );
 
-      deleteTaskItem(taskItemId);
+      deleteTaskItem(localStorageKey);
       taskToRemove.remove();
     }
 
-    saveTaskItem(taskItemId, taskItemObj);
+    saveTaskItem("taskData", taskItemId, taskItemObj);
     insertTaskBasedOnView(taskItemId, taskItemObj, currentTaskBoardView);
     taskForm.remove();
   });
@@ -76,7 +79,7 @@ function addOrSaveTaskButtonListener(taskForm, taskItemId) {
 // Adds tasks to the relevant board based on the page view
 function addTaskToBoard(taskItemId, taskItemObj, taskBoard) {
   if (!taskItemObj) {
-    taskItemObj = getTaskItem(taskItemId);
+    taskItemObj = getTaskItem("taskData", taskItemId);
   }
 
   if (!taskBoard) {
@@ -88,7 +91,10 @@ function addTaskToBoard(taskItemId, taskItemObj, taskBoard) {
 
 function AddEditButtonListener(editButton, taskItemId) {
   editButton.addEventListener("click", () => {
-    let currentTaskItemObj = getTaskItem(taskItemId);
+    let localStorageKey = determineLocalStorageKey(
+        document.querySelector(".main-content-heading").textContent
+      ),
+      currentTaskItemObj = getTaskItem(localStorageKey, taskItemId);
 
     // Create the task edit form and render it on the screen
     let taskEditForm = taskForm("Save", currentTaskItemObj),
@@ -114,7 +120,10 @@ function AddEditButtonListener(editButton, taskItemId) {
 
 function createDeleteConfirmationOverlayListener(deleteButton, taskItemId) {
   deleteButton.addEventListener("click", () => {
-    let taskHeader = getTaskItem(taskItemId).headerValue;
+    let localStorageKey = determineLocalStorageKey(
+        document.querySelector(".main-content-heading").textContent
+      ),
+      taskHeader = getTaskItem(localStorageKey, taskItemId).headerValue;
 
     document.body.append(confirmDeleteTaskOverlay(taskHeader, taskItemId));
   });
@@ -127,10 +136,14 @@ function deleteConfirmationButtonListener(
 ) {
   confirmButton.addEventListener("click", () => {
     let taskToDelete = document.querySelector(
-      `[data-task-item-id = '${taskItemId}']`
-    );
+        `[data-task-item-id = '${taskItemId}']`
+      ),
+      localStorageKey = determineLocalStorageKey(
+        document.querySelector(".main-content-heading").textContent
+      );
 
-    deleteTaskItem(taskItemId);
+    deleteTaskItem(localStorageKey, taskItemId);
+
     taskToDelete.remove();
     overlayContainer.remove();
   });
@@ -139,22 +152,19 @@ function deleteConfirmationButtonListener(
 function toggleTaskCompletion(checkbox, taskItemId) {
   checkbox.addEventListener("click", () => {
     let taskItem = document.querySelector(
-      `[data-task-item-id = '${taskItemId}']`
-    );
+        `[data-task-item-id = '${taskItemId}']`
+      ),
+      localStorageKey = determineLocalStorageKey(
+        document.querySelector(".main-content-heading").textContent
+      ),
+      task = getTaskItem(localStorageKey, taskItemId);
 
-    // toggleClass(taskItem, "completed");
-    // toggleClass(checkmark, "fade-in-out");
-    // if (taskItem.classList.contains("completed")) {
-    //   saveTaskItem(taskItemId, taskItemObj);
-
-    // } else {
-    //   saveTaskToCompleted(taskItemId);
-    //   deleteTaskItem(taskItemId);
-    //   taskItem.remove();
-    // }
-    
-    saveTaskToCompleted(taskItemId);
-    deleteTaskItem(taskItemId);
+    if (taskItem.classList.contains("completed")) {
+      saveTaskItem("taskData", taskItemId, task);
+    } else {
+      saveTaskItem("completed", taskItemId, task);
+    }
+    deleteTaskItem(localStorageKey, taskItemId);
     taskItem.remove();
   });
 }
@@ -414,7 +424,7 @@ function insertTaskForInboxView(taskItemId, taskItemObj, taskViewer) {
 }
 
 function insertTaskForTodayView(taskItemId, taskItemObj, taskViewer) {
-  let taskDueDate = getTaskPriority(taskItemObj.dueDateValue),
+  let taskDueDate = taskItemObj.dueDateValue,
     todaysDate = format(new Date(), "PP"),
     taskList = taskViewer.querySelector(".task-list");
 
