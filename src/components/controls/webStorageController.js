@@ -33,6 +33,23 @@ function saveTaskItem(localStorageKey, taskItemKey, taskItemObj) {
   saveData(localStorageKey, JSON.stringify(localStorageDataObj));
 }
 
+function saveProjectTaskData(projectName, taskItemKey, taskItemObj) {
+  let projectData = JSON.parse(getData("projects"));
+
+  if (projectData.hasOwnProperty(projectName)) {
+    console.log("There is a project with this name already!");
+    return;
+  }
+
+  if (!taskItemKey) {
+    projectData[projectName] = {};
+  } else {
+    projectData[projectName][taskItemKey] = taskItemObj;
+  }
+
+  saveData("projects", JSON.stringify(projectData));
+}
+
 // Get task data from the user's browser's local storage
 function getTaskItem(localStorageKey, taskItemKey) {
   let taskItem,
@@ -125,6 +142,7 @@ export {
   saveData,
   getData,
   saveTaskItem,
+  saveProjectTaskData,
   getTaskItem,
   deleteTaskItem,
   getTaskPriority,
