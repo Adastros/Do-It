@@ -82,6 +82,7 @@ function addProjectTabListener(
   projectTab.addEventListener("click", () => {
     updateMainContentHeading(projectName);
     updateMainContentProjectDescription(projectDescription);
+    clearTaskViewer();
   });
 }
 
@@ -124,7 +125,7 @@ function addNewProjectButtonListener() {
     );
 
     // create localStorage key using project nam
-    saveData(projectTitle, "{}");
+    saveData(projectName, "{}");
 
     clearTaskViewer();
     newProjectOverlay.remove();
