@@ -72,13 +72,7 @@ function cancelNewProjectButtonListener() {
   });
 }
 
-function addProjectTabListener(
-  projectName,
-  projectDescription,
-  projectTabClass
-) {
-  let projectTab = document.querySelector("." + projectTabClass);
-
+function addProjectTabListener(projectTab, projectName, projectDescription) {
   projectTab.addEventListener("click", () => {
     updateMainContentHeading(projectName);
     updateMainContentProjectDescription(projectDescription);
@@ -106,9 +100,7 @@ function addNewProjectButtonListener() {
       projectDescription = document.querySelector(
         "#new-project-description"
       ).value,
-      projectSpecificClass =
-        "project-" + projectName.toLowerCase().replace(/\s/g, "-"),
-      projectTab = tab(projectName, "project-tab", projectSpecificClass),
+      projectTab = tab(projectName, "project-tab"),
       mainContentHeading = document.querySelector(".main-content-heading"),
       mainContentProjectDescription = document.querySelector(
         ".main-content-project-description"
@@ -118,11 +110,7 @@ function addNewProjectButtonListener() {
     mainContentHeading.textContent = projectName;
 
     projectList.append(projectTab);
-    addProjectTabListener(
-      projectName,
-      projectDescription,
-      projectSpecificClass
-    );
+    addProjectTabListener(projectTab, projectName, projectDescription);
 
     // create localStorage key using project name
     saveProjectTaskData(projectName);
@@ -158,4 +146,4 @@ function menuController() {
   displayNewProjectOverlayForm();
 }
 
-export { menuController, createMenuTabListener };
+export { menuController, createMenuTabListener, addProjectTabListener };
