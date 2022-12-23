@@ -3,7 +3,7 @@ import { tab } from "../menubar/tab.js";
 import { secondaryTaskBoard } from "../appMainContent/secondaryTaskBoard.js";
 import { missingValueAggressiveValidation } from "./formValidationControls.js";
 import { clearTaskViewer, getSortAllTasksMethod } from "./taskController.js";
-import { saveProjectTaskData } from "./webStorageController.js";
+import { saveTaskItem } from "./webStorageController.js";
 import { toggleClass, removeClass } from "../helper/helper.js";
 
 // Event Listeners expect a function reference instead of the function itself.
@@ -113,7 +113,7 @@ function addNewProjectButtonListener() {
     addProjectTabListener(projectTab, projectName, projectDescription);
 
     // create localStorage key using project name
-    saveProjectTaskData(projectName);
+    saveTaskItem(projectName);
 
     clearTaskViewer();
     newProjectOverlay.remove();

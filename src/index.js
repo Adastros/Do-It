@@ -49,7 +49,7 @@ function renderPage() {
 }
 
 (function initApp() {
-  renderPage();
   initLocalStorageGlobalVariables();
+  renderPage();
   initControllers();
 })();

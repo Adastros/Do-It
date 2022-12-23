@@ -8,8 +8,7 @@ import {
   getTaskItem,
   getData,
   deleteTaskItem,
-  getTaskPriority,
-  determineLocalStorageKey,
+  getTaskPriorityKey,
 } from "./webStorageController.js";
 import { missingValueAggressiveValidation } from "./formValidationControls.js";
 import { addClass, removeClass } from "../helper/helper.js";
@@ -50,7 +49,9 @@ function addOrSaveTaskButtonListener(taskForm, taskItemId) {
 
   formAddOrSaveTaskButton.addEventListener("click", () => {
     let taskItemObj = createTaskItemObj(taskForm),
-      currentTaskBoardView = document.querySelector(".main-content-heading");
+      primaryTaskBoardHeading = document.querySelector(
+        ".main-content-heading"
+      ).textContent;
 
     if (!taskItemId) {
       // This is where the taskItemId is created. Only enters if the user is creating a new task.
@@ -60,18 +61,18 @@ function addOrSaveTaskButtonListener(taskForm, taskItemId) {
       // If the user edits and saves a task, remove the task from the DOM and
       // localStorage before replacing it with an updated version of it
       let taskToRemove = document.querySelector(
-          `[data-task-item-id = '${taskItemId}']`
-        ),
-        localStorageKey = determineLocalStorageKey(
-          document.querySelector(".main-content-heading").textContent
-        );
+        `[data-task-item-id = '${taskItemId}']`
+      );
+      // localStorageKey = determineLocalStorageKey(
+      //   document.querySelector(".main-content-heading").textContent
+      // );
 
-      deleteTaskItem(localStorageKey);
+      // deleteTaskItem(localStorageKey);
       taskToRemove.remove();
     }
 
-    saveTaskItem("taskData", taskItemId, taskItemObj);
-    insertTaskBasedOnView(taskItemId, taskItemObj, currentTaskBoardView);
+    saveTaskItem(primaryTaskBoardHeading, taskItemId, taskItemObj);
+    insertTaskBasedOnView(primaryTaskBoardHeading, taskItemId, taskItemObj);
     taskForm.remove();
   });
 }
@@ -91,10 +92,10 @@ function addTaskToBoard(taskItemId, taskItemObj, taskBoard) {
 
 function AddEditButtonListener(editButton, taskItemId) {
   editButton.addEventListener("click", () => {
-    let localStorageKey = determineLocalStorageKey(
-        document.querySelector(".main-content-heading").textContent
-      ),
-      currentTaskItemObj = getTaskItem(localStorageKey, taskItemId);
+    let primaryTaskBoardHeading = document.querySelector(
+        ".main-content-heading"
+      ).textContent,
+      currentTaskItemObj = getTaskItem(primaryTaskBoardHeading, taskItemId);
 
     // Create the task edit form and render it on the screen
     let taskEditForm = taskForm("Save", currentTaskItemObj),
@@ -120,10 +121,10 @@ function AddEditButtonListener(editButton, taskItemId) {
 
 function createDeleteConfirmationOverlayListener(deleteButton, taskItemId) {
   deleteButton.addEventListener("click", () => {
-    let localStorageKey = determineLocalStorageKey(
-        document.querySelector(".main-content-heading").textContent
-      ),
-      taskHeader = getTaskItem(localStorageKey, taskItemId).headerValue;
+    let primaryTaskBoardHeading = document.querySelector(
+        ".main-content-heading"
+      ).textContent,
+      taskHeader = getTaskItem(primaryTaskBoardHeading, taskItemId).headerValue;
 
     document.body.append(confirmDeleteTaskOverlay(taskHeader, taskItemId));
   });
@@ -138,11 +139,10 @@ function deleteConfirmationButtonListener(
     let taskToDelete = document.querySelector(
         `[data-task-item-id = '${taskItemId}']`
       ),
-      localStorageKey = determineLocalStorageKey(
-        document.querySelector(".main-content-heading").textContent
-      );
-
-    deleteTaskItem(localStorageKey, taskItemId);
+      primaryTaskBoardHeading = document.querySelector(
+        ".main-content-heading"
+      ).textContent;
+    deleteTaskItem(primaryTaskBoardHeading, taskItemId);
 
     taskToDelete.remove();
     overlayContainer.remove();
@@ -154,17 +154,17 @@ function toggleTaskCompletion(checkbox, taskItemId) {
     let taskItem = document.querySelector(
         `[data-task-item-id = '${taskItemId}']`
       ),
-      localStorageKey = determineLocalStorageKey(
-        document.querySelector(".main-content-heading").textContent
-      ),
-      task = getTaskItem(localStorageKey, taskItemId);
+      primaryTaskBoardHeading = document.querySelector(
+        ".main-content-heading"
+      ).textContent,
+      task = getTaskItem(primaryTaskBoardHeading, taskItemId);
 
     if (taskItem.classList.contains("completed")) {
       saveTaskItem("taskData", taskItemId, task);
     } else {
       saveTaskItem("completed", taskItemId, task);
     }
-    deleteTaskItem(localStorageKey, taskItemId);
+    deleteTaskItem(primaryTaskBoardHeading, taskItemId);
     taskItem.remove();
   });
 }
@@ -395,38 +395,41 @@ function sortAllTasksByUpcoming(taskDataObj, priorityKeyArr) {
   });
 }
 
-function insertTaskBasedOnView(taskItemId, taskItemObj, currentTaskBoardView) {
-  let taskViewer = document.querySelector(".task-viewer");
-
-  switch (currentTaskBoardView.textContent) {
+function insertTaskBasedOnView(
+  primaryTaskBoardHeading,
+  taskItemId,
+  taskItemObj
+) {
+  switch (primaryTaskBoardHeading) {
     case "Inbox":
-      insertTaskForInboxView(taskItemId, taskItemObj, taskViewer);
+      insertTaskForInboxView(taskItemId, taskItemObj);
       break;
     case "Today":
-      insertTaskForTodayView(taskItemId, taskItemObj, taskViewer);
+      insertTaskForTodayView(taskItemId, taskItemObj);
       break;
     case "Upcoming":
-      insertTaskForUpcomingView(taskItemId, taskItemObj, taskViewer);
+      insertTaskForUpcomingView(taskItemId, taskItemObj);
       break;
-    default:
+    case "Completed":
+      break;
+    default: // Project name
+      insertTaskForProject(taskItemId, taskItemObj);
       return;
   }
 }
 
-function insertTaskForInboxView(taskItemId, taskItemObj, taskViewer) {
-  let priorityKey = getTaskPriority(taskItemObj.priorityValue),
-    taskBoard = taskViewer.querySelector(
-      `[data-priority-key="${priorityKey}"]`
-    ),
+function insertTaskForInboxView(taskItemId, taskItemObj) {
+  let priorityKey = getTaskPriorityKey(taskItemObj.priorityValue),
+    taskBoard = document.querySelector(`[data-priority-key="${priorityKey}"]`),
     taskList = taskBoard.querySelector(".task-list");
 
   addTaskToBoard(taskItemId, taskItemObj, taskList);
 }
 
-function insertTaskForTodayView(taskItemId, taskItemObj, taskViewer) {
+function insertTaskForTodayView(taskItemId, taskItemObj) {
   let taskDueDate = taskItemObj.dueDateValue,
     todaysDate = format(new Date(), "PP"),
-    taskList = taskViewer.querySelector(".task-list");
+    taskList = document.querySelector(".task-list");
 
   if (taskDueDate === todaysDate) {
     addTaskToBoard(taskItemId, taskItemObj, taskList);
@@ -450,6 +453,12 @@ function insertTaskForUpcomingView(taskItemId, taskItemObj) {
       dateTaskBoardsArr[6 - dayDifference]
     );
   }
+}
+
+function insertTaskForProject(taskItemId, taskItemObj) {
+  let taskList = document.querySelector(".task-list");
+
+  addTaskToBoard(taskItemId, taskItemObj, taskList);
 }
 
 function taskController() {
