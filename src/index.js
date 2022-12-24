@@ -20,7 +20,7 @@ function taskData() {
 }
 
 function initLocalStorageGlobalVariables() {
-  saveData("previousMenuTab", "Inbox");
+  saveData("previousTab", "Inbox");
 
   if (!getData("taskData")) {
     saveData("taskData", taskData());

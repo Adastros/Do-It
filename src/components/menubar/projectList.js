@@ -1,5 +1,5 @@
 import { tab } from "./tab.js";
-import { addProjectTabListener } from "../controls/menuController.js";
+import { createTabListener } from "../controls/menuController.js";
 import { getData } from "../controls/webStorageController.js";
 import { addClass, createElement } from "../helper/helper.js";
 
@@ -13,7 +13,7 @@ function projectList() {
     let projectTab = tab(projectNames[i], "project-tab");
     
     projectList.append(projectTab);
-    addProjectTabListener(projectTab, projectNames[i], "");
+    createTabListener(projectTab, projectNames[i], "");
   }
 
   return projectList;

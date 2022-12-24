@@ -1,5 +1,5 @@
 import { tab } from "./tab.js";
-import { createMenuTabListener } from "../controls/menuController.js";
+import { createTabListener } from "../controls/menuController.js";
 import { addClass, createElement } from "../helper/helper.js";
 
 function menuTabs() {
@@ -11,7 +11,7 @@ function menuTabs() {
       menuTab = tab(tabArr[i], "tab", tabSpecificClass);
 
     menuTabContainer.append(menuTab);
-    createMenuTabListener(menuTab);
+    createTabListener(menuTab);
   }
 
   addClass(menuTabContainer, "menu-tabs");

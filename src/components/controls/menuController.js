@@ -1,8 +1,7 @@
 import { newProjectOverlayForm } from "../project/newProjectOverlayForm.js";
 import { tab } from "../menubar/tab.js";
-import { secondaryTaskBoard } from "../appMainContent/secondaryTaskBoard.js";
 import { missingValueAggressiveValidation } from "./formValidationControls.js";
-import { clearTaskViewer, getSortAllTasksMethod } from "./taskController.js";
+import { clearTaskViewer, getTaskSortMethod } from "./taskController.js";
 import { saveTaskItem } from "./webStorageController.js";
 import { toggleClass, removeClass } from "../helper/helper.js";
 
@@ -72,13 +71,13 @@ function cancelNewProjectButtonListener() {
   });
 }
 
-function addProjectTabListener(projectTab, projectName, projectDescription) {
-  projectTab.addEventListener("click", () => {
-    updateMainContentHeading(projectName);
-    updateMainContentProjectDescription(projectDescription);
-    clearTaskViewer();
-  });
-}
+// function addProjectTabListener(projectTab, projectName, projectDescription) {
+//   projectTab.addEventListener("click", () => {
+//     updateMainContentHeading(projectName);
+//     updateMainContentProjectDescription(projectDescription);
+//     clearTaskViewer();
+//   });
+// }
 
 function updateMainContentProjectDescription(projectDescription) {
   let projectDescriptionHeaderSection = document.querySelector(
@@ -126,17 +125,22 @@ function updateMainContentHeading(text) {
   mainContentHeading.textContent = text;
 }
 
-function createMenuTabListener(menuTab) {
-  menuTab.addEventListener("click", () => {
-    let tabName = menuTab.textContent;
+function createTabListener(tabElement, description) {
+  tabElement.addEventListener("click", () => {
+    let tabName = tabElement.textContent;
 
     updateMainContentHeading(tabName);
-    updateMainContentProjectDescription("");
+
+    if (!description) {
+      updateMainContentProjectDescription("");
+    } else {
+      updateMainContentProjectDescription(description);
+    }
 
     //If the user re-clicks the current tab, do not clear and re-sort task viewer.
-    if (localStorage.previousMenuTab !== tabName) {
+    if (localStorage.previousTab !== tabName) {
       clearTaskViewer();
-      getSortAllTasksMethod(tabName);
+      getTaskSortMethod(tabName);
     }
   });
 }
@@ -146,4 +150,4 @@ function menuController() {
   displayNewProjectOverlayForm();
 }
 
-export { menuController, createMenuTabListener, addProjectTabListener };
+export { menuController, createTabListener };

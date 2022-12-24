@@ -177,4 +177,5 @@ export {
   getTaskItem,
   deleteTaskItem,
   getTaskPriorityKey,
+  determineLocalStorageKey,
 };
