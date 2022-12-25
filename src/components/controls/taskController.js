@@ -145,9 +145,24 @@ function deleteConfirmationButtonListener(
       primaryTaskBoardHeading = document.querySelector(
         ".main-content-heading"
       ).textContent;
+
     deleteTaskItem(primaryTaskBoardHeading, taskItemId);
 
-    taskToDelete.remove();
+    // remove the secondary task board if this is the last task left
+    switch (primaryTaskBoardHeading) {
+      case "Today":
+      case "Upcoming":
+        taskToDelete.remove();
+        break;
+      default:
+        if (taskToDelete.parentElement.childElementCount === 1) {
+          taskToDelete.parentElement.parentElement.remove();
+        } else {
+          taskToDelete.remove();
+        }
+        break;
+    }
+
     overlayContainer.remove();
   });
 }
