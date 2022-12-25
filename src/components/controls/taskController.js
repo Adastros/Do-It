@@ -86,6 +86,8 @@ function addTaskToBoard(taskItemId, taskItemObj, taskBoard) {
 
   if (!taskBoard) {
     taskBoard = document.querySelector(".task-viewer");
+  } else {
+    taskBoard = taskBoard.querySelector(".task-list");
   }
 
   taskBoard.append(taskItem(taskItemId, taskItemObj));
@@ -297,14 +299,12 @@ function sortTasksByInbox(inboxTaskDataObj, priorityKeysArr) {
       `[data-priority-key="${priorityKey}"]`
     );
 
-    let priorityBoardTaskList = taskPriorityBoard.querySelector(".task-list");
-
     //Append the tasks to each priority board
     Object.keys(inboxTaskDataObj[priorityKey]).forEach((taskItemKey) => {
       addTaskToBoard(
         taskItemKey,
         inboxTaskDataObj[priorityKey][taskItemKey],
-        priorityBoardTaskList
+        taskPriorityBoard
       );
     });
   });
@@ -456,7 +456,7 @@ function insertTaskBasedOnView(
     case "Completed":
       break;
     default: // Project name
-      insertTaskForProject(taskItemId, taskItemObj);
+      insertTaskForProject();
       return;
   }
 }
@@ -498,10 +498,12 @@ function insertTaskForUpcomingView(taskItemId, taskItemObj) {
   }
 }
 
-function insertTaskForProject(taskItemId, taskItemObj) {
-  let taskList = document.querySelector(".task-list");
+function insertTaskForProject() {
+  let projectName = document.querySelector(".main-content-heading").textContent,
+    projectTaskDataObj = JSON.parse(getData("projects"));
 
-  addTaskToBoard(taskItemId, taskItemObj, taskList);
+  clearTaskViewer();
+  sortTasksByProject(projectTaskDataObj, projectName);
 }
 
 function taskController() {
