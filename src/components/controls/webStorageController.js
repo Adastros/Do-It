@@ -153,13 +153,14 @@ function getTaskPriorityKey(priorityValue) {
 function determineLocalStorageKey(currentTaskBoardViewHeading) {
   let key;
 
-  switch (currentTaskBoardViewHeading) {
-    case "Inbox":
-    case "Today":
-    case "Upcoming":
+  switch (currentTaskBoardViewHeading.toLowerCase()
+  ) {
+    case "inbox":
+    case "today":
+    case "upcoming":
       key = "taskData";
       break;
-    case "Completed":
+    case "completed":
       key = "completed";
       break;
     default: // Project specific data

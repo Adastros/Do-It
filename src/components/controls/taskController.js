@@ -182,6 +182,7 @@ function toggleTaskCompletion(checkbox, taskItemId) {
     } else {
       saveTaskItem("completed", taskItemId, task);
     }
+
     deleteTaskItem(primaryTaskBoardHeading, taskItemId);
     taskItem.remove();
   });
@@ -478,19 +479,17 @@ function insertTaskBasedOnView(
 
 function insertTaskForInboxView(taskItemId, taskItemObj) {
   let priorityKey = getTaskPriorityKey(taskItemObj.priorityValue),
-    taskBoard = document.querySelector(`[data-priority-key="${priorityKey}"]`),
-    taskList = taskBoard.querySelector(".task-list");
+    taskBoard = document.querySelector(`[data-priority-key="${priorityKey}"]`);
 
-  addTaskToBoard(taskItemId, taskItemObj, taskList);
+  addTaskToBoard(taskItemId, taskItemObj, taskBoard);
 }
 
 function insertTaskForTodayView(taskItemId, taskItemObj) {
   let taskDueDate = taskItemObj.dueDateValue,
-    todaysDate = format(new Date(), "PP"),
-    taskList = document.querySelector(".task-list");
+    todaysDate = format(new Date(), "PP");
 
   if (taskDueDate === todaysDate) {
-    addTaskToBoard(taskItemId, taskItemObj, taskList);
+    addTaskToBoard(taskItemId, taskItemObj);
   }
 }
 
