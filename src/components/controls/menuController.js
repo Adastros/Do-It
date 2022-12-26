@@ -71,14 +71,6 @@ function cancelNewProjectButtonListener() {
   });
 }
 
-// function addProjectTabListener(projectTab, projectName, projectDescription) {
-//   projectTab.addEventListener("click", () => {
-//     updateMainContentHeading(projectName);
-//     updateMainContentProjectDescription(projectDescription);
-//     clearTaskViewer();
-//   });
-// }
-
 function updateMainContentProjectDescription(projectDescription) {
   let projectDescriptionHeaderSection = document.querySelector(
     ".main-content-project-description"
@@ -109,7 +101,7 @@ function addNewProjectButtonListener() {
     mainContentHeading.textContent = projectName;
 
     projectList.append(projectTab);
-    addProjectTabListener(projectTab, projectName, projectDescription);
+    createTabListener(projectTab, projectDescription);
 
     // create localStorage key using project name
     saveTaskItem(projectName);
