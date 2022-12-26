@@ -227,8 +227,30 @@ function createTaskItemObj(taskForm) {
         ),
         "PP"
       ),
+      taskType: determineTaskType(),
     };
   }
+}
+
+function determineTaskType() {
+  let taskType,
+    primaryTaskBoardHeading = document.querySelector(
+      ".main-content-heading"
+    ).textContent;
+
+  switch (primaryTaskBoardHeading.toLowerCase()) {
+    case "inbox":
+    case "today":
+    case "upcoming":
+    case "completed":
+      taskType = "General Task";
+      break;
+    default:
+      taskType = "Project Task: " + primaryTaskBoardHeading;
+      break;
+  }
+
+  return taskType;
 }
 
 function clearTaskViewer() {

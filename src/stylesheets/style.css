@@ -272,6 +272,13 @@ img {
 .date-and-priority-indicator-container {
   display: flex;
   gap: 0.5rem;
+}
+
+.secondary-task-info-container {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   font-size: 75%;
 }
 
