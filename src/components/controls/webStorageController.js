@@ -129,7 +129,7 @@ function deleteTaskItem(primaryTaskBoardHeading, taskItemKey) {
 function getTaskPriorityKey(priorityValue) {
   let priorityKey;
 
-  switch (priorityValue) {
+  switch (priorityValue.toLowerCase()) {
     case "high":
       priorityKey = "highPriorityTasks";
       break;

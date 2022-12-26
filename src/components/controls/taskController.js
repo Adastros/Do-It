@@ -12,7 +12,11 @@ import {
   determineLocalStorageKey,
 } from "./webStorageController.js";
 import { missingValueAggressiveValidation } from "./formValidationControls.js";
-import { addClass, removeClass } from "../helper/helper.js";
+import {
+  addClass,
+  removeClass,
+  capitalizeFirstLetter,
+} from "../helper/helper.js";
 
 function addNewTaskButtonListener() {
   let addNewTaskButton = document.querySelector(".add-new-task-button");
@@ -275,20 +279,21 @@ function getTaskSortMethod(tabName) {
     taskDataObj = JSON.parse(getData(localStorageKey)),
     taskDataKeys = Object.keys(taskDataObj);
 
-  switch (tabName) {
-    case "Inbox":
+  clearTaskViewer();
+
+  switch (tabName.toLowerCase()) {
+    case "inbox":
       // Create the task priority boards first before sorting tasks
-      createTaskPriorityBoards();
       sortTasksByInbox(taskDataObj, taskDataKeys);
       break;
-    case "Today":
+    case "today":
       sortTasksByToday(taskDataObj, taskDataKeys);
       break;
-    case "Upcoming":
+    case "upcoming":
       createDateTaskBoards();
       sortTasksByUpcoming(taskDataObj, taskDataKeys);
       break;
-    case "Completed":
+    case "completed":
       sortTasksByCompleted(taskDataObj, taskDataKeys);
       break;
     default: // Sort Project Tabs
@@ -297,27 +302,6 @@ function getTaskSortMethod(tabName) {
   }
 
   localStorage.previousTab = tabName;
-}
-
-function createTaskPriorityBoards() {
-  let taskViewer = document.querySelector(".task-viewer"),
-    priorityBoardHeaderArr = ["High", "Medium", "Low", "None"],
-    priorityKeys = [
-      "highPriorityTasks",
-      "mediumPriorityTasks",
-      "lowPriorityTasks",
-      "noPriorityTasks",
-    ];
-
-  priorityBoardHeaderArr.forEach((boardHeader, i) => {
-    let priorityBoard = secondaryTaskBoard(boardHeader + " Priority");
-
-    // An identifier that is used when sorting through task data
-    // to append tasks based on priority.
-    priorityBoard.dataset.priorityKey = priorityKeys[i];
-
-    taskViewer.append(priorityBoard);
-  });
 }
 
 function createDateTaskBoards() {
@@ -339,21 +323,38 @@ function createDateTaskBoards() {
 }
 
 function sortTasksByInbox(inboxTaskDataObj, priorityKeysArr) {
-  let taskViewer = document.querySelector(".task-viewer");
+  let taskViewer = document.querySelector(".task-viewer"),
+    priorityBoardHeaderArr = ["High", "Medium", "Low", "No"],
+    priorityKeys = [
+      "highPriorityTasks",
+      "mediumPriorityTasks",
+      "lowPriorityTasks",
+      "noPriorityTasks",
+    ];
 
-  priorityKeysArr.forEach((priorityKey) => {
-    let taskPriorityBoard = taskViewer.querySelector(
-      `[data-priority-key="${priorityKey}"]`
-    );
-
-    //Append the tasks to each priority board
-    Object.keys(inboxTaskDataObj[priorityKey]).forEach((taskItemKey) => {
-      addTaskToBoard(
-        taskItemKey,
-        inboxTaskDataObj[priorityKey][taskItemKey],
-        taskPriorityBoard
+  priorityKeysArr.forEach((priorityKey, i) => {
+    // Check if an object is empty before appending tasks to the
+    // priority board
+    if (Object.keys(inboxTaskDataObj[priorityKey]).length) {
+      let priorityBoard = secondaryTaskBoard(
+        priorityBoardHeaderArr[i] + " Priority"
       );
-    });
+
+      // An identifier that is used when sorting through task data
+      // to append tasks based on priority.
+      priorityBoard.dataset.priorityKey = priorityKeys[i];
+
+      //Append the tasks to each priority board
+      Object.keys(inboxTaskDataObj[priorityKey]).forEach((taskItemKey) => {
+        addTaskToBoard(
+          taskItemKey,
+          inboxTaskDataObj[priorityKey][taskItemKey],
+          priorityBoard
+        );
+      });
+
+      taskViewer.append(priorityBoard);
+    }
   });
 }
 
@@ -509,10 +510,15 @@ function insertTaskBasedOnView(
 }
 
 function insertTaskForInboxView(taskItemId, taskItemObj) {
-  let priorityKey = getTaskPriorityKey(taskItemObj.priorityValue),
-    taskBoard = document.querySelector(`[data-priority-key="${priorityKey}"]`);
+  let taskBoard = document.querySelector(
+    `[data-priority-key="${getTaskPriorityKey(taskItemObj.priorityValue)}"]`
+  );
 
-  addTaskToBoard(taskItemId, taskItemObj, taskBoard);
+  if (!taskBoard) {
+    getTaskSortMethod("inbox");
+  } else {
+    addTaskToBoard(taskItemId, taskItemObj, taskBoard);
+  }
 }
 
 function insertTaskForTodayView(taskItemId, taskItemObj) {

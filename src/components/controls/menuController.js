@@ -139,7 +139,6 @@ function createTabListener(tabElement, description) {
 
     //If the user re-clicks the current tab, do not clear and re-sort task viewer.
     if (localStorage.previousTab !== tabName) {
-      clearTaskViewer();
       getTaskSortMethod(tabName);
     }
   });
