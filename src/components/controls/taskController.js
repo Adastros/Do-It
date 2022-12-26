@@ -178,7 +178,16 @@ function toggleTaskCompletion(checkbox, taskItemId) {
       task = getTaskItem(primaryTaskBoardHeading, taskItemId);
 
     if (taskItem.classList.contains("completed")) {
-      saveTaskItem("taskData", taskItemId, task);
+      // Determines where to move the completed task back to.
+      if (task.taskType.includes("General")) {
+        saveTaskItem(task.taskType, taskItemId, task);
+      } else {
+        saveTaskItem(
+          task.taskType.replace("Project Task: ", ""),
+          taskItemId,
+          task
+        );
+      }
     } else {
       saveTaskItem("completed", taskItemId, task);
     }
