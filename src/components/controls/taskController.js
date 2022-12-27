@@ -78,10 +78,6 @@ function saveTaskButtonListener(taskForm, taskItemId) {
         ".main-content-heading"
       ).textContent;
 
-    // If the user edits and saves a task, remove the task from the DOM and
-    // localStorage before replacing it with an updated version of it
-    document.querySelector(`[data-task-item-id = '${taskItemId}']`).remove();
-
     saveTaskItem(primaryTaskBoardHeading, taskItemId, taskItemObj);
     insertTaskBasedOnView(primaryTaskBoardHeading, taskItemId, taskItemObj);
     taskForm.remove();
@@ -523,6 +519,9 @@ function insertTaskBasedOnView(
     case "upcoming":
       insertTaskForUpcomingView(taskItemId, taskItemObj);
       break;
+    case "completed":
+      insertTaskForCompleted(taskItemId, taskItemObj);
+      break;
     default: // Project name
       insertTaskForProject();
       return;
@@ -567,6 +566,28 @@ function insertTaskForUpcomingView(taskItemId, taskItemObj) {
       dateTaskBoardsArr[6 - dayDifference]
     );
   }
+}
+
+function insertTaskForCompleted(taskItemId, taskItemObj) {
+  let taskToEdit = document.querySelector(
+      `[data-task-item-id="${taskItemId}"]`
+    ),
+    dateBoard = taskToEdit.parentElement.parentElement;
+
+  //Remove the task from the DOM and localStorage before replacing it
+  // with an updated version of it
+  taskToEdit.remove();
+  addTaskToBoard(taskItemId, taskItemObj, dateBoard);
+
+  // Reselect the updated task and style it
+  let updatedTask = dateBoard.querySelector(
+    `[data-task-item-id="${taskItemId}"]`
+  );
+  addClass(updatedTask, "completed");
+  removeClass(
+    updatedTask.querySelector(".checkbox").firstElementChild, // checkmark img element
+    "fade-in-out"
+  );
 }
 
 function insertTaskForProject() {
