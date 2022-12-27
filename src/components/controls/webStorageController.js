@@ -169,7 +169,6 @@ function determineLocalStorageKey(currentTaskBoardViewHeading) {
     case "inbox":
     case "today":
     case "upcoming":
-    case "general task": // when "uncompleting" a task
       key = "taskData";
       break;
     case "completed":

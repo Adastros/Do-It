@@ -13,10 +13,7 @@ import {
   determineLocalStorageKey,
 } from "./webStorageController.js";
 import { missingValueAggressiveValidation } from "./formValidationControls.js";
-import {
-  addClass,
-  removeClass,
-} from "../helper/helper.js";
+import { addClass, removeClass } from "../helper/helper.js";
 
 function addNewTaskButtonListener() {
   let addNewTaskButton = document.querySelector(".add-new-task-button");
@@ -36,7 +33,7 @@ function addNewTaskButtonListener() {
 
     // Activate listeners for form buttons
     createCancelButtonListener(newTaskForm, newTaskFormCancelButton);
-    addOrSaveTaskButtonListener(newTaskForm);
+    addTaskButtonListener(newTaskForm);
     missingValueAggressiveValidation(formTaskHeader, formAddTaskButton);
   });
 }
@@ -47,7 +44,30 @@ function createCancelButtonListener(formOrOverlay, cancelButton) {
   });
 }
 
-function addOrSaveTaskButtonListener(taskForm, taskItemId) {
+function addTaskButtonListener(taskForm) {
+  let formAddTaskButton = taskForm.querySelector(
+    ".form-add-or-save-task-button"
+  );
+
+  formAddTaskButton.addEventListener("click", () => {
+    let taskItemObj = createTaskItemObj(taskForm),
+      primaryTaskBoardHeading = document.querySelector(
+        ".main-content-heading"
+      ).textContent,
+      taskItemId = createTaskItemIdNumber();
+
+    if (primaryTaskBoardHeading !== "Completed") {
+      saveTaskItem(primaryTaskBoardHeading, taskItemId, taskItemObj);
+      insertTaskBasedOnView(primaryTaskBoardHeading, taskItemId, taskItemObj);
+    } else {
+      saveTaskItem("inbox", taskItemId, taskItemObj);
+    }
+
+    taskForm.remove();
+  });
+}
+
+function saveTaskButtonListener(taskForm, taskItemId) {
   let formAddOrSaveTaskButton = taskForm.querySelector(
     ".form-add-or-save-task-button"
   );
@@ -58,23 +78,9 @@ function addOrSaveTaskButtonListener(taskForm, taskItemId) {
         ".main-content-heading"
       ).textContent;
 
-    if (!taskItemId) {
-      // This is where the taskItemId is created. Only enters if the user is creating a new task.
-      // Otherwise, the user is editing and saving a task. A new task item # is not needed.
-      taskItemId = createTaskItemIdNumber();
-    } else {
-      // If the user edits and saves a task, remove the task from the DOM and
-      // localStorage before replacing it with an updated version of it
-      let taskToRemove = document.querySelector(
-        `[data-task-item-id = '${taskItemId}']`
-      );
-      // localStorageKey = determineLocalStorageKey(
-      //   document.querySelector(".main-content-heading").textContent
-      // );
-
-      // deleteTaskItem(localStorageKey);
-      taskToRemove.remove();
-    }
+    // If the user edits and saves a task, remove the task from the DOM and
+    // localStorage before replacing it with an updated version of it
+    document.querySelector(`[data-task-item-id = '${taskItemId}']`).remove();
 
     saveTaskItem(primaryTaskBoardHeading, taskItemId, taskItemObj);
     insertTaskBasedOnView(primaryTaskBoardHeading, taskItemId, taskItemObj);
@@ -121,7 +127,7 @@ function AddEditButtonListener(editButton, taskItemId) {
 
     // Set listeners for task edit form
     createCancelButtonListener(taskEditForm, newTaskFormCancelButton);
-    addOrSaveTaskButtonListener(taskEditForm, taskItemId);
+    saveTaskButtonListener(taskEditForm, taskItemId);
     missingValueAggressiveValidation(formTaskHeader, formAddTaskButton);
   });
 }
@@ -169,7 +175,10 @@ function toggleTaskCompletion(checkbox, taskItemId) {
     if (taskItem.classList.contains("completed")) {
       // Determines where to move the completed task back to.
       if (task.taskType.includes("General")) {
-        saveTaskItem(task.taskType, taskItemId, task);
+        // Inbox is used since general tasks can be created during the
+        // inbox, today, and upcoming views. All three views save tasks
+        // to taskData.
+        saveTaskItem("inbox", taskItemId, task);
       } else {
         saveTaskItem(
           task.taskType.replace("Project Task: ", ""),
@@ -504,17 +513,15 @@ function insertTaskBasedOnView(
   taskItemId,
   taskItemObj
 ) {
-  switch (primaryTaskBoardHeading) {
-    case "Inbox":
+  switch (primaryTaskBoardHeading.toLowerCase()) {
+    case "inbox":
       insertTaskForInboxView(taskItemId, taskItemObj);
       break;
-    case "Today":
+    case "today":
       insertTaskForTodayView(taskItemId, taskItemObj);
       break;
-    case "Upcoming":
+    case "upcoming":
       insertTaskForUpcomingView(taskItemId, taskItemObj);
-      break;
-    case "Completed":
       break;
     default: // Project name
       insertTaskForProject();
@@ -584,7 +591,8 @@ export {
   AddEditButtonListener,
   createDeleteConfirmationOverlayListener,
   deleteConfirmationButtonListener,
-  addOrSaveTaskButtonListener,
+  addTaskButtonListener,
+  saveTaskButtonListener,
   clearTaskViewer,
   getTaskSortMethod,
 };
