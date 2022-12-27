@@ -23,24 +23,6 @@ function createTaskHeaderField(headerValue) {
   return headerContainer;
 }
 
-function createTaskDescriptionField(descriptionValue) {
-  let descriptionContainer = createElement("div"),
-    descriptionLabel = createElement("label"),
-    descriptionInputField = createElement("textarea");
-
-  descriptionLabel.textContent = "Description";
-  if (descriptionValue) {
-    descriptionInputField.textContent = descriptionValue;
-  }
-
-  descriptionLabel.setAttribute("for", "form-task-description");
-  descriptionInputField.setAttribute("id", "form-task-description");
-
-  descriptionContainer.append(descriptionLabel, descriptionInputField);
-
-  return descriptionContainer;
-}
-
 // The addOrSaveTaskButtonText argument is used to determine if the
 // taskForm should state "save" or "add task" for one of the buttons.
 function taskForm(addOrSaveTaskButtonText, currentTaskItemObj) {
@@ -48,9 +30,6 @@ function taskForm(addOrSaveTaskButtonText, currentTaskItemObj) {
     taskForm = createElement("div"),
     taskItemForm = createElement("form"),
     headerField = createTaskHeaderField(currentTaskItemObj.headerValue),
-    descriptionField = createTaskDescriptionField(
-      currentTaskItemObj.descriptionValue
-    ),
     taskFormActionsContainer = createElement("div"),
     taskDateAndPriorityContainer = createElement("div"),
     taskFormButtonsContainer = createElement("div"),
@@ -81,7 +60,7 @@ function taskForm(addOrSaveTaskButtonText, currentTaskItemObj) {
     taskDateAndPriorityContainer,
     taskFormButtonsContainer
   );
-  taskItemForm.append(headerField, descriptionField, taskFormActionsContainer);
+  taskItemForm.append(headerField, taskFormActionsContainer);
   taskForm.append(taskItemForm);
 
   taskFormOverlay.append(taskForm);

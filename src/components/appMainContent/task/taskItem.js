@@ -48,7 +48,7 @@ function taskItem(taskItemId, taskItemObj) {
 
   checkBoxAndTaskInfoContainer.append(
     checkbox(taskItemId),
-    taskInfo(taskItemObj.headerValue, taskItemObj.descriptionValue)
+    taskInfo(taskItemObj.headerValue)
   );
 
   primaryTaskInfoAndActionsContainer.append(

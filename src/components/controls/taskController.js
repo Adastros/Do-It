@@ -16,7 +16,6 @@ import { missingValueAggressiveValidation } from "./formValidationControls.js";
 import {
   addClass,
   removeClass,
-  capitalizeFirstLetter,
 } from "../helper/helper.js";
 
 function addNewTaskButtonListener() {
@@ -233,13 +232,11 @@ function createTaskItemObj(taskForm) {
   if (!taskForm) {
     return {
       headerValue: "",
-      descriptionValue: "",
       priorityValue: "",
     };
   } else {
     return {
       headerValue: taskForm.querySelector("#form-task-header").value,
-      descriptionValue: taskForm.querySelector("#form-task-description").value,
       priorityValue: taskForm.querySelector("#task-priority-dropdown").value,
       // reconverts it into a more widely recognizable date form (e.g.: November 11, 2022)
       // the '-' are replaced with '/' due to an issue where formatting the date with '-'
