@@ -8,6 +8,7 @@ import {
   getTaskItem,
   getData,
   deleteTaskItem,
+  deleteEmptyCompletionDateKeys,
   getTaskPriorityKey,
   determineLocalStorageKey,
 } from "./webStorageController.js";
@@ -151,22 +152,7 @@ function deleteConfirmationButtonListener(
       ).textContent;
 
     deleteTaskItem(primaryTaskBoardHeading, taskItemId);
-
-    // remove the secondary task board if this is the last task left
-    switch (primaryTaskBoardHeading) {
-      case "Today":
-      case "Upcoming":
-        taskToDelete.remove();
-        break;
-      default:
-        if (taskToDelete.parentElement.childElementCount === 1) {
-          taskToDelete.parentElement.parentElement.remove();
-        } else {
-          taskToDelete.remove();
-        }
-        break;
-    }
-
+    removeTaskOrBoardFromDOM(primaryTaskBoardHeading, taskToDelete);
     overlayContainer.remove();
   });
 }
@@ -197,8 +183,34 @@ function toggleTaskCompletion(checkbox, taskItemId) {
     }
 
     deleteTaskItem(primaryTaskBoardHeading, taskItemId);
-    taskItem.remove();
+    removeTaskOrBoardFromDOM(primaryTaskBoardHeading, taskItem);
   });
+}
+
+function removeTaskOrBoardFromDOM(primaryTaskBoardHeading, taskToDelete) {
+  // remove the secondary task board if this is the last task left.
+  // Otherwise, remove the task from the secondary task board
+  switch (primaryTaskBoardHeading.toLowerCase()) {
+    case "today":
+    case "upcoming":
+      taskToDelete.remove();
+      break;
+    case "completed":
+      if (taskToDelete.parentElement.childElementCount === 1) {
+        deleteEmptyCompletionDateKeys();
+        taskToDelete.parentElement.parentElement.remove();
+      } else {
+        taskToDelete.remove();
+      }
+      break;
+    default: // Project tabs and inbox
+      if (taskToDelete.parentElement.childElementCount === 1) {
+        taskToDelete.parentElement.parentElement.remove();
+      } else {
+        taskToDelete.remove();
+      }
+      break;
+  }
 }
 
 // Random assigns a eight digit integer for the task ID.
@@ -334,7 +346,7 @@ function sortTasksByInbox(inboxTaskDataObj, priorityKeysArr) {
 
   priorityKeysArr.forEach((priorityKey, i) => {
     // Check if an object is empty before appending tasks to the
-    // priority board
+    // priority board. If empty, do not create the priority task board.
     if (Object.keys(inboxTaskDataObj[priorityKey]).length) {
       let priorityBoard = secondaryTaskBoard(
         priorityBoardHeaderArr[i] + " Priority"
@@ -430,9 +442,14 @@ function sortTasksByCompleted(completedTaskDataObj, orderedCompletionDates) {
       dateTaskBoard = secondaryTaskBoard(formattedDate);
 
     Object.keys(completedTaskDataObj[date]).forEach((taskItemId) => {
-      let completedTask = taskItem(
+      addTaskToBoard(
         taskItemId,
-        completedTaskDataObj[date][taskItemId]
+        completedTaskDataObj[date][taskItemId],
+        dateTaskBoard
+      );
+
+      let completedTask = dateTaskBoard.querySelector(
+        `[data-task-item-id = '${taskItemId}']`
       );
 
       addClass(completedTask, "completed");
@@ -440,7 +457,6 @@ function sortTasksByCompleted(completedTaskDataObj, orderedCompletionDates) {
         completedTask.querySelector(".checkbox").firstElementChild, // checkmark img element
         "fade-in-out"
       );
-      dateTaskBoard.append(completedTask);
     });
 
     taskViewer.append(dateTaskBoard);

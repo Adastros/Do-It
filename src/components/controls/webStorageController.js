@@ -126,6 +126,18 @@ function deleteTaskItem(primaryTaskBoardHeading, taskItemKey) {
   saveData(localStorageKey, JSON.stringify(taskDataObj));
 }
 
+function deleteEmptyCompletionDateKeys() {
+  let completionTaskDataObj = JSON.parse(getData("completed"));
+
+  Object.keys(completionTaskDataObj).forEach((dateKey) => {
+    if (!Object.keys(completionTaskDataObj[dateKey]).length) {
+      delete completionTaskDataObj[dateKey];
+    }
+  });
+
+  saveData("completed", JSON.stringify(completionTaskDataObj));
+}
+
 function getTaskPriorityKey(priorityValue) {
   let priorityKey;
 
@@ -157,7 +169,7 @@ function determineLocalStorageKey(currentTaskBoardViewHeading) {
     case "inbox":
     case "today":
     case "upcoming":
-    case "general task":  // when "uncompleting" a task
+    case "general task": // when "uncompleting" a task
       key = "taskData";
       break;
     case "completed":
@@ -177,6 +189,7 @@ export {
   saveTaskItem,
   getTaskItem,
   deleteTaskItem,
+  deleteEmptyCompletionDateKeys,
   getTaskPriorityKey,
   determineLocalStorageKey,
 };
