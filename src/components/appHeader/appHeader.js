@@ -10,6 +10,7 @@ function appHeader() {
     menuButton = iconButtonMedium(menuIcon, "Menu icon"),
     themeButton = iconButtonMedium(lightIcon, "Light theme icon"),
     addNewTaskButton = textButton("Add task", "add-new-task-button"),
+    demoButton = textButton("Demo", "demo-button"),
     topRightButtonContainer = createElement("div");
 
   addClass(menuButton, "menu-button");
@@ -17,7 +18,7 @@ function appHeader() {
   addClass(topRightButtonContainer, "top-right-side-button-container");
   addClass(appHeader, "appHeader");
 
-  topRightButtonContainer.append(addNewTaskButton, themeButton);
+  topRightButtonContainer.append(addNewTaskButton, demoButton, themeButton);
   appHeader.append(menuButton, appLogo(), topRightButtonContainer);
 
   return appHeader;

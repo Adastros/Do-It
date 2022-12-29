@@ -3,6 +3,7 @@ import { taskForm } from "../appMainContent/task/taskForm.js";
 import { confirmDeleteTaskOverlay } from "../appMainContent/task/confirmDeleteTaskOverlay.js";
 import { taskItem } from "../appMainContent/task/taskItem.js";
 import { secondaryTaskBoard } from "../appMainContent/secondaryTaskBoard.js";
+import { projectList } from "../menubar/projectList.js";
 import {
   saveTaskItem,
   getTaskItem,
@@ -11,9 +12,11 @@ import {
   deleteEmptyCompletionDateKeys,
   getTaskPriorityKey,
   determineLocalStorageKey,
+  saveData,
 } from "./webStorageController.js";
 import { missingValueAggressiveValidation } from "./formValidationControls.js";
 import { addClass, removeClass } from "../helper/helper.js";
+import demoJson from "../../../data/demo.json" assert { type: "json" };
 
 function addNewTaskButtonListener() {
   let addNewTaskButton = document.querySelector(".add-new-task-button");
@@ -286,6 +289,16 @@ function clearTaskViewer() {
   while (taskViewer.firstElementChild) {
     taskViewer.firstElementChild.remove();
   }
+}
+
+function clearProjectTabs() {
+  document.querySelector(".project-list").remove();
+}
+
+function reloadProjectTabs() {
+  let projectSection = document.querySelector(".project-section");
+
+  projectSection.append(projectList());
 }
 
 function getTaskSortMethod(tabName) {
@@ -598,11 +611,83 @@ function insertTaskForProject() {
   sortTasksByProject(projectTaskDataObj, projectName);
 }
 
+function demoAppButtonListener() {
+  let demoButton = document.querySelector(".demo-button"),
+    primaryTaskBoardHeading = document.querySelector(
+      ".main-content-heading"
+    ).textContent;
+
+  demoButton.addEventListener("click", () => {
+    let todaysDate = new Date().setHours(0, 0, 0, 0);
+
+    Object.keys(demoJson).forEach((primaryKey) => {
+      let primaryObj = {};
+      console.log(primaryKey);
+      if (primaryKey !== "completed") {
+        Object.keys(demoJson[primaryKey]).forEach((secondaryKey) => {
+          primaryObj[secondaryKey] = {};
+
+          demoJson[primaryKey][secondaryKey].forEach((task) => {
+            task.dueDateValue = format(
+              addDays(todaysDate, +task.dueDateValue),
+              "PP"
+            );
+
+            primaryObj[secondaryKey][`${createTaskItemIdNumber()}`] = task;
+          });
+        });
+      } else {
+        let completedArr = demoJson[primaryKey].map((completedTask) => {
+          completedTask.dueDateValue = format(
+            addDays(todaysDate, +completedTask.dueDateValue),
+            "PP"
+          );
+
+          return completedTask;
+        });
+
+        completedArr = completedArr.sort((dateLeft, dateRight) => {
+          compareDesc(
+            new Date(dateRight.dueDateValue),
+            new Date(dateLeft.dueDateValue)
+          );
+        });
+
+        completedArr.forEach((task) => {
+          if (!primaryObj.hasOwnProperty(task.dueDateValue)) {
+            primaryObj[task.dueDateValue] = {};
+          }
+
+          primaryObj[task.dueDateValue][`${createTaskItemIdNumber()}`] = task;
+        });
+      }
+      console.log(primaryObj);
+      saveData(primaryKey, JSON.stringify(primaryObj));
+    });
+
+    // Clear the following DOM components and reload the tasks
+    clearTaskViewer();
+    clearProjectTabs();
+    getTaskSortMethod(primaryTaskBoardHeading);
+    reloadProjectTabs();
+  });
+}
+
+function emptyTaskData() {
+  return JSON.stringify({
+    highPriorityTasks: {},
+    mediumPriorityTasks: {},
+    lowPriorityTasks: {},
+    noPriorityTasks: {},
+  });
+}
+
 function taskController() {
   // Sort tasks by priority for the Inbox menu tab on page load
   getTaskSortMethod("Inbox");
 
   addNewTaskButtonListener();
+  demoAppButtonListener();
 }
 
 export {
@@ -616,4 +701,5 @@ export {
   saveTaskButtonListener,
   clearTaskViewer,
   getTaskSortMethod,
+  emptyTaskData,
 };

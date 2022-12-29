@@ -1,0 +1,249 @@
+{
+  "taskData": {
+    "highPriorityTasks": [
+      {
+        "headerValue": "Walk the dogs",
+        "priorityValue": "high",
+        "dueDateValue": "0",
+        "taskType": "General Task"
+      },
+      {
+        "headerValue": "Meal prep for next week",
+        "priorityValue": "high",
+        "dueDateValue": "7",
+        "taskType": "General Task"
+      },
+      {
+        "headerValue": "Turn in homework for intro to computer science class",
+        "priorityValue": "high",
+        "dueDateValue": "-2",
+        "taskType": "General Task"
+      }
+    ],
+    "mediumPriorityTasks": [
+      {
+        "headerValue": "Do the laundry",
+        "priorityValue": "medium",
+        "dueDateValue": "0",
+        "taskType": "General Task"
+      },
+      {
+        "headerValue": "Return textbook to Fred",
+        "priorityValue": "medium",
+        "dueDateValue": "4",
+        "taskType": "General Task"
+      },
+      {
+        "headerValue": "Replace water filter",
+        "priorityValue": "medium",
+        "dueDateValue": "0",
+        "taskType": "General Task"
+      },
+      {
+        "headerValue": "Call mom",
+        "priorityValue": "medium",
+        "dueDateValue": "0",
+        "taskType": "General Task"
+      }
+    ],
+    "lowPriorityTasks": [
+      {
+        "headerValue": "Vacuum the floor",
+        "priorityValue": "low",
+        "dueDateValue": "3",
+        "taskType": "General Task"
+      },
+      {
+        "headerValue": "Take out the trash",
+        "priorityValue": "low",
+        "dueDateValue": "3",
+        "taskType": "General Task"
+      },
+      {
+        "headerValue": "Make a Dentist Appointment",
+        "priorityValue": "low",
+        "dueDateValue": "7",
+        "taskType": "General Task"
+      },
+      {
+        "headerValue": "Replace patio lightbulb",
+        "priorityValue": "low",
+        "dueDateValue": "-5",
+        "taskType": "General Task"
+      }
+    ],
+    "noPriorityTasks": [
+      {
+        "headerValue": "Work on setting up 3D printer",
+        "priorityValue": "none",
+        "dueDateValue": "20",
+        "taskType": "General Task"
+      },
+      {
+        "headerValue": "Shop for a jacket",
+        "priorityValue": "none",
+        "dueDateValue": "30",
+        "taskType": "General Task"
+      },
+      {
+        "headerValue": "Fix squeaky cabinet",
+        "priorityValue": "none",
+        "dueDateValue": "30",
+        "taskType": "General Task"
+      }
+    ]
+  },
+
+  "projects": {
+    "Upgrade my desktop PC": [
+      {
+        "headerValue": "Buy motherboard from Charles",
+        "priorityValue": "low",
+        "dueDateValue": "2",
+        "taskType": "Project Task: Upgrade my desktop PC"
+      },
+      {
+        "headerValue": "Shop for a GPU",
+        "priorityValue": "high",
+        "dueDateValue": "7",
+        "taskType": "Project Task: Upgrade my desktop PC"
+      },
+      {
+        "headerValue": "Shop for a CPU",
+        "priorityValue": "low",
+        "dueDateValue": "7",
+        "taskType": "Project Task: Upgrade my desktop PC"
+      },
+      {
+        "headerValue": "Replace my PC parts",
+        "priorityValue": "high",
+        "dueDateValue": "14",
+        "taskType": "Project Task: Upgrade my desktop PC"
+      },
+      {
+        "headerValue": "Shop for a new monitor",
+        "priorityValue": "low",
+        "dueDateValue": "7",
+        "taskType": "Project Task: Upgrade my desktop PC"
+      },
+      {
+        "headerValue": "Ask Fred if he wants to buy my old parts",
+        "priorityValue": "low",
+        "dueDateValue": "-4",
+        "taskType": "Project Task: Upgrade my desktop PC"
+      }
+    ],
+    "Build a Portfolio Website": [
+      {
+        "headerValue": "Ask Fred for thoughts on initial website design",
+        "priorityValue": "high",
+        "dueDateValue": "5",
+        "taskType": "Project Task: Build a Portfolio Website"
+      },
+      {
+        "headerValue": "Create initial design in Figma",
+        "priorityValue": "high",
+        "dueDateValue": "3",
+        "taskType": "Project Task: Build a Portfolio Website"
+      },
+      {
+        "headerValue": "Ask Fred for thoughts on final website design",
+        "priorityValue": "high",
+        "dueDateValue": "20",
+        "taskType": "Project Task: Build a Portfolio Website"
+      },
+      {
+        "headerValue": "Research technology stack to use",
+        "priorityValue": "high",
+        "dueDateValue": "-3",
+        "taskType": "Project Task: Build a Portfolio Website"
+      },
+      {
+        "headerValue": "Create github repository",
+        "priorityValue": "high",
+        "dueDateValue": "-1",
+        "taskType": "Project Task: Build a Portfolio Website"
+      },
+      {
+        "headerValue": "Look at other people's website portfolios for ideas",
+        "priorityValue": "high",
+        "dueDateValue": "-1",
+        "taskType": "Project Task: Build a Portfolio Website"
+      }
+    ]
+  },
+  "completed": [
+    {
+      "headerValue": "Water the plants",
+      "priorityValue": "high",
+      "dueDateValue": "0",
+      "taskType": "General Task"
+    },
+    {
+      "headerValue": "Grocery Shop",
+      "priorityValue": "high",
+      "dueDateValue": "-3",
+      "taskType": "General Task"
+    },
+    {
+      "headerValue": "Turn in art project",
+      "priorityValue": "high",
+      "dueDateValue": "-1",
+      "taskType": "General Task"
+    },
+    {
+      "headerValue": "Walk the dogs",
+      "priorityValue": "high",
+      "dueDateValue": "-1",
+      "taskType": "General Task"
+    },
+    {
+      "headerValue": "Babysit Sarah",
+      "priorityValue": "high",
+      "dueDateValue": "-5",
+      "taskType": "General Task"
+    },
+    {
+      "headerValue": "Bake cookies",
+      "priorityValue": "low",
+      "dueDateValue": "-2",
+      "taskType": "General Task"
+    },
+    {
+      "headerValue": "Walk the dogs",
+      "priorityValue": "high",
+      "dueDateValue": "-2",
+      "taskType": "General Task"
+    },
+    {
+      "headerValue": "Call dad",
+      "priorityValue": "medium",
+      "dueDateValue": "0",
+      "taskType": "General Task"
+    },
+    {
+      "headerValue": "Shop for a birthday gift for Sarah",
+      "priorityValue": "medium",
+      "dueDateValue": "-2",
+      "taskType": "General Task"
+    },
+    {
+      "headerValue": "Research computer components",
+      "priorityValue": "high",
+      "dueDateValue": "-3",
+      "taskType": "Project Task: Upgrade my desktop PC"
+    },
+    {
+      "headerValue": "Shop for M.2 PCIE Gen 4 SSD",
+      "priorityValue": "low",
+      "dueDateValue": "0",
+      "taskType": "Project Task: Upgrade my desktop PC"
+    },
+    {
+      "headerValue": "Decide if I want to host portfolio on Github pages or Heroku",
+      "priorityValue": "high",
+      "dueDateValue": "-5",
+      "taskType": "Project Task: Build a Portfolio Website"
+    }
+  ]
+}

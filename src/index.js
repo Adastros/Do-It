@@ -1,6 +1,9 @@
 import { appHeader } from "./components/appHeader/appHeader.js";
 import { appMainContent } from "./components/appMainContent/appMainContent.js";
-import { taskController } from "./components/controls/taskController.js";
+import {
+  taskController,
+  emptyTaskData,
+} from "./components/controls/taskController.js";
 import { menuController } from "./components/controls/menuController";
 import { createElement } from "./components/helper/helper.js";
 import { menubar } from "./components/menubar/menubar.js";
@@ -10,20 +13,11 @@ import {
 } from "./components/controls/webStorageController.js";
 import "./stylesheets/style.css";
 
-function taskData() {
-  return JSON.stringify({
-    highPriorityTasks: {},
-    mediumPriorityTasks: {},
-    lowPriorityTasks: {},
-    noPriorityTasks: {},
-  });
-}
-
 function initLocalStorageGlobalVariables() {
   saveData("previousTab", "Inbox");
 
   if (!getData("taskData")) {
-    saveData("taskData", taskData());
+    saveData("taskData", emptyTaskData());
   }
 
   if (!getData("completed")) {
