@@ -48,7 +48,12 @@ function taskForm(addOrSaveTaskButtonText, currentTaskItemObj) {
   addClass(taskForm, "task-form-container");
   addClass(taskFormOverlay, "task-form-overlay");
 
-  addOrSaveTaskButton.setAttribute("disabled", "");
+  if (addOrSaveTaskButtonText === "Add Task") {
+    addOrSaveTaskButton.setAttribute("disabled", "");
+  } else {
+    addOrSaveTaskButton.removeAttribute("disabled", "");
+  }
+  
   taskItemForm.setAttribute("novalidate", "");
 
   taskDateAndPriorityContainer.append(
