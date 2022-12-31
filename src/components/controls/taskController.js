@@ -15,7 +15,11 @@ import {
   saveData,
 } from "./webStorageController.js";
 import { missingValueAggressiveValidation } from "./formValidationControls.js";
-import { addClass, removeClass } from "../helper/helper.js";
+import {
+  addClass,
+  capitalizeFirstLetter,
+  removeClass,
+} from "../helper/helper.js";
 import demoJson from "../../../data/demo.json" assert { type: "json" };
 
 function addNewTaskButtonListener() {
@@ -76,13 +80,57 @@ function saveTaskButtonListener(taskForm, taskItemId) {
   );
 
   formAddOrSaveTaskButton.addEventListener("click", () => {
-    let taskItemObj = createTaskItemObj(taskForm),
+    let editedTaskObj = createTaskItemObj(taskForm),
       primaryTaskBoardHeading = document.querySelector(
         ".main-content-heading"
-      ).textContent;
+      ).textContent,
+      taskToEdit = document.querySelector(
+        `[data-task-item-id="${taskItemId}"]`
+      ),
+      currentTask = getTaskItem(primaryTaskBoardHeading, taskItemId);
 
-    saveTaskItem(primaryTaskBoardHeading, taskItemId, taskItemObj);
-    insertTaskBasedOnView(primaryTaskBoardHeading, taskItemId, taskItemObj);
+    deleteTaskItem(primaryTaskBoardHeading, taskItemId);
+    saveTaskItem(primaryTaskBoardHeading, taskItemId, editedTaskObj);
+
+    switch (primaryTaskBoardHeading.toLowerCase()) {
+      case "inbox":
+        if (currentTask.priorityValue === editedTaskObj.priorityValue) {
+          editTaskInPlace(taskToEdit, editedTaskObj);
+        } else {
+          removeTaskOrBoardFromDOM(primaryTaskBoardHeading, taskToEdit);
+          insertTaskBasedOnView(
+            primaryTaskBoardHeading,
+            taskItemId,
+            editedTaskObj
+          );
+        }
+        break;
+      case "upcoming":
+        if (currentTask.dueDateValue === editedTaskObj.dueDateValue) {
+          editTaskInPlace(taskToEdit, editedTaskObj);
+        } else {
+          removeTaskOrBoardFromDOM(primaryTaskBoardHeading, taskToEdit);
+          insertTaskBasedOnView(
+            primaryTaskBoardHeading,
+            taskItemId,
+            editedTaskObj
+          );
+        }
+        break;
+      case "today":
+      case "completed":
+        editTaskInPlace(taskToEdit, editedTaskObj);
+        break;
+      default: // Projects
+        removeTaskOrBoardFromDOM(primaryTaskBoardHeading, taskToEdit);
+        insertTaskBasedOnView(
+          primaryTaskBoardHeading,
+          taskItemId,
+          editedTaskObj
+        );
+        break;
+    }
+
     taskForm.remove();
   });
 }
@@ -100,6 +148,21 @@ function addTaskToBoard(taskItemId, taskItemObj, taskBoard) {
   }
 
   taskBoard.append(taskItem(taskItemId, taskItemObj));
+}
+
+function editTaskInPlace(taskToEdit, taskItemObj) {
+  let taskHeader = taskToEdit.querySelector(".task-header"),
+    dueDate = taskToEdit.querySelector(
+      ".date-and-priority-indicator-container"
+    ).firstElementChild,
+    priority = taskToEdit.querySelector(
+      ".date-and-priority-indicator-container"
+    ).lastElementChild;
+
+  taskHeader.textContent = taskItemObj.headerValue;
+  dueDate.textContent = "Due Date: " + taskItemObj.dueDateValue;
+  priority.textContent =
+    "Priority: " + capitalizeFirstLetter(taskItemObj.priorityValue);
 }
 
 function AddEditButtonListener(editButton, taskItemId) {
@@ -537,7 +600,7 @@ function insertTaskBasedOnView(
       break;
     default: // Project name
       insertTaskForProject();
-      return;
+      break;
   }
 }
 
