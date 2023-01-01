@@ -25,7 +25,7 @@ header {
 main {
   flex: 1;
   display: flex;
-  overflow: hidden;
+  overflow-y: auto;
 }
 
 input {
@@ -200,7 +200,6 @@ img {
   flex-direction: column;
   align-items: center;
   transition: transform 0.25s;
-  overflow-y: auto;
 }
 
 .main-content-header {
@@ -341,6 +340,10 @@ img {
 .hide {
   visibility: hidden;
   overflow: hidden;
+}
+
+.scrollable-y {
+  overflow-y: auto;
 }
 
 #task-priority-dropdown {

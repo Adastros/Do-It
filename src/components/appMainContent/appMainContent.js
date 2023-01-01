@@ -7,7 +7,7 @@ function appMainContent() {
     linebreak = createElement("div");
 
   addClass(linebreak, "linebreak");
-  addClass(appMainContent, "main-content");
+  addClass(appMainContent, "main-content", "scrollable-y");
 
   appMainContent.append(mainContentHeader(), linebreak, taskViewer());
 
