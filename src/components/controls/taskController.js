@@ -86,13 +86,31 @@ function saveTaskButtonListener(taskForm, taskItemId) {
   );
 
   formAddOrSaveTaskButton.addEventListener("click", () => {
-    let editedTaskObj = createTaskItemObj(taskForm),
+    let completedDataObj = JSON.parse(getData("completed")),
+      completionDates = Object.keys(completedDataObj),
+      completionDateKey;
+
+    for (let i = 0; i < completionDates.length; i++) {
+      if (
+        completedDataObj[completionDates[i]].hasOwnProperty(`${taskItemId}`)
+      ) {
+        completionDateKey = completionDates[i];
+        break;
+      }
+    }
+
+    let editedTaskObj = createTaskItemObj(taskForm, taskItemId),
       primaryTaskBoardHeading = document.querySelector(
         ".main-content-heading"
       ).textContent;
 
     deleteTaskItem(primaryTaskBoardHeading, taskItemId);
-    saveTaskItem(primaryTaskBoardHeading, taskItemId, editedTaskObj);
+    saveTaskItem(
+      primaryTaskBoardHeading,
+      taskItemId,
+      editedTaskObj,
+      completionDateKey
+    );
     getTaskSortMethod(primaryTaskBoardHeading);
 
     taskForm.remove();
@@ -236,7 +254,7 @@ function createTaskItemIdNumber() {
   return taskId;
 }
 
-function createTaskItemObj(taskForm) {
+function createTaskItemObj(taskForm, keepTaskType) {
   // When creating the first task in task viewer, assign empty values to
   // the object so that taskForm will display empty fields.
   if (!taskForm) {
@@ -259,12 +277,12 @@ function createTaskItemObj(taskForm) {
         ),
         "PP"
       ),
-      taskType: determineTaskType(),
+      taskType: determineTaskType(keepTaskType),
     };
   }
 }
 
-function determineTaskType() {
+function determineTaskType(keepTaskType) {
   let taskType,
     primaryTaskBoardHeading = document.querySelector(
       ".main-content-heading"
@@ -274,8 +292,10 @@ function determineTaskType() {
     case "inbox":
     case "today":
     case "upcoming":
-    case "completed":
       taskType = "General Task";
+      break;
+    case "completed":
+      taskType = keepTaskType;
       break;
     default:
       taskType = "Project Task: " + primaryTaskBoardHeading;

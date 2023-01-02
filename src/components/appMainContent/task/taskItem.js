@@ -20,7 +20,7 @@ function taskItem(taskItemId, taskItemObj) {
 
   priorityIndicator.textContent = "Priority: " + upperCasePriorityValue;
   dueDateIndicator.textContent = "Due Date: " + taskItemObj.dueDateValue;
-  taskLabel = taskItemObj.taskType;
+  taskLabel.textContent = taskItemObj.taskType;
 
   addClass(
     dueDateAndPriorityIndicatorContainer,

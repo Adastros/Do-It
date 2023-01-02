@@ -11,7 +11,12 @@ function getData(key) {
 }
 
 // Save task data to the user's browser's local storage
-function saveTaskItem(primaryTaskBoardHeading, taskItemKey, taskItemObj) {
+function saveTaskItem(
+  primaryTaskBoardHeading,
+  taskItemKey,
+  taskItemObj,
+  completionDateKey
+) {
   let localStorageKey = determineLocalStorageKey(primaryTaskBoardHeading),
     taskDataObj = JSON.parse(getData(localStorageKey)),
     updatedTaskDataObj;
@@ -28,7 +33,8 @@ function saveTaskItem(primaryTaskBoardHeading, taskItemKey, taskItemObj) {
       updatedTaskDataObj = updateCompleted(
         taskDataObj,
         taskItemKey,
-        taskItemObj
+        taskItemObj,
+        completionDateKey
       );
       break;
     case "projects":
@@ -56,16 +62,25 @@ function updateTaskData(taskDataObj, taskItemKey, taskItemObj) {
   return taskDataObj;
 }
 
-function updateCompleted(taskDataObj, taskItemKey, taskItemObj) {
-  let todaysDate = format(new Date(), "PP");
+function updateCompleted(
+  taskDataObj,
+  taskItemKey,
+  taskItemObj,
+  completionDateKey
+) {
+  if (completionDateKey) {
+    taskDataObj[completionDateKey][`${taskItemKey}`] = taskItemObj;
+  } else {
+    let todaysDate = format(new Date(), "PP");
 
-  // If this is the first task completed for a given day, create the key based on the
-  // date completed prior to moving the task data over to the completed key
-  if (!taskDataObj.hasOwnProperty(todaysDate)) {
-    taskDataObj[todaysDate] = {};
+    // If this is the first task completed for a given day, create the key based on the
+    // date completed prior to moving the task data over to the completed key
+    if (!taskDataObj.hasOwnProperty(todaysDate)) {
+      taskDataObj[todaysDate] = {};
+    }
+
+    taskDataObj[todaysDate][`${taskItemKey}`] = taskItemObj;
   }
-
-  taskDataObj[todaysDate][`${taskItemKey}`] = taskItemObj;
 
   return taskDataObj;
 }
@@ -120,7 +135,7 @@ function deleteTaskItem(primaryTaskBoardHeading, taskItemKey) {
     taskDataObjKeys = Object.keys(taskDataObj);
 
   for (let i = 0; i < taskDataObjKeys.length; i++) {
-    if (taskDataObj[taskDataObjKeys[i]].hasOwnProperty(taskItemKey)) {
+    if (taskDataObj[taskDataObjKeys[i]].hasOwnProperty(`${taskItemKey}`)) {
       delete taskDataObj[taskDataObjKeys[i]][taskItemKey];
       break;
     }
