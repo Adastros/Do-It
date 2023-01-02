@@ -757,24 +757,24 @@ function insertTaskForProjectView() {
 }
 
 function demoAppButtonListener() {
-  let demoButton = document.querySelector(".demo-button"),
-    primaryTaskBoardHeading = document.querySelector(
-      ".main-content-heading"
-    ).textContent;
+  let demoButton = document.querySelector(".demo-button");
 
   demoButton.addEventListener("click", () => {
-    let todaysDate = new Date().setHours(0, 0, 0, 0);
+    let primaryTaskBoardHeading = document.querySelector(
+        ".main-content-heading"
+      ).textContent,
+      todaysDate = new Date().setHours(0, 0, 0, 0);
 
     Object.keys(demoJson).forEach((primaryKey) => {
       let primaryObj = {};
-      console.log(primaryKey);
+
       if (primaryKey !== "completed") {
         Object.keys(demoJson[primaryKey]).forEach((secondaryKey) => {
           primaryObj[secondaryKey] = {};
 
           demoJson[primaryKey][secondaryKey].forEach((task) => {
             task.dueDateValue = format(
-              addDays(todaysDate, +task.dueDateValue),
+              addDays(todaysDate, +task.dateOffset),
               "PP"
             );
 
@@ -784,7 +784,7 @@ function demoAppButtonListener() {
       } else {
         let completedArr = demoJson[primaryKey].map((completedTask) => {
           completedTask.dueDateValue = format(
-            addDays(todaysDate, +completedTask.dueDateValue),
+            addDays(todaysDate, +completedTask.dateOffset),
             "PP"
           );
 
@@ -806,7 +806,7 @@ function demoAppButtonListener() {
           primaryObj[task.dueDateValue][`${createTaskItemIdNumber()}`] = task;
         });
       }
-      console.log(primaryObj);
+
       saveData(primaryKey, JSON.stringify(primaryObj));
     });
 

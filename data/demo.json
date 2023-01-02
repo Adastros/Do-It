@@ -4,92 +4,106 @@
       {
         "headerValue": "Walk the dogs",
         "priorityValue": "high",
-        "dueDateValue": "0",
-        "taskType": "General Task"
+        "dueDateValue": "",
+        "taskType": "General Task",
+        "dateOffset": "0"
       },
       {
         "headerValue": "Meal prep for next week",
         "priorityValue": "high",
-        "dueDateValue": "7",
-        "taskType": "General Task"
+        "dueDateValue": "",
+        "taskType": "General Task",
+        "dateOffset": "7"
       },
       {
         "headerValue": "Turn in homework for intro to computer science class",
         "priorityValue": "high",
-        "dueDateValue": "-2",
-        "taskType": "General Task"
+        "dueDateValue": "",
+        "taskType": "General Task",
+        "dateOffset": "-2"
       }
     ],
     "mediumPriorityTasks": [
       {
         "headerValue": "Do the laundry",
         "priorityValue": "medium",
-        "dueDateValue": "0",
-        "taskType": "General Task"
+        "dueDateValue": "",
+        "taskType": "General Task",
+        "dateOffset": "0"
       },
       {
         "headerValue": "Return textbook to Fred",
         "priorityValue": "medium",
-        "dueDateValue": "4",
-        "taskType": "General Task"
+        "dueDateValue": "",
+        "taskType": "General Task",
+        "dateOffset": "4"
       },
       {
         "headerValue": "Replace water filter",
         "priorityValue": "medium",
-        "dueDateValue": "0",
-        "taskType": "General Task"
+        "dueDateValue": "",
+        "taskType": "General Task",
+        "dateOffset": "0"
       },
       {
         "headerValue": "Call mom",
         "priorityValue": "medium",
-        "dueDateValue": "0",
-        "taskType": "General Task"
+        "dueDateValue": "",
+        "taskType": "General Task",
+        "dateOffset": "0"
       }
     ],
     "lowPriorityTasks": [
       {
         "headerValue": "Vacuum the floor",
         "priorityValue": "low",
-        "dueDateValue": "3",
-        "taskType": "General Task"
+        "dueDateValue": "",
+        "taskType": "General Task",
+        "dateOffset": "3"
       },
       {
         "headerValue": "Take out the trash",
         "priorityValue": "low",
-        "dueDateValue": "3",
-        "taskType": "General Task"
+        "dueDateValue": "",
+        "taskType": "General Task",
+        "dateOffset": "3"
       },
       {
         "headerValue": "Make a Dentist Appointment",
         "priorityValue": "low",
-        "dueDateValue": "7",
-        "taskType": "General Task"
+        "dueDateValue": "",
+        "taskType": "General Task",
+        "dateOffset": "7"
       },
       {
         "headerValue": "Replace patio lightbulb",
         "priorityValue": "low",
-        "dueDateValue": "-5",
-        "taskType": "General Task"
+        "dueDateValue": "",
+        "taskType": "General Task",
+        "dateOffset": "-5"
       }
     ],
     "noPriorityTasks": [
       {
         "headerValue": "Work on setting up 3D printer",
         "priorityValue": "none",
-        "dueDateValue": "20",
-        "taskType": "General Task"
+        "dueDateValue": "",
+        "taskType": "General Task",
+        "dateOffset": "20"
       },
       {
         "headerValue": "Shop for a jacket",
         "priorityValue": "none",
-        "dueDateValue": "30",
-        "taskType": "General Task"
+        "dueDateValue": "",
+        "taskType": "General Task",
+        "dateOffset": "30"
       },
       {
         "headerValue": "Fix squeaky cabinet",
         "priorityValue": "none",
-        "dueDateValue": "30",
-        "taskType": "General Task"
+        "dueDateValue": "",
+        "taskType": "General Task",
+        "dateOffset": "30"
       }
     ]
   },
@@ -99,76 +113,88 @@
       {
         "headerValue": "Buy motherboard from Charles",
         "priorityValue": "low",
-        "dueDateValue": "2",
-        "taskType": "Project Task: Upgrade my desktop PC"
+        "dueDateValue": "",
+        "taskType": "Project Task: Upgrade my desktop PC",
+        "dateOffset": "2"
       },
       {
         "headerValue": "Shop for a GPU",
         "priorityValue": "high",
-        "dueDateValue": "7",
-        "taskType": "Project Task: Upgrade my desktop PC"
+        "dueDateValue": "",
+        "taskType": "Project Task: Upgrade my desktop PC",
+        "dateOffset": "7"
       },
       {
         "headerValue": "Shop for a CPU",
         "priorityValue": "low",
-        "dueDateValue": "7",
-        "taskType": "Project Task: Upgrade my desktop PC"
+        "dueDateValue": "",
+        "taskType": "Project Task: Upgrade my desktop PC",
+        "dateOffset": "7"
       },
       {
         "headerValue": "Replace my PC parts",
         "priorityValue": "high",
-        "dueDateValue": "14",
-        "taskType": "Project Task: Upgrade my desktop PC"
+        "dueDateValue": "",
+        "taskType": "Project Task: Upgrade my desktop PC",
+        "dateOffset": "14"
       },
       {
         "headerValue": "Shop for a new monitor",
         "priorityValue": "low",
-        "dueDateValue": "7",
-        "taskType": "Project Task: Upgrade my desktop PC"
+        "dueDateValue": "",
+        "taskType": "Project Task: Upgrade my desktop PC",
+        "dateOffset": "7"
       },
       {
         "headerValue": "Ask Fred if he wants to buy my old parts",
         "priorityValue": "low",
-        "dueDateValue": "-4",
-        "taskType": "Project Task: Upgrade my desktop PC"
+        "dueDateValue": "",
+        "taskType": "Project Task: Upgrade my desktop PC",
+        "dateOffset": "-4"
       }
     ],
     "Build a Portfolio Website": [
       {
         "headerValue": "Ask Fred for thoughts on initial website design",
         "priorityValue": "high",
-        "dueDateValue": "5",
-        "taskType": "Project Task: Build a Portfolio Website"
+        "dueDateValue": "",
+        "taskType": "Project Task: Build a Portfolio Website",
+        "dateOffset": "5"
       },
       {
         "headerValue": "Create initial design in Figma",
         "priorityValue": "high",
-        "dueDateValue": "3",
-        "taskType": "Project Task: Build a Portfolio Website"
+        "dueDateValue": "",
+        "taskType": "Project Task: Build a Portfolio Website",
+        "dateOffset": "3"
       },
       {
         "headerValue": "Ask Fred for thoughts on final website design",
         "priorityValue": "high",
-        "dueDateValue": "20",
-        "taskType": "Project Task: Build a Portfolio Website"
+        "dueDateValue": "",
+        "taskType": "Project Task: Build a Portfolio Website",
+        "dateOffset": "20"
       },
       {
         "headerValue": "Research technology stack to use",
         "priorityValue": "high",
-        "dueDateValue": "-3",
-        "taskType": "Project Task: Build a Portfolio Website"
+        "dueDateValue": "",
+        "taskType": "Project Task: Build a Portfolio Website",
+        "dateOffset": "-3"
       },
       {
         "headerValue": "Create github repository",
         "priorityValue": "high",
-        "dueDateValue": "-1",
-        "taskType": "Project Task: Build a Portfolio Website"
+        "dueDateValue": "",
+        "taskType": "Project Task: Build a Portfolio Website",
+        "dateOffset": "-1"
       },
       {
         "headerValue": "Look at other people's website portfolios for ideas",
         "priorityValue": "high",
-        "dueDateValue": "-1",
-        "taskType": "Project Task: Build a Portfolio Website"
+        "dueDateValue": "",
+        "taskType": "Project Task: Build a Portfolio Website",
+        "dateOffset": "-1"
       }
     ]
   },
@@ -176,74 +202,86 @@
     {
       "headerValue": "Water the plants",
       "priorityValue": "high",
-      "dueDateValue": "0",
-      "taskType": "General Task"
+      "dueDateValue": "",
+      "taskType": "General Task",
+      "dateOffset": "0"
     },
     {
       "headerValue": "Grocery Shop",
       "priorityValue": "high",
-      "dueDateValue": "-3",
-      "taskType": "General Task"
+      "dueDateValue": "",
+      "taskType": "General Task",
+      "dateOffset": "-3"
     },
     {
       "headerValue": "Turn in art project",
       "priorityValue": "high",
-      "dueDateValue": "-1",
-      "taskType": "General Task"
+      "dueDateValue": "",
+      "taskType": "General Task",
+      "dateOffset": "-1"
     },
     {
       "headerValue": "Walk the dogs",
       "priorityValue": "high",
-      "dueDateValue": "-1",
-      "taskType": "General Task"
+      "dueDateValue": "",
+      "taskType": "General Task",
+      "dateOffset": "-1"
     },
     {
       "headerValue": "Babysit Sarah",
       "priorityValue": "high",
-      "dueDateValue": "-5",
-      "taskType": "General Task"
+      "dueDateValue": "",
+      "taskType": "General Task",
+      "dateOffset": "-5"
     },
     {
       "headerValue": "Bake cookies",
       "priorityValue": "low",
-      "dueDateValue": "-2",
-      "taskType": "General Task"
+      "dueDateValue": "",
+      "taskType": "General Task",
+      "dateOffset": "-2"
     },
     {
       "headerValue": "Walk the dogs",
       "priorityValue": "high",
-      "dueDateValue": "-2",
-      "taskType": "General Task"
+      "dueDateValue": "",
+      "taskType": "General Task",
+      "dateOffset": "-2"
     },
     {
       "headerValue": "Call dad",
       "priorityValue": "medium",
-      "dueDateValue": "0",
-      "taskType": "General Task"
+      "dueDateValue": "",
+      "taskType": "General Task",
+      "dateOffset": "0"
     },
     {
       "headerValue": "Shop for a birthday gift for Sarah",
       "priorityValue": "medium",
-      "dueDateValue": "-2",
-      "taskType": "General Task"
+      "dueDateValue": "",
+      "taskType": "General Task",
+      "dateOffset": "-2"
     },
     {
       "headerValue": "Research computer components",
       "priorityValue": "high",
-      "dueDateValue": "-3",
-      "taskType": "Project Task: Upgrade my desktop PC"
+      "dueDateValue": "",
+      "taskType": "Project Task: Upgrade my desktop PC",
+      "dateOffset": "-3"
     },
     {
       "headerValue": "Shop for M.2 PCIE Gen 4 SSD",
       "priorityValue": "low",
-      "dueDateValue": "0",
-      "taskType": "Project Task: Upgrade my desktop PC"
+      "dueDateValue": "",
+      "taskType": "Project Task: Upgrade my desktop PC",
+      "dateOffset": "0"
     },
     {
       "headerValue": "Decide if I want to host portfolio on Github pages or Heroku",
       "priorityValue": "high",
-      "dueDateValue": "-5",
-      "taskType": "Project Task: Build a Portfolio Website"
+      "dueDateValue": "",
+      "taskType": "Project Task: Build a Portfolio Website",
+      "dateOffset": "-5"
     }
   ]
 }
