@@ -353,6 +353,43 @@ function clearEmptyTaskBoards() {
   }
 }
 
+function sortByDueDateAsc(entries) {
+  return entries.sort((entryLeft, entryRight) => {
+    return compareDesc(
+      new Date(entryRight[1].dueDateValue),
+      new Date(entryLeft[1].dueDateValue)
+    );
+  });
+}
+
+function combineGeneralAndProjectTasks() {
+  let taskDataObj = JSON.parse(getData("taskData")),
+    projectDataObj = JSON.parse(getData("projects")),
+    combinedTaskObj = {};
+
+  [taskDataObj, projectDataObj].forEach((dataObj, i) => {
+    Object.keys(dataObj).forEach((secondaryKey) => {
+      if (!combinedTaskObj.hasOwnProperty(secondaryKey) && i === 0) {
+        combinedTaskObj[secondaryKey] = {};
+      }
+
+      Object.entries(dataObj[secondaryKey]).forEach((entry) => {
+        if (!isTaskOverdue(entry[1])) {
+          if (i === 0) {
+            combinedTaskObj[secondaryKey][entry[0]] = entry[1];
+          } else {
+            combinedTaskObj[getTaskPriorityKey(entry[1].priorityValue)][
+              entry[0]
+            ] = entry[1];
+          }
+        }
+      });
+    });
+  });
+
+  return combinedTaskObj;
+}
+
 function createOverDueTaskBoard(overDueTasks) {
   let primaryTaskBoard = document.querySelector(".task-viewer"),
     overDueBoard = secondaryTaskBoard("Overdue Tasks");
@@ -441,47 +478,29 @@ function checkForAllOverdueTasks(localStorageKey, primaryTaskBoardHeading) {
   }
 
   if (overDueTasks.length > 1) {
-    overDueTasks.sort((dateLeft, dateRight) =>
-      compareDesc(
-        new Date(dateLeft.dueDateValue),
-        new Date(dateRight.dueDateValue)
-      )
-    );
+    overDueTasks = sortByDueDateAsc(overDueTasks);
   }
 
   return overDueTasks;
 }
 
 function sortTasksByInbox() {
-  let taskDataObj = JSON.parse(getData("taskData")),
-    projectDataObj = JSON.parse(getData("projects"));
+  let combinedTaskObj = combineGeneralAndProjectTasks();
 
-  Object.keys(taskDataObj).forEach((secondaryKey) => {
-    //Append the tasks to each priority board
-    Object.keys(taskDataObj[secondaryKey]).forEach((taskItemKey) => {
-      let taskObj = taskDataObj[secondaryKey][taskItemKey];
+  Object.keys(combinedTaskObj).forEach((priorityKey) => {
+    let taskEntries = sortByDueDateAsc(
+      Object.entries(combinedTaskObj[priorityKey])
+    );
 
-      if (!isTaskOverdue(taskObj)) {
-        addTaskToBoard(
-          taskItemKey,
-          taskObj,
-          document.querySelector(`[data-priority-key="${secondaryKey}"]`)
-        );
-      }
-    });
-  });
+    taskEntries.forEach((entry) => {
+      let taskItemKey = entry[0],
+        taskObj = entry[1];
 
-  Object.keys(projectDataObj).forEach((secondaryKey) => {
-    //Append the tasks to each priority board
-    Object.keys(projectDataObj[secondaryKey]).forEach((taskItemKey) => {
-      if (!isTaskOverdue(projectDataObj[secondaryKey][taskItemKey])) {
-        let taskObj = projectDataObj[secondaryKey][taskItemKey],
-          board = document.querySelector(
-            `[data-priority-key="${getTaskPriorityKey(taskObj.priorityValue)}"]`
-          );
-
-        addTaskToBoard(taskItemKey, taskObj, board);
-      }
+      addTaskToBoard(
+        taskItemKey,
+        taskObj,
+        document.querySelector(`[data-priority-key="${priorityKey}"]`)
+      );
     });
   });
 }
