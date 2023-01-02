@@ -1,7 +1,7 @@
 import { newProjectOverlayForm } from "../project/newProjectOverlayForm.js";
 import { tab } from "../menubar/tab.js";
 import { missingValueAggressiveValidation } from "./formValidationControls.js";
-import { clearTaskViewer, getTaskSortMethod } from "./taskController.js";
+import { clearPrimaryTaskBoard, getTaskSortMethod } from "./taskController.js";
 import { saveTaskItem } from "./webStorageController.js";
 import { toggleClass, removeClass, addClass } from "../helper/helper.js";
 
@@ -121,7 +121,7 @@ function addNewProjectButtonListener() {
     // create localStorage key using project name
     saveTaskItem(projectName);
 
-    clearTaskViewer();
+    clearPrimaryTaskBoard();
     newProjectOverlay.remove();
   });
 }

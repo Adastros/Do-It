@@ -88,20 +88,23 @@ function updateProjects(taskDataObj, projectName, taskItemKey, taskItemObj) {
 }
 
 // Get task data from the user's browser's local storage
-function getTaskItem(primaryTaskBoardHeading, taskItemKey) {
+function getTaskItem(taskItemKey) {
   let taskItem,
-    localStorageKey = determineLocalStorageKey(primaryTaskBoardHeading),
-    taskDataObj = JSON.parse(getData(localStorageKey)),
-    localStoragePrimaryKeys = Object.keys(taskDataObj);
+    localStorageKeys = Object.keys(localStorage);
 
-  for (let i = 0; i < localStoragePrimaryKeys.length; i++) {
-    let localStorageSecondaryKeys = localStoragePrimaryKeys[i];
+  loop1: for (let i = 0; i < localStorageKeys.length; i++) {
+    if (localStorageKeys[i] !== "previousTab") {
+      let dataObj = JSON.parse(getData(localStorageKeys[i])),
+        primaryKeys = Object.keys(dataObj);
 
-    if (
-      taskDataObj[localStorageSecondaryKeys].hasOwnProperty(`${taskItemKey}`)
-    ) {
-      taskItem = taskDataObj[localStorageSecondaryKeys][`${taskItemKey}`];
-      break;
+      for (let j = 0; j < primaryKeys.length; j++) {
+        let tasksObj = dataObj[primaryKeys[j]];
+
+        if (tasksObj.hasOwnProperty(`${taskItemKey}`)) {
+          taskItem = dataObj[primaryKeys[j]][`${taskItemKey}`];
+          break loop1;
+        }
+      }
     }
   }
 
