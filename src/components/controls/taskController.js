@@ -104,7 +104,7 @@ function saveTaskButtonListener(taskForm, taskItemId) {
         ".main-content-heading"
       ).textContent;
 
-    deleteTaskItem(primaryTaskBoardHeading, taskItemId);
+    deleteTaskItem(taskItemId);
     saveTaskItem(
       primaryTaskBoardHeading,
       taskItemId,
@@ -175,7 +175,7 @@ function deleteConfirmationButtonListener(
         ".main-content-heading"
       ).textContent;
 
-    deleteTaskItem(primaryTaskBoardHeading, taskItemId);
+    deleteTaskItem(taskItemId);
     removeTaskOrBoardFromDOM(primaryTaskBoardHeading, taskToDelete);
     overlayContainer.remove();
   });
@@ -190,6 +190,8 @@ function toggleTaskCompletion(checkbox, taskItemId) {
         ".main-content-heading"
       ).textContent,
       task = getTaskItem(taskItemId);
+
+    deleteTaskItem(taskItemId);
 
     if (taskItem.classList.contains("completed")) {
       // Determines where to move the completed task back to.
@@ -209,7 +211,6 @@ function toggleTaskCompletion(checkbox, taskItemId) {
       saveTaskItem("completed", taskItemId, task);
     }
 
-    deleteTaskItem(primaryTaskBoardHeading, taskItemId);
     removeTaskOrBoardFromDOM(primaryTaskBoardHeading, taskItem);
   });
 }

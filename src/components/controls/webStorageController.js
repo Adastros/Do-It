@@ -124,19 +124,23 @@ function getTaskItem(taskItemKey) {
 // Gets a copy of all task data, deletes a task, and rewrites
 // the mutated task data back to localStorage. localStorage.removeItem()
 // was not used since it only removes the first level of keys available to it.
-function deleteTaskItem(primaryTaskBoardHeading, taskItemKey) {
-  let localStorageKey = determineLocalStorageKey(primaryTaskBoardHeading),
-    taskDataObj = JSON.parse(getData(localStorageKey)),
-    taskDataObjKeys = Object.keys(taskDataObj);
+function deleteTaskItem(taskItemKey) {
+  let localStorageKeys = Object.keys(localStorage);
 
-  for (let i = 0; i < taskDataObjKeys.length; i++) {
-    if (taskDataObj[taskDataObjKeys[i]].hasOwnProperty(`${taskItemKey}`)) {
-      delete taskDataObj[taskDataObjKeys[i]][taskItemKey];
-      break;
+  loop1: for (let i = 0; i < localStorageKeys.length; i++) {
+    if (localStorageKeys[i] !== "previousTab") {
+      let dataObj = JSON.parse(getData(localStorageKeys[i])),
+        primaryKeys = Object.keys(dataObj);
+
+      for (let j = 0; j < primaryKeys.length; j++) {
+        if (dataObj[primaryKeys[j]].hasOwnProperty(`${taskItemKey}`)) {
+          delete dataObj[primaryKeys[j]][taskItemKey];
+          saveData(localStorageKeys[i], JSON.stringify(dataObj));
+          break;
+        }
+      }
     }
   }
-
-  saveData(localStorageKey, JSON.stringify(taskDataObj));
 }
 
 function deleteEmptyCompletionDateKeys() {
