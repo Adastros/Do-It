@@ -1,3 +1,4 @@
+import { add } from "date-fns";
 import { textButton } from "../generalButtons/textButton.js";
 import { addClass, createElement } from "../helper/helper.js";
 
@@ -28,7 +29,11 @@ function projectNameFormField() {
 
   addClass(projectNameContainer, "new-project-name-form-field");
 
-  projectNameContainer.append(projectNameLabel, projectNameInput);
+  projectNameContainer.append(
+    projectNameLabel,
+    projectNameInput,
+    projectErrorField()
+  );
 
   return projectNameContainer;
 }
@@ -53,6 +58,18 @@ function projectDescriptionFormField() {
   );
 
   return projectDescriptionContainer;
+}
+
+function projectErrorField() {
+  let errorField = createElement("div"),
+    errorMessage = createElement("span");
+
+  addClass(errorField, "error-field", "hide");
+  addClass(errorMessage, "error-message");
+
+  errorField.append(errorMessage);
+
+  return errorField;
 }
 
 function projectFormButtons() {

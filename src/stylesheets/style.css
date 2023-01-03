@@ -30,6 +30,7 @@ main {
 
 input {
   width: 100%;
+  border: 2px solid black;
 }
 
 textarea {
@@ -192,6 +193,19 @@ img {
 
 .new-project-form-buttons {
   align-self: flex-end;
+}
+
+.error {
+  border-color: red;
+  box-shadow: 0 0 2px red;
+}
+
+.error-field {
+  width: 100%;
+}
+
+.error-message {
+  color: red;
 }
 
 .main-content {

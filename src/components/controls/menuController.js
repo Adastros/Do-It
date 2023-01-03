@@ -1,6 +1,9 @@
 import { newProjectOverlayForm } from "../project/newProjectOverlayForm.js";
 import { tab } from "../menubar/tab.js";
-import { missingValueAggressiveValidation } from "./formValidationControls.js";
+import {
+  missingValueAggressiveValidation,
+  doesProjectNameExist,
+} from "./formValidationControls.js";
 import { clearPrimaryTaskBoard, getTaskSortMethod } from "./taskController.js";
 import { saveTaskItem } from "./webStorageController.js";
 import { toggleClass, removeClass, addClass } from "../helper/helper.js";
@@ -100,29 +103,32 @@ function addNewProjectButtonListener() {
   );
 
   addNewProjectButton.addEventListener("click", () => {
-    let newProjectOverlay = document.querySelector(".new-project-overlay"),
-      projectList = document.querySelector(".project-list"),
-      projectName = document.querySelector("#new-project-name").value,
+    let projectName = document.querySelector("#new-project-name").value.trim(),
       projectDescription = document.querySelector(
         "#new-project-description"
-      ).value,
-      projectTab = tab(projectName, "project-tab"),
-      mainContentHeading = document.querySelector(".main-content-heading"),
-      mainContentProjectDescription = document.querySelector(
-        ".main-content-project-description"
-      );
+      ).value;
 
-    mainContentProjectDescription.textContent = projectDescription;
-    mainContentHeading.textContent = projectName;
+    if (doesProjectNameExist(projectName)) {
+      let newProjectOverlay = document.querySelector(".new-project-overlay"),
+        projectList = document.querySelector(".project-list"),
+        projectTab = tab(projectName, "project-tab"),
+        mainContentHeading = document.querySelector(".main-content-heading"),
+        mainContentProjectDescription = document.querySelector(
+          ".main-content-project-description"
+        );
 
-    projectList.append(projectTab);
-    createTabListener(projectTab, projectDescription);
+      mainContentProjectDescription.textContent = projectDescription;
+      mainContentHeading.textContent = projectName;
 
-    // create localStorage key using project name
-    saveTaskItem(projectName);
+      projectList.append(projectTab);
+      createTabListener(projectTab, projectDescription);
 
-    clearPrimaryTaskBoard();
-    newProjectOverlay.remove();
+      // create localStorage key using project name
+      saveTaskItem(projectName);
+
+      clearPrimaryTaskBoard();
+      newProjectOverlay.remove();
+    }
   });
 }
 

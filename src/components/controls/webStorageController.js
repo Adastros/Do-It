@@ -86,11 +86,6 @@ function updateCompleted(
 }
 
 function updateProjects(taskDataObj, projectName, taskItemKey, taskItemObj) {
-  // if (taskDataObj.hasOwnProperty(projectName) && !taskItemKey) {
-  //   console.log("There is a project with this name already!");
-  //   return;
-  // }
-
   // If taskItemKey is falsey, taskItemObj is as well. This only occurs when
   // a new project is created.
   if (!taskItemKey) {
