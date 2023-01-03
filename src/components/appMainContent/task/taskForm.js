@@ -18,9 +18,21 @@ function createTaskHeaderField(headerValue) {
   headerInputField.setAttribute("required", "");
   addClass(headerInputField, "form-task-header");
 
-  headerContainer.append(headerLabel, headerInputField);
+  headerContainer.append(headerLabel, headerInputField, taskFormErrorField());
 
   return headerContainer;
+}
+
+function taskFormErrorField() {
+  let errorField = createElement("div"),
+    errorMessage = createElement("span");
+
+  addClass(errorField, "error-field", "hide");
+  addClass(errorMessage, "error-message");
+
+  errorField.append(errorMessage);
+
+  return errorField;
 }
 
 // The addOrSaveTaskButtonText argument is used to determine if the
@@ -53,7 +65,7 @@ function taskForm(addOrSaveTaskButtonText, currentTaskItemObj) {
   } else {
     addOrSaveTaskButton.removeAttribute("disabled", "");
   }
-  
+
   taskItemForm.setAttribute("novalidate", "");
 
   taskDateAndPriorityContainer.append(

@@ -2,12 +2,21 @@ import { getData } from "./webStorageController.js";
 import { removeClass, addClass } from "../helper/helper.js";
 
 // Aggressively checks and disables the add button if if form field is empty
-function missingValueAggressiveValidation(eventListenerNode, buttonToDisable) {
-  eventListenerNode.addEventListener("input", (e) => {
+function missingValueAggressiveValidation(input, buttonToDisable) {
+  input.addEventListener("input", (e) => {
+    let errorField = document.querySelector(".error-field"),
+      errorMessage = document.querySelector(".error-message");
+
     if (e.currentTarget.validity.valid) {
       buttonToDisable.removeAttribute("disabled", "");
+      errorMessage.textContent = "";
+      removeClass(input, "error");
+      addClass(errorField, "hide");
     } else {
       buttonToDisable.setAttribute("disabled", "");
+      errorMessage.textContent = "Please enter a task name.";
+      addClass(input, "error");
+      removeClass(errorField, "hide");
     }
   });
 }
