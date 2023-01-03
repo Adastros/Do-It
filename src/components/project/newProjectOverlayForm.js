@@ -1,4 +1,3 @@
-import { add } from "date-fns";
 import { textButton } from "../generalButtons/textButton.js";
 import { addClass, createElement } from "../helper/helper.js";
 
@@ -36,28 +35,6 @@ function projectNameFormField() {
   );
 
   return projectNameContainer;
-}
-
-function projectDescriptionFormField() {
-  let projectDescriptionContainer = createElement("div"),
-    projectDescriptionLabel = createElement("label"),
-    projectDescriptionTextarea = createElement("textarea");
-
-  projectDescriptionLabel.textContent = "Project Description:";
-  projectDescriptionLabel.setAttribute("for", "new-project-description");
-  projectDescriptionTextarea.setAttribute("id", "new-project-description");
-  projectDescriptionTextarea.setAttribute("name", "newProjectDescription");
-  projectDescriptionTextarea.setAttribute("rows", "3");
-  projectDescriptionTextarea.setAttribute("maxlength", "300");
-
-  addClass(projectDescriptionContainer, "new-project-description-form-field");
-
-  projectDescriptionContainer.append(
-    projectDescriptionLabel,
-    projectDescriptionTextarea
-  );
-
-  return projectDescriptionContainer;
 }
 
 function projectErrorField() {
@@ -104,7 +81,6 @@ function newProjectForm() {
   newProjectForm.append(
     formHeader(),
     projectNameFormField(),
-    projectDescriptionFormField(),
     newProjectButtons
   );
 

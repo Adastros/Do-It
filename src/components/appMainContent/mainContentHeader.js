@@ -3,8 +3,7 @@ import { addClass, createElement } from "../helper/helper.js";
 function mainContentHeader() {
   let mainContentHeader = createElement("div"),
     headingContainer = createElement("div"),
-    heading = createElement("h1"),
-    projectDescription = createElement("p");
+    heading = createElement("h1");
 
   // On page load, Inbox is loaded by default.
   heading.textContent = "Inbox";
@@ -12,9 +11,8 @@ function mainContentHeader() {
   addClass(mainContentHeader, "main-content-header");
   addClass(headingContainer, "main-content-heading-container");
   addClass(heading, "main-content-heading");
-  addClass(projectDescription, "main-content-project-description");
 
-  headingContainer.append(heading, projectDescription);
+  headingContainer.append(heading);
   mainContentHeader.append(headingContainer);
 
   return mainContentHeader;

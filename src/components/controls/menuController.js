@@ -89,39 +89,24 @@ function cancelNewProjectButtonListener() {
   });
 }
 
-function updateMainContentProjectDescription(projectDescription) {
-  let projectDescriptionHeaderSection = document.querySelector(
-    ".main-content-project-description"
-  );
-
-  projectDescriptionHeaderSection.textContent = projectDescription;
-}
-
 function addNewProjectButtonListener() {
   let addNewProjectButton = document.querySelector(
     ".new-project-form-add-button"
   );
 
   addNewProjectButton.addEventListener("click", () => {
-    let projectName = document.querySelector("#new-project-name").value.trim(),
-      projectDescription = document.querySelector(
-        "#new-project-description"
-      ).value;
+    let projectName = document.querySelector("#new-project-name").value.trim();
 
     if (doesProjectNameExist(projectName)) {
       let newProjectOverlay = document.querySelector(".new-project-overlay"),
         projectList = document.querySelector(".project-list"),
         projectTab = tab(projectName, "project-tab"),
-        mainContentHeading = document.querySelector(".main-content-heading"),
-        mainContentProjectDescription = document.querySelector(
-          ".main-content-project-description"
-        );
+        mainContentHeading = document.querySelector(".main-content-heading");
 
-      mainContentProjectDescription.textContent = projectDescription;
       mainContentHeading.textContent = projectName;
 
       projectList.append(projectTab);
-      createTabListener(projectTab, projectDescription);
+      createTabListener(projectTab);
 
       // create localStorage key using project name
       saveTaskItem(projectName);
@@ -138,17 +123,11 @@ function updateMainContentHeading(text) {
   mainContentHeading.textContent = text;
 }
 
-function createTabListener(tabElement, description) {
+function createTabListener(tabElement) {
   tabElement.addEventListener("click", () => {
     let tabName = tabElement.textContent;
 
     updateMainContentHeading(tabName);
-
-    if (!description) {
-      updateMainContentProjectDescription("");
-    } else {
-      updateMainContentProjectDescription(description);
-    }
 
     //If the user re-clicks the current tab, do not clear and re-sort task viewer.
     if (localStorage.previousTab !== tabName) {

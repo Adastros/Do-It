@@ -217,7 +217,6 @@ img {
 }
 
 .main-content-header {
-  height: 75px;
   width: 100%;
 }
 
@@ -274,10 +273,6 @@ img {
 
 .task-header {
   font-weight: normal;
-}
-
-.task-description {
-  font-size: 90%;
 }
 
 .checkbox {
