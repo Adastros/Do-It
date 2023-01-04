@@ -365,7 +365,7 @@ function getTaskSortMethod(primaryTaskBoardHeading) {
 }
 
 function clearEmptyTaskBoards() {
-  let taskBoards = document.getElementsByClassName("secondary-task-board");
+  let taskBoards = document.querySelectorAll(".secondary-task-board");
 
   for (let i = 0; i < taskBoards.length; i++) {
     if (taskBoards[i].lastElementChild.childElementCount === 0) {
