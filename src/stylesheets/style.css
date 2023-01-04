@@ -40,7 +40,6 @@ textarea {
 }
 
 img {
-  width: 100%;
   display: block;
 }
 
@@ -76,6 +75,17 @@ img {
 
 .text-button {
   padding: 0.25rem 0.5rem;
+}
+
+.add-new-task-button {
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.add-new-task-button > img {
+  height: 100%;
 }
 
 .view-button {

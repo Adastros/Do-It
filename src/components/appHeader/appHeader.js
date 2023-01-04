@@ -1,13 +1,20 @@
 import { appLogo } from "./appLogo.js";
 import { iconButtonMedium } from "../generalButtons/iconButtonMedium.js";
 import { textButton } from "../generalButtons/textButton.js";
+import { iconAndTextButton } from "../generalButtons/iconAndTextButton.js";
 import { addClass, createElement } from "../helper/helper.js";
 import menuIcon from "../../icons/menu.svg";
+import addIcon from "../../icons/plus.svg";
 
 function appHeader() {
   let appHeader = createElement("header"),
     menuButton = iconButtonMedium(menuIcon, "Menu icon"),
-    addNewTaskButton = textButton("Add task", "add-new-task-button"),
+    addNewTaskButton = iconAndTextButton(
+      "Add task",
+      addIcon,
+      "",
+      "add-new-task-button"
+    ),
     demoButton = textButton("Demo", "demo-button"),
     topRightButtonContainer = createElement("div");
 
