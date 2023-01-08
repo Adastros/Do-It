@@ -11,7 +11,7 @@ function iconAndTextButton(text, imgSrc, altText, ...cssClass) {
   button.setAttribute("type", "button");
 
   addClass(icon, "icon-text-button-img");
-  addClass(button, ...cssClass);
+  addClass(button, "icon-text-button", ...cssClass);
 
   button.prepend(icon);
 

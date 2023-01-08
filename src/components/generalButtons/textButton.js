@@ -5,7 +5,7 @@ function textButton(text, ...cssClass) {
 
   button.textContent = text;
   button.setAttribute("type", "button");
-  addClass(button, ...cssClass);
+  addClass(button, "text-button", ...cssClass);
 
   return button;
 }

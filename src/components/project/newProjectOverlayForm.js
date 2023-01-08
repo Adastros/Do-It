@@ -1,24 +1,12 @@
 import { textButton } from "../generalButtons/textButton.js";
 import { addClass, createElement } from "../helper/helper.js";
 
-function formHeader() {
-  let headerContainer = createElement("div"),
-    header = createElement("h2");
-
-  header.textContent = "New Project";
-
-  addClass(headerContainer, "new-project-header-container");
-  headerContainer.append(header);
-
-  return headerContainer;
-}
-
 function projectNameFormField() {
   let projectNameContainer = createElement("div"),
     projectNameLabel = createElement("label"),
     projectNameInput = createElement("input");
 
-  projectNameLabel.textContent = "Project Name:";
+  projectNameLabel.textContent = "Project Name";
   projectNameLabel.setAttribute("for", "new-project-name");
   projectNameInput.setAttribute("id", "new-project-name");
   projectNameInput.setAttribute("type", "text");
@@ -79,7 +67,6 @@ function newProjectForm() {
   addClass(newProjectForm, "new-project-form");
 
   newProjectForm.append(
-    formHeader(),
     projectNameFormField(),
     newProjectButtons
   );

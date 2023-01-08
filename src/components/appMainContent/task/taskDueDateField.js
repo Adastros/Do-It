@@ -23,8 +23,6 @@ function taskDueDateField(dueDate) {
     dateInput.setAttribute("value", `${format(new Date(), "yyyy-MM-dd")}`);
   }
 
-  addClass(taskDueDateField, "task-due-date-field");
-
   taskDueDateField.append(dateInputLabel, dateInput);
 
   return taskDueDateField;

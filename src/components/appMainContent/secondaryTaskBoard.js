@@ -4,7 +4,7 @@ function secondaryTaskBoard(boardHeader) {
   let secondaryTaskBoard = createElement("div"),
     boardTitle = createElement("h2"),
     linebreak = createElement("div"),
-    taskList = createElement("div");
+    taskList = createElement("ul");
 
   boardTitle.textContent = boardHeader;
 

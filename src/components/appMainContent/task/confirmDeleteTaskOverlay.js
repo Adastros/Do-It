@@ -22,7 +22,7 @@ function confirmDeleteTaskOverlay(taskHeader, taskItemId) {
   addClass(overlayContainer, "delete-task-confirmation-overlay");
 
   confirmationText.append(taskHeaderBold);
-  buttonContainer.append(confirmButton, cancelButton);
+  buttonContainer.append(cancelButton, confirmButton);
   promptContainer.append(confirmationText, buttonContainer);
   overlayContainer.append(promptContainer);
 

@@ -9,8 +9,8 @@ import {
 
 function taskItem(taskItemId, taskItemObj) {
   let taskItem = createElement("div"),
+    taskInfoContainer = createElement("div"),
     primaryTaskInfoAndActionsContainer = createElement("div"),
-    checkBoxAndTaskInfoContainer = createElement("div"),
     secondaryTaskInfoContainer = createElement("div"),
     dueDateAndPriorityIndicatorContainer = createElement("div"),
     taskLabel = createElement("p"),
@@ -31,7 +31,7 @@ function taskItem(taskItemId, taskItemObj) {
     primaryTaskInfoAndActionsContainer,
     "primary-task-and-actions-container"
   );
-  addClass(checkBoxAndTaskInfoContainer, "check-box-and-task-info-container");
+  addClass(taskInfoContainer, "task-item-info-container");
   addClass(taskItem, "task-item");
 
   taskItem.dataset.taskItemId = taskItemId;
@@ -46,20 +46,17 @@ function taskItem(taskItemId, taskItemObj) {
     taskLabel
   );
 
-  checkBoxAndTaskInfoContainer.append(
-    checkbox(taskItemId),
-    taskInfo(taskItemObj.headerValue)
-  );
-
   primaryTaskInfoAndActionsContainer.append(
-    checkBoxAndTaskInfoContainer,
+    taskInfo(taskItemObj.headerValue),
     taskItemActions(taskItemId)
   );
 
-  taskItem.append(
+  taskInfoContainer.append(
     primaryTaskInfoAndActionsContainer,
     secondaryTaskInfoContainer
   );
+
+  taskItem.append(checkbox(taskItemId), taskInfoContainer);
 
   return taskItem;
 }

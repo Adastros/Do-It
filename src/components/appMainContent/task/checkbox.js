@@ -12,6 +12,7 @@ function checkbox(taskItemId) {
 
   addClass(checkbox, "checkbox");
   addClass(checkmark, "fade-in-out");
+  addClass(checkboxContainer, "checkbox-container");
   toggleTaskCompletion(checkbox, taskItemId);
 
   checkbox.append(checkmark);

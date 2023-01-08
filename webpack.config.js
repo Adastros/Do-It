@@ -7,7 +7,8 @@ module.exports = {
   devtool: "inline-source-map",
   plugins: [
     new HtmlWebpackPlugin({
-      title: "todo app",
+      title: "Do It | A Todo App",
+      template: "./src/index.html",
     }),
   ],
   output: {
