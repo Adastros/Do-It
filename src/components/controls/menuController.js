@@ -17,45 +17,21 @@ let menubarListener = () => {
   toggleClass(menubar, "hide");
 };
 
-let mainContentListener = () => {
-  let mainContent = document.querySelector(".main-content");
-  toggleClass(mainContent, "scrollable-y");
-};
-
-function openMenuTransitions(menubar, mainContent) {
-  // Remove listener before starting transition to avoid triggering the
-  // listener to hide the menu when the transition ends.
-  menubar.removeEventListener("transitionend", menubarListener);
-
-  // Switch scrollbar to <div.main-content> at end of opening transition
-  mainContent.addEventListener("transitionend", mainContentListener);
-
-  // Make menu visible before starting transition to show menu.
-  removeClass(menubar, "hide");
-}
-
-function closeMenuTransitions(menubar, mainContent) {
-  // Avoids switching scrollbar to <main> when opening menubar transition completes
-  // Does nothing when closing menubar
-  mainContent.removeEventListener("transitionend", mainContentListener);
-
-  // Hide menubar after it has transitioned outside the viewport.
-  menubar.addEventListener("transitionend", menubarListener);
-
-  // Switches scroll bar y from <div.main-content> to <main> before transitioning
-  removeClass(mainContent, "scrollable-y");
-}
-
 function toggleMenubarVisibility() {
   let menuButton = document.querySelector("header").firstElementChild,
-    menubar = document.querySelector(".menu-bar"),
-    mainContent = document.querySelector(".main-content");
+    menubar = document.querySelector(".menu-bar");
 
   menuButton.addEventListener("click", () => {
     if (menubar.classList.contains("closed")) {
-      openMenuTransitions(menubar, mainContent);
+      // Remove listener before starting transition to avoid triggering the
+      // listener to hide the menu when the transition ends.
+      menubar.removeEventListener("transitionend", menubarListener);
+
+      // Make menu visible before starting transition to show menu.
+      removeClass(menubar, "hide");
     } else {
-      closeMenuTransitions(menubar, mainContent);
+      // Hide menubar after it has transitioned outside the viewport.
+      menubar.addEventListener("transitionend", menubarListener);
     }
     toggleClass(menubar, "closed");
   });

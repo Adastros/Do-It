@@ -26,6 +26,7 @@ header {
 }
 
 main {
+  position: relative;
   flex: 1;
   display: flex;
   overflow-y: auto;
@@ -171,6 +172,8 @@ button:hover {
 }
 
 .menu-bar {
+  position: sticky;
+  top: 0;
   width: 270px;
   display: flex;
   flex-direction: column;
@@ -457,10 +460,6 @@ button:hover {
 .hide {
   visibility: hidden;
   overflow: hidden;
-}
-
-.scrollable-y {
-  overflow-y: auto;
 }
 
 #task-due-date-input {
