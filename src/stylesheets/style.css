@@ -149,6 +149,11 @@ button:hover {
   background-position: center;
 }
 
+.empty-date-task-board-msg {
+  display: flex;
+  align-self: flex-start;
+}
+
 .view-button {
   height: 2rem;
   display: flex;

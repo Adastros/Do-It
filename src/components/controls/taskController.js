@@ -183,6 +183,10 @@ function deleteConfirmationButtonListener(
     if (isPrimaryTaskListEmpty()) {
       addPrimaryTaskBoardBackground(primaryTaskBoardHeading);
     }
+
+    if (primaryTaskBoardHeading.toLowerCase() === "upcoming") {
+      emptyTaskBoardMessage();
+    }
   });
 }
 
@@ -220,6 +224,10 @@ function toggleTaskCompletion(checkbox, taskItemId) {
 
     if (isPrimaryTaskListEmpty()) {
       addPrimaryTaskBoardBackground(primaryTaskBoardHeading);
+    }
+
+    if (primaryTaskBoardHeading.toLowerCase() === "upcoming") {
+      emptyTaskBoardMessage();
     }
   });
 }
@@ -352,6 +360,7 @@ function getTaskSortMethod(primaryTaskBoardHeading) {
     case "upcoming":
       createDateTaskBoards();
       sortTasksByUpcoming();
+      emptyTaskBoardMessage();
       break;
     case "completed":
       sortTasksByCompleted(primaryTaskBoardHeading);
@@ -395,7 +404,7 @@ function isPrimaryTaskListEmpty() {
 function addPrimaryTaskBoardBackground(primaryTaskBoardHeading) {
   let primaryTaskBoardList = document.querySelector(".task-viewer"),
     noTasksMessage = createElement("p");
-  
+
   if (primaryTaskBoardHeading.toLowerCase() === "completed") {
     noTasksMessage.textContent = `You haven't completed any tasks yet! 
       Complete some tasks to see how much you've accomplished here.`;
@@ -501,6 +510,21 @@ function createDateTaskBoards() {
     primaryTaskBoard.append(secondaryTaskBoard(formattedDate));
     date = addDays(date, 1);
   }
+}
+
+function emptyTaskBoardMessage() {
+  let taskLists = document.querySelectorAll(".task-list");
+
+  taskLists.forEach((list) => {
+    let emptyTaskBoardMessage = createElement("p");
+
+    emptyTaskBoardMessage.textContent = "There are no tasks due on this date.";
+    addClass(emptyTaskBoardMessage, "empty-date-task-board-msg");
+
+    if (list.childElementCount === 0) {
+      list.append(emptyTaskBoardMessage);
+    }
+  });
 }
 
 function checkForAllOverdueTasks(localStorageKey, primaryTaskBoardHeading) {
