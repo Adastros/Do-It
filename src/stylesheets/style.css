@@ -142,6 +142,13 @@ button:hover {
   background-color: #aad8ff;
 }
 
+.no-task-background {
+  background-image: url("../image/no-tasks-background.jpg");
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
 .view-button {
   height: 2rem;
   display: flex;

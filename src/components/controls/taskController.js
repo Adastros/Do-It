@@ -24,6 +24,7 @@ import { missingValueAggressiveValidation } from "./formValidationControls.js";
 import {
   addClass,
   capitalizeFirstLetter,
+  createElement,
   removeClass,
 } from "../helper/helper.js";
 import demoJson from "../../../data/demo.json" assert { type: "json" };
@@ -178,6 +179,10 @@ function deleteConfirmationButtonListener(
     deleteTaskItem(taskItemId);
     removeTaskOrBoardFromDOM(primaryTaskBoardHeading, taskToDelete);
     overlayContainer.remove();
+
+    if (isPrimaryTaskListEmpty()) {
+      addPrimaryTaskBoardBackground(primaryTaskBoardHeading);
+    }
   });
 }
 
@@ -212,6 +217,10 @@ function toggleTaskCompletion(checkbox, taskItemId) {
     }
 
     removeTaskOrBoardFromDOM(primaryTaskBoardHeading, taskItem);
+
+    if (isPrimaryTaskListEmpty()) {
+      addPrimaryTaskBoardBackground(primaryTaskBoardHeading);
+    }
   });
 }
 
@@ -219,7 +228,6 @@ function removeTaskOrBoardFromDOM(primaryTaskBoardHeading, taskToDelete) {
   // remove the secondary task board if this is the last task left.
   // Otherwise, remove the task from the secondary task board
   switch (primaryTaskBoardHeading.toLowerCase()) {
-    case "today":
     case "upcoming":
       taskToDelete.remove();
       break;
@@ -231,7 +239,7 @@ function removeTaskOrBoardFromDOM(primaryTaskBoardHeading, taskToDelete) {
         taskToDelete.remove();
       }
       break;
-    default: // Project tabs and inbox
+    default: // Project tabs, inbox, today
       if (taskToDelete.parentElement.childElementCount === 1) {
         taskToDelete.parentElement.parentElement.remove();
       } else {
@@ -361,6 +369,12 @@ function getTaskSortMethod(primaryTaskBoardHeading) {
     clearEmptyTaskBoards();
   }
 
+  if (isPrimaryTaskListEmpty() && primaryTaskBoardHeading !== "Upcoming") {
+    addPrimaryTaskBoardBackground(primaryTaskBoardHeading);
+  } else {
+    removePrimaryTaskBoardBackground();
+  }
+
   localStorage.previousTab = primaryTaskBoardHeading;
 }
 
@@ -372,6 +386,33 @@ function clearEmptyTaskBoards() {
       taskBoards[i].remove();
     }
   }
+}
+
+function isPrimaryTaskListEmpty() {
+  return !document.querySelector(".task-viewer").childElementCount;
+}
+
+function addPrimaryTaskBoardBackground(primaryTaskBoardHeading) {
+  let primaryTaskBoardList = document.querySelector(".task-viewer"),
+    noTasksMessage = createElement("p");
+  
+  if (primaryTaskBoardHeading.toLowerCase() === "completed") {
+    noTasksMessage.textContent = `You haven't completed any tasks yet! 
+      Complete some tasks to see how much you've accomplished here.`;
+  } else {
+    noTasksMessage.textContent = `There doesn't seem to be anymore tasks! 
+      Add some more if needed. Otherwise, enjoy the rest of your day!`;
+  }
+
+  primaryTaskBoardList.append(noTasksMessage);
+
+  if (!document.body.classList.contains("no-task-background")) {
+    addClass(document.body, "no-task-background");
+  }
+}
+
+function removePrimaryTaskBoardBackground() {
+  removeClass(document.body, "no-task-background");
 }
 
 function sortByDueDateAsc(entries) {
@@ -723,7 +764,9 @@ function insertTaskForTodayView(taskItemId, taskItemObj) {
     taskDueDate = taskItemObj.dueDateValue,
     todaysDate = format(new Date(), "PP");
 
-  if (taskDueDate === todaysDate) {
+  if (!todayBoard) {
+    getTaskSortMethod("today");
+  } else if (taskDueDate === todaysDate) {
     addTaskToBoard(taskItemId, taskItemObj, todayBoard);
   }
 }
@@ -868,4 +911,5 @@ export {
   clearPrimaryTaskBoard,
   getTaskSortMethod,
   emptyTaskData,
+  addPrimaryTaskBoardBackground,
 };

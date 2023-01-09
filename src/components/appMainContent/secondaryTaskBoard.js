@@ -13,7 +13,7 @@ function secondaryTaskBoard(boardHeader) {
   addClass(boardTitle, "secondary-task-title");
   addClass(secondaryTaskBoard, "secondary-task-board");
 
-  if (boardHeader === "Today") {
+  if (boardHeader.toLowerCase() === "today") {
     secondaryTaskBoard.append(taskList);
   } else {
     secondaryTaskBoard.append(boardTitle, linebreak, taskList);

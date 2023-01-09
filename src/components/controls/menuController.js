@@ -4,8 +4,12 @@ import {
   missingValueAggressiveValidation,
   doesProjectNameExist,
 } from "./formValidationControls.js";
-import { clearPrimaryTaskBoard, getTaskSortMethod } from "./taskController.js";
-import { saveTaskItem } from "./webStorageController.js";
+import {
+  clearPrimaryTaskBoard,
+  getTaskSortMethod,
+  addPrimaryTaskBoardBackground,
+} from "./taskController.js";
+import { saveData, saveTaskItem } from "./webStorageController.js";
 import { toggleClass, removeClass, addClass } from "../helper/helper.js";
 
 // Reason for arrow function:
@@ -88,6 +92,8 @@ function addNewProjectButtonListener() {
       saveTaskItem(projectName);
 
       clearPrimaryTaskBoard();
+      addPrimaryTaskBoardBackground(projectName);
+      saveData("previousTab", projectName);
       newProjectOverlay.remove();
     }
   });
