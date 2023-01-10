@@ -10,7 +10,7 @@ import {
   addPrimaryTaskBoardBackground,
 } from "./taskController.js";
 import { saveData, saveTaskItem } from "./webStorageController.js";
-import { toggleClass, removeClass } from "../helper/helper.js";
+import { toggleClass, removeClass, addClass } from "../helper/helper.js";
 
 // Reason for arrow function:
 // Event Listeners expect a function reference instead of the function itself.
@@ -118,9 +118,24 @@ function createTabListener(tabElement) {
   });
 }
 
+function projectTabListeners(projectTab) {
+  projectTab.addEventListener("mouseover", () => {
+    removeClass(projectTab.lastElementChild, "hide");
+  });
+
+  projectTab.addEventListener("mouseout", () => {
+    addClass(projectTab.lastElementChild, "hide");
+  });
+}
+
 function menuController() {
   toggleMenubarVisibility();
   displayNewProjectOverlayForm();
 }
 
-export { menuController, createTabListener, updateMainContentHeading };
+export {
+  menuController,
+  createTabListener,
+  updateMainContentHeading,
+  projectTabListeners,
+};
