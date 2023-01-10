@@ -6,7 +6,7 @@ import {
   isBefore,
 } from "date-fns";
 import { taskForm } from "../appMainContent/task/taskForm.js";
-import { confirmDeleteTaskOverlay } from "../appMainContent/task/confirmDeleteTaskOverlay.js";
+import { confirmDeletePromptOverlay } from "../appMainContent/task/confirmDeletePromptOverlay.js";
 import { taskItem } from "../appMainContent/task/taskItem.js";
 import { secondaryTaskBoard } from "../appMainContent/secondaryTaskBoard.js";
 import { projectList } from "../menubar/projectList.js";
@@ -15,18 +15,15 @@ import {
   getTaskItem,
   getData,
   deleteTaskItem,
+  deleteProject,
   deleteEmptyCompletionDateKeys,
   getTaskPriorityKey,
   determineLocalStorageKey,
   saveData,
 } from "./webStorageController.js";
+import { updateMainContentHeading } from "./menuController.js";
 import { missingValueAggressiveValidation } from "./formValidationControls.js";
-import {
-  addClass,
-  capitalizeFirstLetter,
-  createElement,
-  removeClass,
-} from "../helper/helper.js";
+import { addClass, createElement, removeClass } from "../helper/helper.js";
 import demoJson from "../../../data/demo.json" assert { type: "json" };
 
 function addNewTaskButtonListener() {
@@ -155,37 +152,54 @@ function AddEditButtonListener(editButton, taskItemId) {
   });
 }
 
-function createDeleteConfirmationOverlayListener(deleteButton, taskItemId) {
+function createDeletePromptOverlayListener(deleteButton, itemObj) {
   deleteButton.addEventListener("click", () => {
-    let taskHeader = getTaskItem(taskItemId).headerValue;
+    let taskOrProjectText;
 
-    document.body.append(confirmDeleteTaskOverlay(taskHeader, taskItemId));
+    if (itemObj.hasOwnProperty("taskItemId")) {
+      taskOrProjectText = getTaskItem(itemObj.taskItemId).headerValue;
+    } else {
+      taskOrProjectText = itemObj.projectName;
+    }
+
+    document.body.append(
+      confirmDeletePromptOverlay(taskOrProjectText, itemObj)
+    );
   });
 }
 
 function deleteConfirmationButtonListener(
   confirmButton,
   overlayContainer,
-  taskItemId
+  itemObj
 ) {
   confirmButton.addEventListener("click", () => {
-    let taskToDelete = document.querySelector(
-        `[data-task-item-id = '${taskItemId}']`
-      ),
-      primaryTaskBoardHeading = document.querySelector(
-        ".main-content-heading"
-      ).textContent;
+    if (itemObj.hasOwnProperty("taskItemId")) {
+      let itemToDelete = document.querySelector(
+          `[data-task-item-id = '${itemObj.taskItemId}']`
+        ),
+        primaryTaskBoardHeading = document.querySelector(
+          ".main-content-heading"
+        ).textContent;
 
-    deleteTaskItem(taskItemId);
-    removeTaskOrBoardFromDOM(primaryTaskBoardHeading, taskToDelete);
-    overlayContainer.remove();
+      deleteTaskItem(itemObj.taskItemId);
+      removeTaskOrBoardFromDOM(primaryTaskBoardHeading, itemToDelete);
+      overlayContainer.remove();
 
-    if (isPrimaryTaskListEmpty()) {
-      addPrimaryTaskBoardBackground(primaryTaskBoardHeading);
-    }
+      if (isPrimaryTaskListEmpty()) {
+        addPrimaryTaskBoardBackground(primaryTaskBoardHeading);
+      }
 
-    if (primaryTaskBoardHeading.toLowerCase() === "upcoming") {
-      emptyTaskBoardMessage();
+      if (primaryTaskBoardHeading.toLowerCase() === "upcoming") {
+        emptyTaskBoardMessage();
+      }
+    } else {
+      deleteProject(itemObj.projectName);
+      clearProjectTabs();
+      reloadProjectTabs();
+      getTaskSortMethod("inbox");
+      updateMainContentHeading("Inbox");
+      overlayContainer.remove();
     }
   });
 }
@@ -928,7 +942,7 @@ export {
   toggleTaskCompletion,
   createCancelButtonListener,
   AddEditButtonListener,
-  createDeleteConfirmationOverlayListener,
+  createDeletePromptOverlayListener,
   deleteConfirmationButtonListener,
   addTaskButtonListener,
   saveTaskButtonListener,

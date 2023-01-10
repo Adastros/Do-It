@@ -1,7 +1,7 @@
 import { iconButtonSmall } from "../../generalButtons/iconButtonSmall.js";
 import {
   AddEditButtonListener,
-  createDeleteConfirmationOverlayListener,
+  createDeletePromptOverlayListener,
 } from "../../controls/taskController.js";
 import { addClass, createElement } from "../../helper/helper.js";
 import editIcon from "../../../icons/edit.svg";
@@ -13,7 +13,7 @@ function taskItemActions(taskItemId) {
     deleteButton = iconButtonSmall(deleteIcon, "Task Delete Button");
 
   AddEditButtonListener(editButton, taskItemId);
-  createDeleteConfirmationOverlayListener(deleteButton, taskItemId);
+  createDeletePromptOverlayListener(deleteButton, { taskItemId: taskItemId });
 
   addClass(taskItemActions, "task-item-actions");
 

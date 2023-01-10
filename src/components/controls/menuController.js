@@ -1,5 +1,5 @@
 import { newProjectOverlayForm } from "../project/newProjectOverlayForm.js";
-import { tab } from "../menubar/tab.js";
+import { projectTab } from "../project/projectTab.js";
 import {
   missingValueAggressiveValidation,
   doesProjectNameExist,
@@ -10,7 +10,7 @@ import {
   addPrimaryTaskBoardBackground,
 } from "./taskController.js";
 import { saveData, saveTaskItem } from "./webStorageController.js";
-import { toggleClass, removeClass, addClass } from "../helper/helper.js";
+import { toggleClass, removeClass } from "../helper/helper.js";
 
 // Reason for arrow function:
 // Event Listeners expect a function reference instead of the function itself.
@@ -80,13 +80,13 @@ function addNewProjectButtonListener() {
     if (doesProjectNameExist(projectName)) {
       let newProjectOverlay = document.querySelector(".new-project-overlay"),
         projectList = document.querySelector(".project-list"),
-        projectTab = tab(projectName, "project-tab"),
+        newProjectTab = projectTab(projectName),
         mainContentHeading = document.querySelector(".main-content-heading");
 
       mainContentHeading.textContent = projectName;
 
-      projectList.append(projectTab);
-      createTabListener(projectTab);
+      projectList.append(newProjectTab);
+      createTabListener(newProjectTab);
 
       // create localStorage key using project name
       saveTaskItem(projectName);
@@ -123,4 +123,4 @@ function menuController() {
   displayNewProjectOverlayForm();
 }
 
-export { menuController, createTabListener };
+export { menuController, createTabListener, updateMainContentHeading };

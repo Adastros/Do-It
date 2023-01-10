@@ -1,10 +1,14 @@
 import { addClass, createElement } from "../helper/helper.js";
 
 function tab(text, ...cssClass) {
-  let tab = createElement("div");
+  let tab = createElement("div"),
+    tabName = createElement("div");
 
-  tab.textContent = text;
+  tabName.textContent = text;
+  addClass(tabName, "tab-name");
   addClass(tab, ...cssClass);
+
+  tab.append(tabName);
 
   return tab;
 }

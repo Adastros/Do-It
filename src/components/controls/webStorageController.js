@@ -143,6 +143,13 @@ function deleteTaskItem(taskItemKey) {
   }
 }
 
+function deleteProject(projectName) {
+  let projectDataObj = JSON.parse(getData("projects"));
+
+  delete projectDataObj[projectName];
+  saveData("projects", JSON.stringify(projectDataObj));
+}
+
 function deleteEmptyCompletionDateKeys() {
   let completionTaskDataObj = JSON.parse(getData("completed"));
 
@@ -205,6 +212,7 @@ export {
   saveTaskItem,
   getTaskItem,
   deleteTaskItem,
+  deleteProject,
   deleteEmptyCompletionDateKeys,
   getTaskPriorityKey,
   determineLocalStorageKey,

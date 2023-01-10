@@ -1,5 +1,4 @@
-import { tab } from "./tab.js";
-import { createTabListener } from "../controls/menuController.js";
+import { projectTab } from "../project/projectTab.js";
 import { getData } from "../controls/webStorageController.js";
 import { addClass, createElement } from "../helper/helper.js";
 
@@ -10,10 +9,7 @@ function projectList() {
   addClass(projectList, "project-list");
 
   for (let i = 0; i < projectNames.length; i++) {
-    let projectTab = tab(projectNames[i], "project-tab");
-    
-    projectList.append(projectTab);
-    createTabListener(projectTab, projectNames[i], "");
+    projectList.append(projectTab(projectNames[i]));
   }
 
   return projectList;

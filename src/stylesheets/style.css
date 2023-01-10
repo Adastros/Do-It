@@ -97,6 +97,7 @@ button:hover {
 .icon-button-extra-small {
   height: 20px;
   width: 20px;
+  background-color: #f8f7ff;
 }
 
 .text-button {
@@ -201,11 +202,16 @@ button:hover {
 .tab {
   padding: 1rem;
   border-radius: 4px;
+  background-color: #f8f7ff;
 }
 
 .tab:hover,
 .project-tab:hover {
-  background-color: lightgray;
+  filter: brightness(0.85);
+}
+
+.tab-name {
+  flex: 1;
 }
 
 .linebreak {
@@ -232,11 +238,15 @@ button:hover {
 
 .project-tab {
   width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   margin-bottom: 0.5rem;
   padding: 0.5rem;
   border-radius: 4px;
   font-size: 0.9rem;
   overflow-wrap: break-word;
+  background-color: #f8f7ff;
 }
 
 .new-project-overlay,

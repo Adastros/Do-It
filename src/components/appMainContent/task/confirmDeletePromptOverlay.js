@@ -5,31 +5,31 @@ import {
 } from "../../controls/taskController";
 import { addClass, createElement } from "../../helper/helper.js";
 
-function confirmDeleteTaskOverlay(taskHeader, taskItemId) {
+function confirmDeletePromptOverlay(taskOrProjectText, itemObj) {
   let overlayContainer = createElement("div"),
     promptContainer = createElement("div"),
     confirmationText = createElement("p"),
-    taskHeaderBold = createElement("b"),
+    taskOrProjectTextBold = createElement("b"),
     buttonContainer = createElement("div"),
     confirmButton = textButton("Yes", "text-button"),
     cancelButton = textButton("No", "text-button");
 
   confirmationText.textContent = `Are you sure you want to delete `;
-  taskHeaderBold.textContent = `${taskHeader}?`;
+  taskOrProjectTextBold.textContent = `${taskOrProjectText}?`;
 
   addClass(buttonContainer, "delete-prompt-button-container");
   addClass(promptContainer, "delete-confirmation-prompt");
   addClass(overlayContainer, "delete-task-confirmation-overlay");
 
-  confirmationText.append(taskHeaderBold);
+  confirmationText.append(taskOrProjectTextBold);
   buttonContainer.append(cancelButton, confirmButton);
   promptContainer.append(confirmationText, buttonContainer);
   overlayContainer.append(promptContainer);
 
   createCancelButtonListener(overlayContainer, cancelButton);
-  deleteConfirmationButtonListener(confirmButton, overlayContainer, taskItemId);
+  deleteConfirmationButtonListener(confirmButton, overlayContainer, itemObj);
 
   return overlayContainer;
 }
 
-export { confirmDeleteTaskOverlay };
+export { confirmDeletePromptOverlay };
