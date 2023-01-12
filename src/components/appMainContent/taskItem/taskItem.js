@@ -5,7 +5,7 @@ import {
   addClass,
   createElement,
   capitalizeFirstLetter,
-} from "../../helper/helper.js";
+} from "../../generalHelper/generalHelper.js";
 
 function taskItem(taskItemId, taskItemObj) {
   let taskItem = createElement("div"),

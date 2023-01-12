@@ -1,4 +1,4 @@
-import { createElement } from "../../helper/helper.js";
+import { createElement } from "../../generalHelper/generalHelper.js";
 
 function taskPriorityDropdown(priorityValue) {
   let taskPriorityDropdown = createElement("div"),

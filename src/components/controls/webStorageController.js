@@ -12,12 +12,12 @@ function getData(key) {
 
 // Save task data to the user's browser's local storage
 function saveTaskItem(
-  primaryTaskBoardHeading,
+  mainContentHeading,
   taskItemKey,
   taskItemObj,
   completionDateKey
 ) {
-  let localStorageKey = determineLocalStorageKey(primaryTaskBoardHeading),
+  let localStorageKey = determineLocalStorageKey(mainContentHeading),
     taskDataObj = JSON.parse(getData(localStorageKey)),
     updatedTaskDataObj;
 
@@ -40,7 +40,7 @@ function saveTaskItem(
     case "projects":
       updatedTaskDataObj = updateProjects(
         taskDataObj,
-        primaryTaskBoardHeading,
+        mainContentHeading,
         taskItemKey,
         taskItemObj
       );
@@ -162,6 +162,15 @@ function deleteEmptyCompletionDateKeys() {
   saveData("completed", JSON.stringify(completionTaskDataObj));
 }
 
+function emptyTaskData() {
+  return JSON.stringify({
+    highPriorityTasks: {},
+    mediumPriorityTasks: {},
+    lowPriorityTasks: {},
+    noPriorityTasks: {},
+  });
+}
+
 function getTaskPriorityKey(priorityValue) {
   let priorityKey;
 
@@ -214,6 +223,7 @@ export {
   deleteTaskItem,
   deleteProject,
   deleteEmptyCompletionDateKeys,
+  emptyTaskData,
   getTaskPriorityKey,
   determineLocalStorageKey,
 };

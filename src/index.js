@@ -1,16 +1,14 @@
 import { appHeader } from "./components/appHeader/appHeader.js";
 import { appMainContent } from "./components/appMainContent/appMainContent.js";
-import {
-  taskController,
-  emptyTaskData,
-} from "./components/controls/taskController.js";
-import { menuController } from "./components/controls/menuController";
-import { createElement } from "./components/helper/helper.js";
 import { menubar } from "./components/menubar/menubar.js";
+import { taskController } from "./components/controls/taskController.js";
+import { menuController } from "./components/controls/menuController";
 import {
   getData,
   saveData,
+  emptyTaskData,
 } from "./components/controls/webStorageController.js";
+import { createElement } from "./components/generalHelper/generalHelper.js";
 import "./stylesheets/style.css";
 
 function initLocalStorageGlobalVariables() {

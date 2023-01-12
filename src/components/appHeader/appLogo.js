@@ -1,4 +1,4 @@
-import { addClass, createElement } from "../helper/helper.js";
+import { addClass, createElement } from "../generalHelper/generalHelper.js";
 import logoImg from "../../image/Todo-ist Logo.svg";
 
 function appLogo() {

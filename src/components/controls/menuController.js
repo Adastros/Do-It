@@ -1,25 +1,18 @@
-import { newProjectOverlayForm } from "../project/newProjectOverlayForm.js";
-import { projectTab } from "../project/projectTab.js";
+import { newProjectOverlayForm } from "../menubar/project/newProjectOverlayForm.js";
+import { projectTab } from "../menubar/project/projectTab.js";
+import { clearTaskView, addMainContentBackground } from "./taskController.js";
+import { getTaskSortMethod } from "./taskSortingMethods.js";
+import { saveData, saveTaskItem } from "./webStorageController.js";
 import {
   missingValueAggressiveValidation,
   doesProjectNameExist,
-} from "./formValidationControls.js";
-import {
-  clearPrimaryTaskBoard,
-  getTaskSortMethod,
-  addPrimaryTaskBoardBackground,
-} from "./taskController.js";
-import { saveData, saveTaskItem } from "./webStorageController.js";
-import { toggleClass, removeClass, addClass } from "../helper/helper.js";
+} from "./formControls.js";
+import { toggleClass, removeClass } from "../generalHelper/generalHelper.js";
 
-// Reason for arrow function:
-// Event Listeners expect a function reference instead of the function itself.
-// To avoid calling function immediately, either bind 'this', create an
-// anonymous function, or have a function return a function.
-let menubarListener = () => {
-  let menubar = document.querySelector(".menu-bar");
-  toggleClass(menubar, "hide");
-};
+function menuController() {
+  toggleMenubarVisibility();
+  displayNewProjectOverlayForm();
+}
 
 function toggleMenubarVisibility() {
   let menuButton = document.querySelector("header").firstElementChild,
@@ -41,6 +34,15 @@ function toggleMenubarVisibility() {
   });
 }
 
+// Reason for arrow function:
+// Event Listeners expect a function reference instead of the function itself.
+// To avoid calling function immediately, either bind 'this', create an
+// anonymous function, or have a function return a function.
+let menubarListener = () => {
+  let menubar = document.querySelector(".menu-bar");
+  toggleClass(menubar, "hide");
+};
+
 function displayNewProjectOverlayForm() {
   let newProjectButton = document.querySelector(".new-project-button");
 
@@ -52,13 +54,13 @@ function displayNewProjectOverlayForm() {
         ".new-project-form-add-button"
       );
 
-    cancelNewProjectButtonListener();
-    addNewProjectButtonListener();
+    cancelAddingNewProject();
+    addNewProject();
     missingValueAggressiveValidation(newProjectNameNode, newProjectAddButton);
   });
 }
 
-function cancelNewProjectButtonListener() {
+function cancelAddingNewProject() {
   let cancelButton = document.querySelector(".new-project-form-cancel-button");
 
   cancelButton.addEventListener("click", () => {
@@ -69,7 +71,7 @@ function cancelNewProjectButtonListener() {
   });
 }
 
-function addNewProjectButtonListener() {
+function addNewProject() {
   let addNewProjectButton = document.querySelector(
     ".new-project-form-add-button"
   );
@@ -86,26 +88,20 @@ function addNewProjectButtonListener() {
       mainContentHeading.textContent = projectName;
 
       projectList.append(newProjectTab);
-      createTabListener(newProjectTab);
+      changeTaskViewListener(newProjectTab);
 
       // create localStorage key using project name
       saveTaskItem(projectName);
 
-      clearPrimaryTaskBoard();
-      addPrimaryTaskBoardBackground(projectName);
+      clearTaskView();
+      addMainContentBackground(projectName);
       saveData("previousTab", projectName);
       newProjectOverlay.remove();
     }
   });
 }
 
-function updateMainContentHeading(text) {
-  let mainContentHeading = document.querySelector(".main-content-heading");
-
-  mainContentHeading.textContent = text;
-}
-
-function createTabListener(tabElement) {
+function changeTaskViewListener(tabElement) {
   tabElement.addEventListener("click", () => {
     let tabName = tabElement.textContent;
 
@@ -118,24 +114,28 @@ function createTabListener(tabElement) {
   });
 }
 
-function projectTabListeners(projectTab) {
-  projectTab.addEventListener("mouseover", () => {
-    removeClass(projectTab.lastElementChild, "hide");
-  });
+function updateMainContentHeading(text) {
+  let mainContentHeading = document.querySelector(".main-content-heading");
 
-  projectTab.addEventListener("mouseout", () => {
-    addClass(projectTab.lastElementChild, "hide");
+  mainContentHeading.textContent = text;
+}
+
+function displayContentOnMouseOverListener(eventNode, contentToHide) {
+  eventNode.addEventListener("mouseover", () => {
+    toggleClass(contentToHide, "hide");
   });
 }
 
-function menuController() {
-  toggleMenubarVisibility();
-  displayNewProjectOverlayForm();
+function hideContentOnMouseOutListener(eventNode, contentToHide) {
+  eventNode.addEventListener("mouseout", () => {
+    toggleClass(contentToHide, "hide");
+  });
 }
 
 export {
   menuController,
-  createTabListener,
+  changeTaskViewListener,
   updateMainContentHeading,
-  projectTabListeners,
+  displayContentOnMouseOverListener,
+  hideContentOnMouseOutListener,
 };

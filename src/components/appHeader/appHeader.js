@@ -2,7 +2,7 @@ import { appLogo } from "./appLogo.js";
 import { iconButtonMedium } from "../generalButtons/iconButtonMedium.js";
 import { textButton } from "../generalButtons/textButton.js";
 import { iconAndTextButton } from "../generalButtons/iconAndTextButton.js";
-import { addClass, createElement } from "../helper/helper.js";
+import { addClass, createElement } from "../generalHelper/generalHelper.js";
 import menuIcon from "../../icons/menu.svg";
 import addIcon from "../../icons/plus.svg";
 

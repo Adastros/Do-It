@@ -331,7 +331,7 @@ button:hover {
   width: 100%;
 }
 
-.task-viewer {
+.task-view {
   flex: 1;
   width: 100%;
   display: flex;

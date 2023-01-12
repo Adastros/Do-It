@@ -1,6 +1,6 @@
 import { tab } from "./tab.js";
-import { createTabListener } from "../controls/menuController.js";
-import { addClass, createElement } from "../helper/helper.js";
+import { changeTaskViewListener } from "../controls/menuController.js";
+import { addClass, createElement } from "../generalHelper/generalHelper.js";
 
 function menuTabs() {
   let menuTabContainer = createElement("div"),
@@ -11,7 +11,7 @@ function menuTabs() {
       menuTab = tab(tabArr[i], "tab", tabSpecificClass);
 
     menuTabContainer.append(menuTab);
-    createTabListener(menuTab);
+    changeTaskViewListener(menuTab);
   }
 
   addClass(menuTabContainer, "menu-tabs");

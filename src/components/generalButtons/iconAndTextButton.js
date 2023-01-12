@@ -1,4 +1,4 @@
-import { addClass, createElement } from "../helper/helper.js";
+import { addClass, createElement } from "../generalHelper/generalHelper.js";
 
 function iconAndTextButton(text, imgSrc, altText, ...cssClass) {
   let button = createElement("button"),

@@ -1,6 +1,6 @@
 import { mainContentHeader } from "./mainContentHeader.js";
-import { taskViewer } from "./taskViewer.js";
-import { addClass, createElement } from "../helper/helper.js";
+import { taskView } from "./taskView.js";
+import { addClass, createElement } from "../generalHelper/generalHelper.js";
 
 function appMainContent() {
   let appMainContent = createElement("div"),
@@ -9,7 +9,7 @@ function appMainContent() {
   addClass(linebreak, "linebreak");
   addClass(appMainContent, "main-content");
 
-  appMainContent.append(mainContentHeader(), linebreak, taskViewer());
+  appMainContent.append(mainContentHeader(), linebreak, taskView());
 
   return appMainContent;
 }

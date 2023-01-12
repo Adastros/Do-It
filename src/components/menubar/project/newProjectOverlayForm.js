@@ -1,5 +1,5 @@
-import { textButton } from "../generalButtons/textButton.js";
-import { addClass, createElement } from "../helper/helper.js";
+import { textButton } from "../../generalButtons/textButton.js";
+import { addClass, createElement } from "../../generalHelper/generalHelper.js";
 
 function projectNameFormField() {
   let projectNameContainer = createElement("div"),
@@ -66,10 +66,7 @@ function newProjectForm() {
 
   addClass(newProjectForm, "new-project-form");
 
-  newProjectForm.append(
-    projectNameFormField(),
-    newProjectButtons
-  );
+  newProjectForm.append(projectNameFormField(), newProjectButtons);
 
   return newProjectForm;
 }

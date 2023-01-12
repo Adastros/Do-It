@@ -1,30 +1,37 @@
-import {
-  format,
-  addDays,
-  differenceInDays,
-  compareDesc,
-  isBefore,
-} from "date-fns";
-import { taskForm } from "../appMainContent/task/taskForm.js";
-import { confirmDeletePromptOverlay } from "../appMainContent/task/confirmDeletePromptOverlay.js";
-import { taskItem } from "../appMainContent/task/taskItem.js";
-import { secondaryTaskBoard } from "../appMainContent/secondaryTaskBoard.js";
-import { projectList } from "../menubar/projectList.js";
+import { taskForm } from "../appMainContent/taskForm.js";
+import { taskItem } from "../appMainContent/taskItem/taskItem.js";
+import { projectList } from "../menubar/project/projectList.js";
+import { getTaskSortMethod } from "./taskSortingMethods.js";
+import { updateMainContentHeading } from "./menuController.js";
 import {
   saveTaskItem,
   getTaskItem,
-  getData,
   deleteTaskItem,
   deleteProject,
   deleteEmptyCompletionDateKeys,
-  getTaskPriorityKey,
-  determineLocalStorageKey,
   saveData,
 } from "./webStorageController.js";
-import { updateMainContentHeading } from "./menuController.js";
-import { missingValueAggressiveValidation } from "./formValidationControls.js";
-import { addClass, createElement, removeClass } from "../helper/helper.js";
+import {
+  missingValueAggressiveValidation,
+  addTaskButtonListener,
+  createCancelButtonListener,
+  saveTaskButtonListener,
+} from "./formControls.js";
+import {
+  addClass,
+  createElement,
+  removeClass,
+} from "../generalHelper/generalHelper.js";
+import { format, addDays, compareDesc } from "date-fns";
 import demoJson from "../../../data/demo.json" assert { type: "json" };
+
+function taskController() {
+  // Sort tasks by priority for the Inbox menu tab on page load
+  getTaskSortMethod("Inbox");
+
+  addNewTaskButtonListener();
+  demoAppButtonListener();
+}
 
 function addNewTaskButtonListener() {
   let addNewTaskButton = document.querySelector(".add-new-task-button");
@@ -46,72 +53,6 @@ function addNewTaskButtonListener() {
     createCancelButtonListener(newTaskForm, newTaskFormCancelButton);
     addTaskButtonListener(newTaskForm);
     missingValueAggressiveValidation(formTaskHeader, formAddTaskButton);
-  });
-}
-
-function createCancelButtonListener(formOrOverlay, cancelButton) {
-  cancelButton.addEventListener("click", () => {
-    formOrOverlay.remove();
-  });
-}
-
-function addTaskButtonListener(taskForm) {
-  let formAddTaskButton = taskForm.querySelector(
-    ".form-add-or-save-task-button"
-  );
-
-  formAddTaskButton.addEventListener("click", () => {
-    let taskItemObj = createTaskItemObj(taskForm),
-      primaryTaskBoardHeading = document.querySelector(
-        ".main-content-heading"
-      ).textContent,
-      taskItemId = createTaskItemIdNumber();
-
-    if (primaryTaskBoardHeading !== "Completed") {
-      saveTaskItem(primaryTaskBoardHeading, taskItemId, taskItemObj);
-      insertTaskBasedOnView(primaryTaskBoardHeading, taskItemId, taskItemObj);
-    } else {
-      saveTaskItem("inbox", taskItemId, taskItemObj);
-    }
-
-    taskForm.remove();
-  });
-}
-
-function saveTaskButtonListener(taskForm, taskItemId) {
-  let formAddOrSaveTaskButton = taskForm.querySelector(
-    ".form-add-or-save-task-button"
-  );
-
-  formAddOrSaveTaskButton.addEventListener("click", () => {
-    let completedDataObj = JSON.parse(getData("completed")),
-      completionDates = Object.keys(completedDataObj),
-      completionDateKey;
-
-    for (let i = 0; i < completionDates.length; i++) {
-      if (
-        completedDataObj[completionDates[i]].hasOwnProperty(`${taskItemId}`)
-      ) {
-        completionDateKey = completionDates[i];
-        break;
-      }
-    }
-
-    let editedTaskObj = createTaskItemObj(taskForm, taskItemId),
-      primaryTaskBoardHeading = document.querySelector(
-        ".main-content-heading"
-      ).textContent;
-
-    deleteTaskItem(taskItemId);
-    saveTaskItem(
-      primaryTaskBoardHeading,
-      taskItemId,
-      editedTaskObj,
-      completionDateKey
-    );
-    getTaskSortMethod(primaryTaskBoardHeading);
-
-    taskForm.remove();
   });
 }
 
@@ -152,22 +93,6 @@ function AddEditButtonListener(editButton, taskItemId) {
   });
 }
 
-function createDeletePromptOverlayListener(deleteButton, itemObj) {
-  deleteButton.addEventListener("click", () => {
-    let taskOrProjectText;
-
-    if (itemObj.hasOwnProperty("taskItemId")) {
-      taskOrProjectText = getTaskItem(itemObj.taskItemId).headerValue;
-    } else {
-      taskOrProjectText = itemObj.projectName;
-    }
-
-    document.body.append(
-      confirmDeletePromptOverlay(taskOrProjectText, itemObj)
-    );
-  });
-}
-
 function deleteConfirmationButtonListener(
   confirmButton,
   overlayContainer,
@@ -178,19 +103,19 @@ function deleteConfirmationButtonListener(
       let itemToDelete = document.querySelector(
           `[data-task-item-id = '${itemObj.taskItemId}']`
         ),
-        primaryTaskBoardHeading = document.querySelector(
+        mainContentHeading = document.querySelector(
           ".main-content-heading"
         ).textContent;
 
       deleteTaskItem(itemObj.taskItemId);
-      removeTaskOrBoardFromDOM(primaryTaskBoardHeading, itemToDelete);
+      removeTaskOrBoardFromDOM(mainContentHeading, itemToDelete);
       overlayContainer.remove();
 
-      if (isPrimaryTaskListEmpty()) {
-        addPrimaryTaskBoardBackground(primaryTaskBoardHeading);
+      if (isTaskViewEmpty()) {
+        addMainContentBackground(mainContentHeading);
       }
 
-      if (primaryTaskBoardHeading.toLowerCase() === "upcoming") {
+      if (mainContentHeading.toLowerCase() === "upcoming") {
         emptyTaskBoardMessage();
       }
     } else {
@@ -209,7 +134,7 @@ function toggleTaskCompletion(checkbox, taskItemId) {
     let taskItem = document.querySelector(
         `[data-task-item-id = '${taskItemId}']`
       ),
-      primaryTaskBoardHeading = document.querySelector(
+      mainContentHeading = document.querySelector(
         ".main-content-heading"
       ).textContent,
       task = getTaskItem(taskItemId);
@@ -234,24 +159,31 @@ function toggleTaskCompletion(checkbox, taskItemId) {
       saveTaskItem("completed", taskItemId, task);
     }
 
-    removeTaskOrBoardFromDOM(primaryTaskBoardHeading, taskItem);
+    removeTaskOrBoardFromDOM(mainContentHeading, taskItem);
 
-    if (isPrimaryTaskListEmpty()) {
-      addPrimaryTaskBoardBackground(primaryTaskBoardHeading);
+    if (isTaskViewEmpty()) {
+      addMainContentBackground(mainContentHeading);
     }
 
-    if (primaryTaskBoardHeading.toLowerCase() === "upcoming") {
+    if (mainContentHeading.toLowerCase() === "upcoming") {
       emptyTaskBoardMessage();
     }
   });
 }
 
-function removeTaskOrBoardFromDOM(primaryTaskBoardHeading, taskToDelete) {
+function removeTaskOrBoardFromDOM(mainContentHeading, taskToDelete) {
   // remove the secondary task board if this is the last task left.
   // Otherwise, remove the task from the secondary task board
-  switch (primaryTaskBoardHeading.toLowerCase()) {
+  switch (mainContentHeading.toLowerCase()) {
     case "upcoming":
-      taskToDelete.remove();
+      let overdueTaskBoard = document.querySelector(".overdue-task-board");
+
+      if (overdueTaskBoard.lastElementChild.childElementCount === 1) {
+        overdueTaskBoard.remove();
+      } else {
+        taskToDelete.remove();
+      }
+
       break;
     case "completed":
       if (taskToDelete.parentElement.childElementCount === 1) {
@@ -271,18 +203,27 @@ function removeTaskOrBoardFromDOM(primaryTaskBoardHeading, taskToDelete) {
   }
 }
 
-// Random assigns a eight digit integer for the task ID.
-function createTaskItemIdNumber() {
-  let min = 0,
-    max = 100000000,
-    taskId;
+function clearTaskView() {
+  let taskView = document.querySelector(".task-view");
 
-  do {
-    // The maximum is exclusive and the minimum is inclusive
-    taskId = Math.floor(Math.random() * (max - min) + min);
-  } while (Object.keys(localStorage).includes(`${taskId}`));
+  while (taskView.firstElementChild) {
+    taskView.firstElementChild.remove();
+  }
+}
 
-  return taskId;
+function emptyTaskBoardMessage() {
+  let taskLists = document.querySelectorAll(".task-list");
+
+  taskLists.forEach((list) => {
+    let emptyTaskBoardMessage = createElement("p");
+
+    emptyTaskBoardMessage.textContent = "There are no tasks due on this date.";
+    addClass(emptyTaskBoardMessage, "empty-date-task-board-msg");
+
+    if (list.childElementCount === 0) {
+      list.append(emptyTaskBoardMessage);
+    }
+  });
 }
 
 function createTaskItemObj(taskForm, keepTaskType) {
@@ -313,13 +254,50 @@ function createTaskItemObj(taskForm, keepTaskType) {
   }
 }
 
+function addMainContentBackground(mainContentHeading) {
+  let taskView = document.querySelector(".task-view"),
+    noTasksMessage = createElement("p");
+
+  if (mainContentHeading.toLowerCase() === "completed") {
+    noTasksMessage.textContent = `You haven't completed any tasks yet! 
+        Complete some tasks to see how much you've accomplished here.`;
+  } else {
+    noTasksMessage.textContent = `There doesn't seem to be anymore tasks! 
+        Add some more if needed. Otherwise, enjoy the rest of your day!`;
+  }
+
+  taskView.append(noTasksMessage);
+
+  if (!document.body.classList.contains("no-task-background")) {
+    addClass(document.body, "no-task-background");
+  }
+}
+
+function removeMainContentBackground() {
+  removeClass(document.body, "no-task-background");
+}
+
+// Random assigns a eight digit integer for the task ID.
+function createTaskItemIdNumber() {
+  let min = 0,
+    max = 100000000,
+    taskId;
+
+  do {
+    // The maximum is exclusive and the minimum is inclusive
+    taskId = Math.floor(Math.random() * (max - min) + min);
+  } while (Object.keys(localStorage).includes(`${taskId}`));
+
+  return taskId;
+}
+
 function determineTaskType(keepTaskType) {
   let taskType,
-    primaryTaskBoardHeading = document.querySelector(
+    mainContentHeading = document.querySelector(
       ".main-content-heading"
     ).textContent;
 
-  switch (primaryTaskBoardHeading.toLowerCase()) {
+  switch (mainContentHeading.toLowerCase()) {
     case "inbox":
     case "today":
     case "upcoming":
@@ -329,76 +307,15 @@ function determineTaskType(keepTaskType) {
       taskType = keepTaskType;
       break;
     default:
-      taskType = "Project Task: " + primaryTaskBoardHeading;
+      taskType = "Project Task: " + mainContentHeading;
       break;
   }
 
   return taskType;
 }
 
-function clearPrimaryTaskBoard() {
-  let primaryTaskBoard = document.querySelector(".task-viewer");
-
-  while (primaryTaskBoard.firstElementChild) {
-    primaryTaskBoard.firstElementChild.remove();
-  }
-}
-
 function clearProjectTabs() {
   document.querySelector(".project-list").remove();
-}
-
-function reloadProjectTabs() {
-  let projectSection = document.querySelector(".project-section");
-
-  projectSection.append(projectList());
-}
-
-function getTaskSortMethod(primaryTaskBoardHeading) {
-  let localStorageKey = determineLocalStorageKey(primaryTaskBoardHeading),
-    overDueTasks = checkForAllOverdueTasks(
-      localStorageKey,
-      primaryTaskBoardHeading
-    );
-
-  clearPrimaryTaskBoard();
-
-  switch (primaryTaskBoardHeading.toLowerCase()) {
-    case "inbox":
-      createPriorityBoards();
-      sortTasksByInbox();
-      break;
-    case "today":
-      sortTasksByToday(primaryTaskBoardHeading);
-      break;
-    case "upcoming":
-      createDateTaskBoards();
-      sortTasksByUpcoming();
-      emptyTaskBoardMessage();
-      break;
-    case "completed":
-      sortTasksByCompleted(primaryTaskBoardHeading);
-      break;
-    default: // Sort Project Tabs
-      sortTasksByProject(primaryTaskBoardHeading);
-      break;
-  }
-
-  if (overDueTasks.length > 0 && primaryTaskBoardHeading !== "Completed") {
-    createOverDueTaskBoard(overDueTasks);
-  }
-
-  if (primaryTaskBoardHeading !== "Upcoming") {
-    clearEmptyTaskBoards();
-  }
-
-  if (isPrimaryTaskListEmpty() && primaryTaskBoardHeading !== "Upcoming") {
-    addPrimaryTaskBoardBackground(primaryTaskBoardHeading);
-  } else {
-    removePrimaryTaskBoardBackground();
-  }
-
-  localStorage.previousTab = primaryTaskBoardHeading;
 }
 
 function clearEmptyTaskBoards() {
@@ -411,458 +328,21 @@ function clearEmptyTaskBoards() {
   }
 }
 
-function isPrimaryTaskListEmpty() {
-  return !document.querySelector(".task-viewer").childElementCount;
+function reloadProjectTabs() {
+  let projectSection = document.querySelector(".project-section");
+
+  projectSection.append(projectList());
 }
 
-function addPrimaryTaskBoardBackground(primaryTaskBoardHeading) {
-  let primaryTaskBoardList = document.querySelector(".task-viewer"),
-    noTasksMessage = createElement("p");
-
-  if (primaryTaskBoardHeading.toLowerCase() === "completed") {
-    noTasksMessage.textContent = `You haven't completed any tasks yet! 
-      Complete some tasks to see how much you've accomplished here.`;
-  } else {
-    noTasksMessage.textContent = `There doesn't seem to be anymore tasks! 
-      Add some more if needed. Otherwise, enjoy the rest of your day!`;
-  }
-
-  primaryTaskBoardList.append(noTasksMessage);
-
-  if (!document.body.classList.contains("no-task-background")) {
-    addClass(document.body, "no-task-background");
-  }
-}
-
-function removePrimaryTaskBoardBackground() {
-  removeClass(document.body, "no-task-background");
-}
-
-function sortByDueDateAsc(entries) {
-  return entries.sort((entryLeft, entryRight) => {
-    return compareDesc(
-      new Date(entryRight[1].dueDateValue),
-      new Date(entryLeft[1].dueDateValue)
-    );
-  });
-}
-
-function combineGeneralAndProjectTasks() {
-  let taskDataObj = JSON.parse(getData("taskData")),
-    projectDataObj = JSON.parse(getData("projects")),
-    combinedTaskObj = {};
-
-  [taskDataObj, projectDataObj].forEach((dataObj, i) => {
-    Object.keys(dataObj).forEach((secondaryKey) => {
-      if (!combinedTaskObj.hasOwnProperty(secondaryKey) && i === 0) {
-        combinedTaskObj[secondaryKey] = {};
-      }
-
-      Object.entries(dataObj[secondaryKey]).forEach((entry) => {
-        if (!isTaskOverdue(entry[1])) {
-          if (i === 0) {
-            combinedTaskObj[secondaryKey][entry[0]] = entry[1];
-          } else {
-            combinedTaskObj[getTaskPriorityKey(entry[1].priorityValue)][
-              entry[0]
-            ] = entry[1];
-          }
-        }
-      });
-    });
-  });
-
-  return combinedTaskObj;
-}
-
-function createOverDueTaskBoard(overDueTasks) {
-  let primaryTaskBoard = document.querySelector(".task-viewer"),
-    overDueBoard = secondaryTaskBoard("Overdue Tasks");
-
-  addClass(overDueBoard, "overdue-task-board");
-  primaryTaskBoard.prepend(overDueBoard);
-
-  overDueTasks.forEach((task) => {
-    addTaskToBoard(task[0], task[1], overDueBoard);
-  });
-}
-
-function createPriorityBoards() {
-  let primaryTaskBoard = document.querySelector(".task-viewer"),
-    priorityBoardHeaderArr = ["High", "Medium", "Low", "No"],
-    priorityKeys = [
-      "highPriorityTasks",
-      "mediumPriorityTasks",
-      "lowPriorityTasks",
-      "noPriorityTasks",
-    ];
-
-  priorityBoardHeaderArr.forEach((header, i) => {
-    let priorityBoard = secondaryTaskBoard(header + " Priority");
-
-    // An identifier that is used when sorting through task data
-    // to append tasks based on priority.
-    priorityBoard.dataset.priorityKey = priorityKeys[i];
-
-    primaryTaskBoard.append(priorityBoard);
-  });
-}
-
-function createDateTaskBoards() {
-  let date = new Date(), //Today's date
-    primaryTaskBoard = document.querySelector(".task-viewer");
-
-  for (let i = 0; i < 7; i++) {
-    let formattedDate = format(date, "MMM d - EEEE");
-
-    if (i === 0) {
-      formattedDate += " - Today";
-    } else if (i === 1) {
-      formattedDate += " - Tomorrow";
-    }
-
-    primaryTaskBoard.append(secondaryTaskBoard(formattedDate));
-    date = addDays(date, 1);
-  }
-}
-
-function emptyTaskBoardMessage() {
-  let taskLists = document.querySelectorAll(".task-list");
-
-  taskLists.forEach((list) => {
-    let emptyTaskBoardMessage = createElement("p");
-
-    emptyTaskBoardMessage.textContent = "There are no tasks due on this date.";
-    addClass(emptyTaskBoardMessage, "empty-date-task-board-msg");
-
-    if (list.childElementCount === 0) {
-      list.append(emptyTaskBoardMessage);
-    }
-  });
-}
-
-function checkForAllOverdueTasks(localStorageKey, primaryTaskBoardHeading) {
-  let todaysDate = new Date().setHours(0, 0, 0, 0),
-    taskDataObj = JSON.parse(getData("taskData")),
-    projectDataObj = JSON.parse(getData("projects")),
-    overDueTasks = [];
-
-  // For project view
-  if (localStorageKey === "projects") {
-    Object.keys(projectDataObj[primaryTaskBoardHeading]).forEach((taskKey) => {
-      let dueDate = new Date(
-        projectDataObj[primaryTaskBoardHeading][taskKey].dueDateValue
-      );
-
-      if (compareDesc(todaysDate, dueDate) === -1) {
-        overDueTasks.push([
-          taskKey,
-          projectDataObj[primaryTaskBoardHeading][taskKey],
-        ]);
-      }
-    });
-  }
-  // For inbox, today, and upcoming view
-  else {
-    [taskDataObj, projectDataObj].forEach((dataObj) => {
-      Object.keys(dataObj).forEach((secondaryKey) => {
-        Object.keys(dataObj[secondaryKey]).forEach((taskKey) => {
-          let dueDate = new Date(dataObj[secondaryKey][taskKey].dueDateValue);
-
-          if (compareDesc(todaysDate, dueDate) === -1) {
-            overDueTasks.push([taskKey, dataObj[secondaryKey][taskKey]]);
-          }
-        });
-      });
-    });
-  }
-
-  if (overDueTasks.length > 1) {
-    overDueTasks = sortByDueDateAsc(overDueTasks);
-  }
-
-  return overDueTasks;
-}
-
-function sortTasksByInbox() {
-  let combinedTaskObj = combineGeneralAndProjectTasks();
-
-  Object.keys(combinedTaskObj).forEach((priorityKey) => {
-    let taskEntries = sortByDueDateAsc(
-      Object.entries(combinedTaskObj[priorityKey])
-    );
-
-    taskEntries.forEach((entry) => {
-      let taskItemKey = entry[0],
-        taskObj = entry[1];
-
-      addTaskToBoard(
-        taskItemKey,
-        taskObj,
-        document.querySelector(`[data-priority-key="${priorityKey}"]`)
-      );
-    });
-  });
-}
-
-function sortTasksByToday(primaryTaskBoardHeading) {
-  let primaryTaskBoard = document.querySelector(".task-viewer"),
-    taskDataObj = JSON.parse(getData("taskData")),
-    projectDataObj = JSON.parse(getData("projects")),
-    todaysDate = format(new Date(), "PP"),
-    todayBoard = secondaryTaskBoard(primaryTaskBoardHeading);
-
-  [taskDataObj, projectDataObj].forEach((dataObj) => {
-    Object.keys(dataObj).forEach((secondaryKey) => {
-      Object.keys(dataObj[secondaryKey]).forEach((taskItemKey) => {
-        let taskDueDate = dataObj[secondaryKey][taskItemKey].dueDateValue;
-
-        if (taskDueDate === todaysDate) {
-          if (!isTaskOverdue(dataObj[secondaryKey][taskItemKey])) {
-            addTaskToBoard(
-              taskItemKey,
-              dataObj[secondaryKey][taskItemKey],
-              todayBoard
-            );
-          }
-        }
-      });
-    });
-  });
-
-  primaryTaskBoard.append(todayBoard);
-}
-
-function sortTasksByUpcoming() {
-  let taskDataObj = JSON.parse(getData("taskData")),
-    projectDataObj = JSON.parse(getData("projects")),
-    todaysDate = new Date().setHours(0, 0, 0, 0), // Todays date with time component zero'd out
-    weekFromTodaysDate = addDays(todaysDate, 6), // Today's date + 6 days
-    dateTaskBoardsArr = document.getElementsByClassName("secondary-task-board");
-
-  [taskDataObj, projectDataObj].forEach((dataObj) => {
-    Object.keys(dataObj).forEach((secondaryKey) => {
-      Object.keys(dataObj[secondaryKey]).forEach((taskItemKey) => {
-        let taskDueDate = new Date(
-            dataObj[secondaryKey][taskItemKey].dueDateValue
-          ),
-          dayDifference = differenceInDays(weekFromTodaysDate, taskDueDate);
-
-        if (dayDifference < 7 && dayDifference >= 0) {
-          if (!isTaskOverdue(dataObj[secondaryKey][taskItemKey])) {
-            addTaskToBoard(
-              taskItemKey,
-              dataObj[secondaryKey][taskItemKey],
-              dateTaskBoardsArr[6 - dayDifference]
-            );
-          }
-        }
-      });
-    });
-  });
-}
-
-function sortTasksByCompleted(primaryTaskBoardHeading) {
-  let primaryTaskBoard = document.querySelector(".task-viewer"),
-    completedTaskDataObj = JSON.parse(
-      getData(determineLocalStorageKey(primaryTaskBoardHeading))
-    ),
-    completionDates = Object.keys(completedTaskDataObj);
-
-  // Sort completion dates from most recent to oldest (descending).
-  if (completionDates.length > 1) {
-    completionDates = completionDates.sort((dateLeft, dateRight) =>
-      compareDesc(new Date(dateLeft), new Date(dateRight))
-    );
-  }
-
-  completionDates.forEach((date) => {
-    let formattedDate = format(new Date(date), "MMM d - EEEE"),
-      dateTaskBoard = secondaryTaskBoard(formattedDate);
-
-    Object.keys(completedTaskDataObj[date]).forEach((taskItemId) => {
-      addTaskToBoard(
-        taskItemId,
-        completedTaskDataObj[date][taskItemId],
-        dateTaskBoard
-      );
-
-      let completedTask = dateTaskBoard.querySelector(
-        `[data-task-item-id = '${taskItemId}']`
-      );
-
-      addClass(completedTask, "completed");
-      removeClass(
-        completedTask.querySelector(".checkbox").firstElementChild, // checkmark img element
-        "fade-in-out"
-      );
-    });
-
-    primaryTaskBoard.append(dateTaskBoard);
-  });
-}
-
-function sortTasksByProject(projectName) {
-  let primaryTaskBoard = document.querySelector(".task-viewer"),
-    projectTaskDataObj = JSON.parse(
-      getData(determineLocalStorageKey(projectName))
-    ),
-    sortedProjectEntries = Object.entries(projectTaskDataObj[projectName]).sort(
-      (entryLeft, entryRight) => {
-        return compareDesc(
-          new Date(entryRight[1].dueDateValue),
-          new Date(entryLeft[1].dueDateValue)
-        );
-      }
-    ),
-    previousEntryDueDate,
-    taskBoard;
-
-  sortedProjectEntries.forEach((entry) => {
-    let taskKey = entry[0],
-      taskValueObj = entry[1];
-
-    if (!isTaskOverdue(taskValueObj)) {
-      // If the previous due date is different from the current task's due date,
-      // create a new task board to append all tasks with the same due date until a
-      // task with a different due date is found
-      if (taskValueObj.dueDateValue !== previousEntryDueDate) {
-        let dueDate = new Date(taskValueObj.dueDateValue);
-
-        previousEntryDueDate = taskValueObj.dueDateValue;
-
-        taskBoard = secondaryTaskBoard(format(dueDate, "MMM d - EEEE"));
-
-        primaryTaskBoard.append(taskBoard);
-      }
-
-      addTaskToBoard(taskKey, taskValueObj, taskBoard);
-    }
-  });
-}
-
-function insertTaskBasedOnView(
-  primaryTaskBoardHeading,
-  taskItemId,
-  taskItemObj
-) {
-  if (isTaskOverdue(taskItemObj)) {
-    insertOverdueTask(taskItemId, taskItemObj);
-  } else {
-    switch (primaryTaskBoardHeading.toLowerCase()) {
-      case "inbox":
-        insertTaskForInboxView(taskItemId, taskItemObj);
-        break;
-      case "today":
-        insertTaskForTodayView(taskItemId, taskItemObj);
-        break;
-      case "upcoming":
-        insertTaskForUpcomingView(taskItemId, taskItemObj);
-        break;
-      case "completed":
-        insertTaskForCompletedView(taskItemId, taskItemObj);
-        break;
-      default: // Project name
-        insertTaskForProjectView();
-        break;
-    }
-  }
-}
-
-function isTaskOverdue(taskItemObj) {
-  let todaysDate = new Date().setHours(0, 0, 0, 0);
-
-  return isBefore(new Date(taskItemObj.dueDateValue), todaysDate);
-}
-
-function insertOverdueTask(taskItemId, taskItemObj) {
-  let overdueTaskBoard = document.querySelector(".overdue-task-board");
-
-  if (overdueTaskBoard) {
-    addTaskToBoard(taskItemId, taskItemObj, overdueTaskBoard);
-  } else {
-    createOverDueTaskBoard([taskItemId, taskItemObj]);
-  }
-}
-
-function insertTaskForInboxView(taskItemId, taskItemObj) {
-  let taskBoard = document.querySelector(
-    `[data-priority-key="${getTaskPriorityKey(taskItemObj.priorityValue)}"]`
-  );
-
-  if (!taskBoard) {
-    getTaskSortMethod("inbox");
-  } else {
-    addTaskToBoard(taskItemId, taskItemObj, taskBoard);
-  }
-}
-
-function insertTaskForTodayView(taskItemId, taskItemObj) {
-  let todayBoard = document.getElementsByClassName("secondary-task-board")[1],
-    taskDueDate = taskItemObj.dueDateValue,
-    todaysDate = format(new Date(), "PP");
-
-  if (!todayBoard) {
-    getTaskSortMethod("today");
-  } else if (taskDueDate === todaysDate) {
-    addTaskToBoard(taskItemId, taskItemObj, todayBoard);
-  }
-}
-
-// Need to zero out time component to avoid any date calculation/ conversion issues.
-function insertTaskForUpcomingView(taskItemId, taskItemObj) {
-  let todaysDate = new Date().setHours(0, 0, 0, 0), // Todays date with time component zero'd out
-    weekFromTodaysDate = addDays(todaysDate, 6), // today's date + 6 days
-    dayDifference = differenceInDays(
-      weekFromTodaysDate,
-      new Date(taskItemObj.dueDateValue)
-    ),
-    dateTaskBoardsArr = document.getElementsByClassName("secondary-task-board"),
-    dateBoardIdx = dateTaskBoardsArr.length - 1; // only allows the index of date task boards. Overdue task board will be ignored
-
-  if (dayDifference < 7 && dayDifference >= 0) {
-    addTaskToBoard(
-      taskItemId,
-      taskItemObj,
-      dateTaskBoardsArr[dateBoardIdx - dayDifference]
-    );
-  }
-}
-
-function insertTaskForCompletedView(taskItemId, taskItemObj) {
-  let taskToEdit = document.querySelector(
-      `[data-task-item-id="${taskItemId}"]`
-    ),
-    dateBoard = taskToEdit.parentElement.parentElement;
-
-  //Remove the task from the DOM and localStorage before replacing it
-  // with an updated version of it
-  taskToEdit.remove();
-  addTaskToBoard(taskItemId, taskItemObj, dateBoard);
-
-  // Reselect the updated task and style it
-  let updatedTask = dateBoard.querySelector(
-    `[data-task-item-id="${taskItemId}"]`
-  );
-  addClass(updatedTask, "completed");
-  removeClass(
-    updatedTask.querySelector(".checkbox").firstElementChild, // checkmark img element
-    "fade-in-out"
-  );
-}
-
-function insertTaskForProjectView() {
-  let projectName = document.querySelector(".main-content-heading").textContent;
-
-  clearPrimaryTaskBoard();
-  getTaskSortMethod(projectName);
+function isTaskViewEmpty() {
+  return !document.querySelector(".task-view").childElementCount;
 }
 
 function demoAppButtonListener() {
   let demoButton = document.querySelector(".demo-button");
 
   demoButton.addEventListener("click", () => {
-    let primaryTaskBoardHeading = document.querySelector(
+    let mainContentHeading = document.querySelector(
         ".main-content-heading"
       ).textContent,
       todaysDate = new Date().setHours(0, 0, 0, 0);
@@ -913,41 +393,28 @@ function demoAppButtonListener() {
     });
 
     // Clear the following DOM components and reload the tasks
-    clearPrimaryTaskBoard();
+    clearTaskView();
     clearProjectTabs();
-    getTaskSortMethod(primaryTaskBoardHeading);
+    getTaskSortMethod(mainContentHeading);
     reloadProjectTabs();
   });
 }
 
-function emptyTaskData() {
-  return JSON.stringify({
-    highPriorityTasks: {},
-    mediumPriorityTasks: {},
-    lowPriorityTasks: {},
-    noPriorityTasks: {},
-  });
-}
-
-function taskController() {
-  // Sort tasks by priority for the Inbox menu tab on page load
-  getTaskSortMethod("Inbox");
-
-  addNewTaskButtonListener();
-  demoAppButtonListener();
-}
-
 export {
   taskController,
-  toggleTaskCompletion,
+  addTaskToBoard,
   createCancelButtonListener,
   AddEditButtonListener,
-  createDeletePromptOverlayListener,
+  toggleTaskCompletion,
   deleteConfirmationButtonListener,
   addTaskButtonListener,
   saveTaskButtonListener,
-  clearPrimaryTaskBoard,
-  getTaskSortMethod,
-  emptyTaskData,
-  addPrimaryTaskBoardBackground,
+  clearTaskView,
+  clearEmptyTaskBoards,
+  addMainContentBackground,
+  removeMainContentBackground,
+  emptyTaskBoardMessage,
+  createTaskItemObj,
+  createTaskItemIdNumber,
+  isTaskViewEmpty,
 };

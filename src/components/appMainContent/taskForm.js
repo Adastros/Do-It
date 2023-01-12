@@ -1,7 +1,7 @@
-import { taskDueDateField } from "./taskDueDateField.js";
-import { taskPriorityDropdown } from "./taskPriorityDropdown.js";
-import { textButton } from "../../generalButtons/textButton.js";
-import { createElement, addClass } from "../../helper/helper.js";
+import { taskDueDateField } from "./taskItem/taskDueDateField.js";
+import { taskPriorityDropdown } from "./taskItem/taskPriorityDropdown.js";
+import { textButton } from "../generalButtons/textButton.js";
+import { createElement, addClass } from "../generalHelper/generalHelper.js";
 
 function createTaskHeaderField(headerValue) {
   let headerContainer = createElement("div"),

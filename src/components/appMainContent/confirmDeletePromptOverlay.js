@@ -1,9 +1,9 @@
-import { textButton } from "../../generalButtons/textButton";
+import { textButton } from "../generalButtons/textButton";
 import {
   createCancelButtonListener,
   deleteConfirmationButtonListener,
-} from "../../controls/taskController";
-import { addClass, createElement } from "../../helper/helper.js";
+} from "../controls/taskController";
+import { addClass, createElement } from "../generalHelper/generalHelper.js";
 
 function confirmDeletePromptOverlay(taskOrProjectText, itemObj) {
   let overlayContainer = createElement("div"),
