@@ -55,7 +55,7 @@ function getTaskSortMethod(mainContentHeading) {
       break;
   }
 
-  if (overDueTasks.length > 0 && mainContentHeading !== "Completed") {
+  if (overDueTasks.length && mainContentHeading !== "Completed") {
     createOverDueTaskBoard(overDueTasks);
   }
 

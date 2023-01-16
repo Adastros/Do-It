@@ -342,10 +342,7 @@ function demoAppButtonListener() {
   let demoButton = document.querySelector(".demo-button");
 
   demoButton.addEventListener("click", () => {
-    let mainContentHeading = document.querySelector(
-        ".main-content-heading"
-      ).textContent,
-      todaysDate = new Date().setHours(0, 0, 0, 0);
+    let todaysDate = new Date().setHours(0, 0, 0, 0);
 
     Object.keys(demoJson).forEach((primaryKey) => {
       let primaryObj = {};
@@ -395,7 +392,8 @@ function demoAppButtonListener() {
     // Clear the following DOM components and reload the tasks
     clearTaskView();
     clearProjectTabs();
-    getTaskSortMethod(mainContentHeading);
+    getTaskSortMethod("inbox");
+    updateMainContentHeading("Inbox");
     reloadProjectTabs();
   });
 }
