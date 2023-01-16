@@ -120,22 +120,4 @@ function updateMainContentHeading(text) {
   mainContentHeading.textContent = text;
 }
 
-function displayContentOnMouseOverListener(eventNode, contentToHide) {
-  eventNode.addEventListener("mouseover", () => {
-    toggleClass(contentToHide, "hide");
-  });
-}
-
-function hideContentOnMouseOutListener(eventNode, contentToHide) {
-  eventNode.addEventListener("mouseout", () => {
-    toggleClass(contentToHide, "hide");
-  });
-}
-
-export {
-  menuController,
-  changeTaskViewListener,
-  updateMainContentHeading,
-  displayContentOnMouseOverListener,
-  hideContentOnMouseOutListener,
-};
+export { menuController, changeTaskViewListener, updateMainContentHeading };

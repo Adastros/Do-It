@@ -1,12 +1,12 @@
 import { tab } from "../tab.js";
 import { iconButtonExtraSmall } from "../../generalButtons/iconButtonExtraSmall.js";
+import { changeTaskViewListener } from "../../controls/menuController.js";
+import { createDeletePromptOverlayListener } from "../../controls/formControls.js";
 import {
-  changeTaskViewListener,
+  addClass,
   displayContentOnMouseOverListener,
   hideContentOnMouseOutListener,
-} from "../../controls/menuController.js";
-import { createDeletePromptOverlayListener } from "../../controls/formControls.js";
-import { addClass } from "../../generalHelper/generalHelper.js";
+} from "../../generalHelper/generalHelper.js";
 import deleteIcon from "../../../icons/delete.svg";
 import "../../../stylesheets/projectTab.css";
 

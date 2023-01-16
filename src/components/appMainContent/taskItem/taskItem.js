@@ -5,6 +5,8 @@ import {
   addClass,
   createElement,
   capitalizeFirstLetter,
+  displayContentOnMouseOverListener,
+  hideContentOnMouseOutListener,
 } from "../../generalHelper/generalHelper.js";
 import "../../../stylesheets/taskItem.css";
 
@@ -17,6 +19,7 @@ function taskItem(taskItemId, taskItemObj) {
     taskLabel = createElement("p"),
     priorityIndicator = createElement("p"),
     dueDateIndicator = createElement("p"),
+    taskItemActionButtons = taskItemActions(taskItemId),
     upperCasePriorityValue = capitalizeFirstLetter(taskItemObj.priorityValue);
 
   priorityIndicator.textContent = "Priority: " + upperCasePriorityValue;
@@ -49,7 +52,7 @@ function taskItem(taskItemId, taskItemObj) {
 
   primaryTaskInfoAndActionsContainer.append(
     taskInfo(taskItemObj.headerValue),
-    taskItemActions(taskItemId)
+    taskItemActionButtons
   );
 
   taskInfoContainer.append(
@@ -58,6 +61,9 @@ function taskItem(taskItemId, taskItemObj) {
   );
 
   taskItem.append(checkbox(taskItemId), taskInfoContainer);
+
+  displayContentOnMouseOverListener(taskItem, taskItemActionButtons);
+  hideContentOnMouseOutListener(taskItem, taskItemActionButtons);
 
   return taskItem;
 }

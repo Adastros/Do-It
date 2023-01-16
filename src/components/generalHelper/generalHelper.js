@@ -18,10 +18,24 @@ function capitalizeFirstLetter(word) {
   return word.charAt(0).toUpperCase() + word.slice(1);
 }
 
+function displayContentOnMouseOverListener(eventNode, contentToHide) {
+  eventNode.addEventListener("mouseover", () => {
+    toggleClass(contentToHide, "hide");
+  });
+}
+
+function hideContentOnMouseOutListener(eventNode, contentToHide) {
+  eventNode.addEventListener("mouseout", () => {
+    toggleClass(contentToHide, "hide");
+  });
+}
+
 export {
   createElement,
   addClass,
   removeClass,
   toggleClass,
   capitalizeFirstLetter,
+  displayContentOnMouseOverListener,
+  hideContentOnMouseOutListener,
 };

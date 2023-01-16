@@ -14,7 +14,7 @@ function taskItemActions(taskItemId) {
   AddEditButtonListener(editButton, taskItemId);
   createDeletePromptOverlayListener(deleteButton, { taskItemId: taskItemId });
 
-  addClass(taskItemActions, "task-item-actions");
+  addClass(taskItemActions, "task-item-actions", "hide");
 
   taskItemActions.append(editButton, deleteButton);
 
