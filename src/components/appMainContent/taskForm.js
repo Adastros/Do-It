@@ -2,6 +2,7 @@ import { taskDueDateField } from "./taskItem/taskDueDateField.js";
 import { taskPriorityDropdown } from "./taskItem/taskPriorityDropdown.js";
 import { textButton } from "../generalButtons/textButton.js";
 import { createElement, addClass } from "../generalHelper/generalHelper.js";
+import "../../stylesheets/taskForm.css";
 
 function createTaskHeaderField(headerValue) {
   let headerContainer = createElement("div"),
@@ -16,7 +17,6 @@ function createTaskHeaderField(headerValue) {
   headerLabel.setAttribute("for", "form-task-header");
   headerInputField.setAttribute("id", "form-task-header");
   headerInputField.setAttribute("required", "");
-  addClass(headerInputField, "form-task-header");
   addClass(headerContainer, "task-form-header-container");
 
   headerContainer.append(headerLabel, headerInputField, taskFormErrorField());

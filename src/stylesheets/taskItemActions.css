@@ -1,0 +1,6 @@
+.task-item-actions {
+  align-self: center;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}

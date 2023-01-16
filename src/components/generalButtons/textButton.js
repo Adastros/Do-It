@@ -1,4 +1,5 @@
 import { addClass, createElement } from "../generalHelper/generalHelper.js";
+import "../../stylesheets/textButton.css";
 
 function textButton(text, ...cssClass) {
   let button = createElement("button");

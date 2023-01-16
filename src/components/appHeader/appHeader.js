@@ -5,6 +5,7 @@ import { iconAndTextButton } from "../generalButtons/iconAndTextButton.js";
 import { addClass, createElement } from "../generalHelper/generalHelper.js";
 import menuIcon from "../../icons/menu.svg";
 import addIcon from "../../icons/plus.svg";
+import "../../stylesheets/appHeader.css";
 
 function appHeader() {
   let appHeader = createElement("header"),
@@ -20,7 +21,6 @@ function appHeader() {
 
   addClass(menuButton, "menu-button");
   addClass(topRightButtonContainer, "top-right-side-button-container");
-  addClass(appHeader, "appHeader");
 
   topRightButtonContainer.append(addNewTaskButton, demoButton);
   appHeader.append(menuButton, appLogo(), topRightButtonContainer);

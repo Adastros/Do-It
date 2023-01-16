@@ -1,0 +1,15 @@
+.project-section {
+  display: flex;
+  flex-direction: column;
+}
+
+.project-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.new-project-button {
+  background-color: #f8f7ff;
+}

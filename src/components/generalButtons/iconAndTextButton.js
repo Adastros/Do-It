@@ -1,4 +1,5 @@
 import { addClass, createElement } from "../generalHelper/generalHelper.js";
+import "../../stylesheets/iconAndTextButton.css";
 
 function iconAndTextButton(text, imgSrc, altText, ...cssClass) {
   let button = createElement("button"),
@@ -10,7 +11,6 @@ function iconAndTextButton(text, imgSrc, altText, ...cssClass) {
   icon.setAttribute("alt", altText);
   button.setAttribute("type", "button");
 
-  addClass(icon, "icon-text-button-img");
   addClass(button, "icon-text-button", ...cssClass);
 
   button.prepend(icon);

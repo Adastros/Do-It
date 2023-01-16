@@ -1,0 +1,57 @@
+.task-form-header-container {
+  margin-bottom: 1rem;
+}
+
+.task-form-actions-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.task-form-date-and-priority-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.task-form-buttons-container {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.task-form-container {
+  min-width: 625px;
+  display: flex;
+  flex-direction: column;
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 16px;
+}
+
+.task-form-overlay {
+  height: 100vh;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}
+
+.form-cancel-button {
+  margin-right: 1rem;
+  background-color: #d7d6dd;
+}
+
+.form-add-or-save-task-button {
+  background-color: #aad8ff;
+}
+
+#form-task-header {
+  margin-top: 0.25rem;
+  padding: 0.25rem;
+}

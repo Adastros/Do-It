@@ -1,0 +1,16 @@
+.project-tab {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 0.5rem;
+  padding: 0.5rem;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  overflow-wrap: break-word;
+  background-color: #f8f7ff;
+}
+
+.project-tab:hover {
+  filter: brightness(0.85);
+}

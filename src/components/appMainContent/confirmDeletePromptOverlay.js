@@ -4,6 +4,7 @@ import {
   deleteConfirmationButtonListener,
 } from "../controls/taskController";
 import { addClass, createElement } from "../generalHelper/generalHelper.js";
+import "../../stylesheets/confirmDeletePromptOverlay.css";
 
 function confirmDeletePromptOverlay(taskOrProjectText, itemObj) {
   let overlayContainer = createElement("div"),
@@ -11,8 +12,8 @@ function confirmDeletePromptOverlay(taskOrProjectText, itemObj) {
     confirmationText = createElement("p"),
     taskOrProjectTextBold = createElement("b"),
     buttonContainer = createElement("div"),
-    confirmButton = textButton("Yes", "text-button"),
-    cancelButton = textButton("No", "text-button");
+    confirmButton = textButton("Yes"),
+    cancelButton = textButton("No");
 
   confirmationText.textContent = `Are you sure you want to delete `;
   taskOrProjectTextBold.textContent = `${taskOrProjectText}?`;

@@ -1,0 +1,12 @@
+.checkbox-container {
+  height: 100%;
+}
+
+.checkbox {
+  height: 16px;
+  width: 16px;
+  margin-top: 0.35rem;
+  border: 2px solid #7567c7fc;
+  border-radius: 25%;
+  text-align: center;
+}

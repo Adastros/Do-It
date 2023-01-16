@@ -1,0 +1,10 @@
+.menu-bar {
+  position: sticky;
+  top: 0;
+  width: 270px;
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 1rem;
+  transition: transform 0.25s;
+  background-color: #f8f7ff;
+}

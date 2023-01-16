@@ -1,4 +1,5 @@
 import { createElement, addClass } from "../generalHelper/generalHelper";
+import "../../stylesheets/secondaryTaskBoard.css";
 
 function secondaryTaskBoard(boardHeader) {
   let secondaryTaskBoard = createElement("div"),

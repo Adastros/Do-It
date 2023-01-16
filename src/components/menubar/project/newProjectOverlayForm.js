@@ -1,5 +1,6 @@
 import { textButton } from "../../generalButtons/textButton.js";
 import { addClass, createElement } from "../../generalHelper/generalHelper.js";
+import "../../../stylesheets/newProjectOverlayForm.css";
 
 function projectNameFormField() {
   let projectNameContainer = createElement("div"),

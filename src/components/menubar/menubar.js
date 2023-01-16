@@ -1,6 +1,7 @@
 import { menuTabs } from "./menuTabs.js";
 import { projectSection } from "./project/projectSection.js";
 import { addClass, createElement } from "../generalHelper/generalHelper.js";
+import "../../stylesheets/menubar.css";
 
 function menubar() {
   let menubar = createElement("div"),

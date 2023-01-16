@@ -1,0 +1,39 @@
+.delete-prompt-button-container {
+  width: 100%;
+  display: flex;
+  justify-content: space-around;
+  gap: 2rem;
+  margin-top: 3rem;
+}
+
+.delete-prompt-button-container > button:first-child {
+  background-color: #d7d6dd;
+}
+
+.delete-prompt-button-container > button:last-child {
+  background-color: #aad8ff;
+}
+
+.delete-confirmation-prompt {
+  width: 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: white;
+  padding: 1.5rem;
+  border-radius: 16px;
+}
+
+.delete-task-confirmation-overlay {
+  height: 100vh;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  margin: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: rgba(0, 0, 0, 0.5);
+  overflow: hidden;
+}

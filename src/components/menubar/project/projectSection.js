@@ -2,6 +2,7 @@ import { iconButtonSmall } from "../../generalButtons/iconButtonSmall.js";
 import { projectList } from "./projectList.js";
 import { addClass, createElement } from "../../generalHelper/generalHelper.js";
 import plusIcon from "../../../icons/plus.svg";
+import "../../../stylesheets/projectSection.css";
 
 function projectSection() {
   let projectSection = createElement("div"),

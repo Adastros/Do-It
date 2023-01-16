@@ -1,6 +1,7 @@
 import { tab } from "./tab.js";
 import { changeTaskViewListener } from "../controls/menuController.js";
 import { addClass, createElement } from "../generalHelper/generalHelper.js";
+import "../../stylesheets/menuTabs.css";
 
 function menuTabs() {
   let menuTabContainer = createElement("div"),

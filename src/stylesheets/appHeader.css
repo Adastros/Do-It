@@ -1,0 +1,26 @@
+.add-new-task-button {
+  height: 1.75rem;
+  gap: 0.25rem;
+  background-color: #ffd8be;
+}
+
+.add-new-task-button > img {
+  height: 100%;
+}
+
+.demo-button {
+  height: 1.75rem;
+  border: none;
+  background-color: #ffd8be;
+}
+
+.menu-button {
+  border: none;
+  background-color: #ffd8be;
+}
+
+.top-right-side-button-container {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}

@@ -8,6 +8,7 @@ import {
 import { createDeletePromptOverlayListener } from "../../controls/formControls.js";
 import { addClass } from "../../generalHelper/generalHelper.js";
 import deleteIcon from "../../../icons/delete.svg";
+import "../../../stylesheets/projectTab.css";
 
 function projectTab(projectName) {
   let projectTab = tab(projectName, "project-tab"),

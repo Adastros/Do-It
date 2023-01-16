@@ -1,4 +1,5 @@
 import { addClass, createElement } from "../generalHelper/generalHelper.js";
+import "../../stylesheets/mainContentHeader.css";
 
 function mainContentHeader() {
   let mainContentHeader = createElement("div"),
@@ -9,7 +10,6 @@ function mainContentHeader() {
   heading.textContent = "Inbox";
 
   addClass(mainContentHeader, "main-content-header");
-  addClass(headingContainer, "main-content-heading-container");
   addClass(heading, "main-content-heading");
 
   headingContainer.append(heading);

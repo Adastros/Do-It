@@ -4,6 +4,7 @@ import { createDeletePromptOverlayListener } from "../../controls/formControls.j
 import { addClass, createElement } from "../../generalHelper/generalHelper.js";
 import editIcon from "../../../icons/edit.svg";
 import deleteIcon from "../../../icons/delete.svg";
+import "../../../stylesheets/taskItemActions.css";
 
 function taskItemActions(taskItemId) {
   let taskItemActions = createElement("div"),

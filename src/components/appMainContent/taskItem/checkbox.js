@@ -1,6 +1,7 @@
 import { toggleTaskCompletion } from "../../controls/taskController.js";
 import { addClass, createElement } from "../../generalHelper/generalHelper.js";
 import checkmarkIcon from "../../../icons/check.svg";
+import "../../../stylesheets/checkbox.css";
 
 function checkbox(taskItemId) {
   let checkboxContainer = createElement("div"),

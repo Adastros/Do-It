@@ -1,6 +1,7 @@
 import { mainContentHeader } from "./mainContentHeader.js";
 import { taskView } from "./taskView.js";
 import { addClass, createElement } from "../generalHelper/generalHelper.js";
+import "../../stylesheets/appMainContent.css";
 
 function appMainContent() {
   let appMainContent = createElement("div"),

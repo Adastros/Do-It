@@ -1,5 +1,6 @@
 import { format } from "date-fns";
-import { addClass, createElement } from "../../generalHelper/generalHelper.js";
+import { createElement } from "../../generalHelper/generalHelper.js";
+import "../../../stylesheets/taskDueDateField.css";
 
 function taskDueDateField(dueDate) {
   let taskDueDateField = createElement("div"),

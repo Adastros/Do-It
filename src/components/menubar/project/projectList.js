@@ -1,6 +1,7 @@
 import { projectTab } from "./projectTab.js";
 import { getData } from "../../controls/webStorageController.js";
 import { addClass, createElement } from "../../generalHelper/generalHelper.js";
+import "../../../stylesheets/projectList.css";
 
 function projectList() {
   let projectList = createElement("div"),

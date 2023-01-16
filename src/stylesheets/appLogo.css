@@ -1,0 +1,17 @@
+.app-logo-container {
+    position: absolute;
+    top: calc(50% - 21px);
+    left: calc(50% - 62px);
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .app-logo-container > img {
+    height: 2.25rem;
+    width: min-content;
+  }
+  
+  .app-logo-container > h2 {
+    font-size: 2.25rem;
+  }

@@ -61,88 +61,6 @@ button:hover {
   filter: brightness(0.85);
 }
 
-.app-logo-container {
-  position: absolute;
-  top: calc(50% - 21px);
-  left: calc(50% - 62px);
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.app-logo-container > img {
-  height: 2.25rem;
-  width: min-content;
-}
-
-.app-logo-container > h2 {
-  font-size: 2.25rem;
-}
-
-.menu-button {
-  border: none;
-  background-color: #ffd8be;
-}
-
-.icon-button-medium {
-  height: 35px;
-  width: 35px;
-}
-
-.icon-button-small {
-  height: 27px;
-  width: 27px;
-}
-
-.icon-button-extra-small {
-  height: 20px;
-  width: 20px;
-  background-color: #f8f7ff;
-}
-
-.text-button {
-  padding: 6px 8px;
-}
-
-.icon-text-button {
-  display: flex;
-  align-items: center;
-  padding: 4px 8px;
-}
-
-.add-new-task-button {
-  height: 1.75rem;
-  gap: 0.25rem;
-  background-color: #ffd8be;
-}
-
-.add-new-task-button > img {
-  height: 100%;
-}
-
-.demo-button {
-  height: 1.75rem;
-  border: none;
-  background-color: #ffd8be;
-}
-
-.form-add-or-save-task-button {
-  background-color: #aad8ff;
-}
-
-.new-project-button {
-  background-color: #f8f7ff;
-}
-
-.new-project-form-cancel-button {
-  background-color: #d7d6dd;
-  margin-right: 1rem;
-}
-
-.new-project-form-add-button {
-  background-color: #aad8ff;
-}
-
 .no-task-background {
   background-image: url("../image/no-tasks-background.jpg");
   background-size: cover;
@@ -150,53 +68,16 @@ button:hover {
   background-position: center;
 }
 
+.overdue-task-board {
+  padding: 2rem;
+  border: 2px solid red;
+  box-shadow: 0 0 2px red;
+  border-radius: 16px;
+}
+
 .empty-date-task-board-msg {
   display: flex;
   align-self: flex-start;
-}
-
-.view-button {
-  height: 2rem;
-  display: flex;
-  align-items: center;
-  padding: 0.25rem;
-  gap: 0.1rem;
-}
-
-.view-button > img {
-  height: 100%;
-  width: min-content;
-}
-
-.view-options {
-  /* position: absolute;
-  top: 50%;
-  right: 1rem;
-  transform: translate(0, -50%); */
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.top-right-side-button-container {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.menu-bar {
-  position: sticky;
-  top: 0;
-  width: 270px;
-  display: flex;
-  flex-direction: column;
-  padding: 1.5rem 1rem;
-  transition: transform 0.25s;
-  background-color: #f8f7ff;
-}
-
-.menu-tabs {
-  width: 100%;
 }
 
 .tab {
@@ -205,104 +86,14 @@ button:hover {
   background-color: #f8f7ff;
 }
 
-.tab:hover,
-.project-tab:hover {
+.tab:hover {
   filter: brightness(0.85);
-}
-
-.tab-name {
-  flex: 1;
 }
 
 .linebreak {
   width: 100%;
   margin: 1rem auto;
   border-top: 1px solid grey;
-}
-
-.project-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.5rem;
-}
-
-.project-section {
-  display: flex;
-  flex-direction: column;
-}
-
-.project-list {
-  margin: 0.25rem 0;
-}
-
-.project-tab {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 0.5rem;
-  padding: 0.5rem;
-  border-radius: 4px;
-  font-size: 0.9rem;
-  overflow-wrap: break-word;
-  background-color: #f8f7ff;
-}
-
-.new-project-overlay,
-.task-form-overlay,
-.delete-task-confirmation-overlay {
-  height: 100vh;
-  width: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  margin: auto;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(0, 0, 0, 0.5);
-  overflow: hidden;
-}
-
-.new-project-form,
-.task-form-container,
-.delete-confirmation-prompt {
-  display: flex;
-  flex-direction: column;
-  background-color: white;
-  padding: 1.5rem;
-  border-radius: 16px;
-}
-
-.task-form-container {
-  min-width: 625px;
-}
-
-.delete-confirmation-prompt {
-  align-items: center;
-  width: 500px;
-}
-
-.delete-prompt-button-container {
-  width: 100%;
-  display: flex;
-  justify-content: space-around;
-  gap: 2rem;
-  margin-top: 3rem;
-}
-
-.delete-prompt-button-container > button:first-child {
-  background-color: #d7d6dd;
-}
-
-.delete-prompt-button-container > button:last-child {
-  background-color: #aad8ff;
-}
-
-.new-project-form-buttons {
-  display: flex;
-  align-self: flex-end;
 }
 
 .error {
@@ -316,143 +107,6 @@ button:hover {
 
 .error-message {
   color: red;
-}
-
-.main-content {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  padding: 2rem;
-  transition: transform 0.25s;
-}
-
-.main-content-header {
-  width: 100%;
-}
-
-.task-view {
-  flex: 1;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.secondary-task-board {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 1rem;
-}
-
-.overdue-task-board {
-  padding: 2rem;
-  border: 2px solid red;
-  box-shadow: 0 0 2px red;
-  border-radius: 16px;
-}
-
-.task-list {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.task-item {
-  width: 100%;
-  display: flex;
-  gap: 1rem;
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  background-color: white;
-}
-
-.task-item:hover {
-  filter: brightness(0.85);
-}
-
-.task-item-info-container {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-}
-
-.primary-task-and-actions-container {
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.task-header {
-  font-weight: normal;
-}
-
-.checkbox-container {
-  height: 100%;
-}
-
-.checkbox {
-  height: 16px;
-  width: 16px;
-  margin-top: 0.35rem;
-  border: 2px solid #7567c7fc;
-  border-radius: 25%;
-  text-align: center;
-}
-
-.date-and-priority-indicator-container {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.secondary-task-info-container {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-size: 75%;
-}
-
-.task-form-actions-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.task-form-date-and-priority-container {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.task-form-buttons-container {
-  display: flex;
-  gap: 0.5rem;
-}
-
-.task-item-actions {
-  align-self: center;
-  display: flex;
-  align-items: center;
-  gap: 1rem;
-}
-
-.task-form-header-container {
-  margin-bottom: 1rem;
-}
-
-.form-cancel-button {
-  margin-right: 1rem;
-  background-color: #d7d6dd;
-}
-
-.new-project-name-form-field {
-  margin-bottom: 1rem;
 }
 
 .completed {
@@ -482,19 +136,4 @@ button:hover {
 .hide {
   visibility: hidden;
   overflow: hidden;
-}
-
-#task-due-date-input {
-  width: fit-content;
-  margin-left: 0.5rem;
-}
-
-#form-task-header,
-#new-project-name {
-  margin-top: 0.25rem;
-  padding: 0.25rem;
-}
-
-#task-priority-dropdown {
-  margin-left: 0.5rem;
 }

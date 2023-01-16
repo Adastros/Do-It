@@ -6,6 +6,7 @@ import {
   createElement,
   capitalizeFirstLetter,
 } from "../../generalHelper/generalHelper.js";
+import "../../../stylesheets/taskItem.css";
 
 function taskItem(taskItemId, taskItemObj) {
   let taskItem = createElement("div"),
