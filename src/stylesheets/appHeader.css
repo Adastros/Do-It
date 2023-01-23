@@ -24,3 +24,9 @@
   align-items: center;
   gap: 1rem;
 }
+
+@media (max-width: 750px) {
+  .top-right-side-button-container {
+    gap: 0;
+  }
+}

@@ -1,6 +1,7 @@
 import { appHeader } from "./components/appHeader/appHeader.js";
 import { appMainContent } from "./components/appMainContent/appMainContent.js";
 import { menubar } from "./components/menubar/menubar.js";
+import { menubarOverlay } from "./components/menubar/menubarOverlay.js";
 import { taskController } from "./components/controls/taskController.js";
 import { menuController } from "./components/controls/menuController";
 import {
@@ -36,7 +37,7 @@ function renderPage() {
   let bodyTag = document.body,
     mainTag = createElement("main");
 
-  mainTag.append(menubar(), appMainContent());
+  mainTag.append(menubarOverlay(), menubar(), appMainContent());
   bodyTag.append(appHeader(), mainTag);
 }
 

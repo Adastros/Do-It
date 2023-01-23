@@ -1,10 +1,18 @@
 .menu-bar {
-  position: sticky;
-  top: 0;
-  width: 270px;
+  position: fixed;
+  top: 80px;
+  left: 0px;
+  min-height: 100vh;
+  min-width: 270px;
   display: flex;
   flex-direction: column;
   padding: 1.5rem 1rem;
-  transition: transform 0.25s;
   background-color: #f8f7ff;
+  transition: left 0.4s ease-in-out;
+}
+
+@media (max-width: 270px) {
+  .menu-bar {
+    min-width: 100vw;
+  }
 }

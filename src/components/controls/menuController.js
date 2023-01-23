@@ -7,41 +7,94 @@ import {
   missingValueAggressiveValidation,
   doesProjectNameExist,
 } from "./formControls.js";
-import { toggleClass, removeClass } from "../generalHelper/generalHelper.js";
+import {
+  toggleClass,
+  removeClass,
+  addClass,
+} from "../generalHelper/generalHelper.js";
 
 function menuController() {
+  menubarTransitionStartListener();
+  menubarTransitionEndListener();
   toggleMenubarVisibility();
   displayNewProjectOverlayForm();
+  positionMenubarOnWidthChange();
 }
 
-function toggleMenubarVisibility() {
-  let menuButton = document.querySelector("header").firstElementChild,
-    menubar = document.querySelector(".menu-bar");
+function positionMenubarOnWidthChange() {
+  let menubarOverlay = document.querySelector("main").firstElementChild,
+    menubar = document.querySelector(".menu-bar"),
+    // To prevent menu from re-opening or re-closing when the viewport size
+    // changes. The initial value is set based on the width of the viewport
+    // on page load. This is to mainly to prevent the menu bar from opening
+    // on viewports smaller than or equal to 750px.
+    menuFlag751pxUp = window.innerWidth > 750 ? true : false;
 
-  menuButton.addEventListener("click", () => {
-    if (menubar.classList.contains("closed")) {
-      // Remove listener before starting transition to avoid triggering the
-      // listener to hide the menu when the transition ends.
-      menubar.removeEventListener("transitionend", menubarListener);
-
-      // Make menu visible before starting transition to show menu.
-      removeClass(menubar, "hide");
+  const resizeObserver = new ResizeObserver((entry) => {
+    if (entry[0].contentBoxSize[0].inlineSize > 750) {
+      if (menuFlag751pxUp) {
+        menuFlag751pxUp = !menuFlag751pxUp;
+        removeClass(menubar, "hide");
+        removeClass(menubar, "closed");
+        removeClass(menubarOverlay, "dark-background-overlay");
+        addClass(menubarOverlay, "hide");
+      }
     } else {
-      // Hide menubar after it has transitioned outside the viewport.
-      menubar.addEventListener("transitionend", menubarListener);
+      if (!menuFlag751pxUp) {
+        menuFlag751pxUp = !menuFlag751pxUp;
+        addClass(menubar, "closed");
+        addClass(menubar, "hide");
+      }
     }
-    toggleClass(menubar, "closed");
+  });
+
+  resizeObserver.observe(document.body);
+}
+
+function menubarTransitionEndListener() {
+  let menubar = document.querySelector(".menu-bar");
+
+  menubar.addEventListener("transitionend", () => {
+    if (menubar.classList.contains("closed")) {
+      // Hide menubar after it has transitioned outside the viewport.
+      addClass(menubar, "hide");
+    }
   });
 }
 
-// Reason for arrow function:
-// Event Listeners expect a function reference instead of the function itself.
-// To avoid calling function immediately, either bind 'this', create an
-// anonymous function, or have a function return a function.
-let menubarListener = () => {
+function menubarTransitionStartListener() {
   let menubar = document.querySelector(".menu-bar");
-  toggleClass(menubar, "hide");
-};
+
+  menubar.addEventListener("transitionstart", () => {
+    if (!menubar.classList.contains("closed")) {
+      // Make menu visible before starting transition to show menu.
+      removeClass(menubar, "hide");
+    }
+  });
+}
+
+function toggleMenubarVisibility() {
+  let menubarOverlay = document.querySelector("main").firstElementChild,
+    menuButton = document.querySelector("header").firstElementChild,
+    menubar = document.querySelector(".menu-bar");
+
+  menuButton.addEventListener("click", () => {
+    // body and window have same viewport dimensions for this app
+    let windowWidth = window.innerWidth;
+
+    if (windowWidth <= 750) {
+      if (menubarOverlay.classList.contains("dark-background-overlay")) {
+        removeClass(menubarOverlay, "dark-background-overlay");
+        addClass(menubarOverlay, "hide");
+      } else {
+        removeClass(menubarOverlay, "hide");
+        addClass(menubarOverlay, "dark-background-overlay");
+      }
+    }
+
+    toggleClass(menubar, "closed");
+  });
+}
 
 function displayNewProjectOverlayForm() {
   let newProjectButton = document.querySelector(".new-project-button");
