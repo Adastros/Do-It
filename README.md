@@ -21,4 +21,4 @@ This app currently only functions with chromium-based browsers such as Google Ch
 - How to sort, manage, and store data on the UI and through localStorage.
 
 ## Live Link to Application
-https://adastros.github.io/Todo-List/
+https://adastros.github.io/Do-It/
