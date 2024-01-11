@@ -5,8 +5,6 @@ Do It is a simple to-do list web application without a backend. It logs and trac
 
 Data from the app is stored in and retrieved from the user's browser localStorage. 
 
-This app currently only functions with chromium-based browsers such as Google Chrome or Microsoft Edge. 
-
 ## Project Stack
 <img src="https://skillicons.dev/icons?i=javascript,html,css" />
 
