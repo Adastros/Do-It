@@ -77,6 +77,15 @@ function createCancelButtonListener(formOrOverlay, cancelButton) {
   });
 }
 
+function createCloseOverlayListener(formOrOverlay) {
+  formOrOverlay.addEventListener("click", (e) => {
+    // Prevents listener from firing if the target is not the overlay container
+    if (e.target === formOrOverlay) {
+      formOrOverlay.remove();
+    }
+  });
+}
+
 function saveTaskButtonListener(taskForm, taskItemId) {
   let formAddOrSaveTaskButton = taskForm.querySelector(
     ".form-add-or-save-task-button"
@@ -136,6 +145,7 @@ export {
   createDeletePromptOverlayListener,
   addTaskButtonListener,
   createCancelButtonListener,
+  createCloseOverlayListener,
   saveTaskButtonListener,
   doesProjectNameExist,
 };

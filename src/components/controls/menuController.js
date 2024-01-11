@@ -4,6 +4,7 @@ import { clearTaskView, addMainContentBackground } from "./taskController.js";
 import { getTaskSortMethod } from "./taskSortingMethods.js";
 import { saveData, saveTaskItem } from "./webStorageController.js";
 import {
+  createCloseOverlayListener,
   missingValueAggressiveValidation,
   doesProjectNameExist,
 } from "./formControls.js";
@@ -94,19 +95,54 @@ function toggleMenubarVisibility() {
 
     toggleClass(menubar, "closed");
   });
+
+  menubarOverlay.addEventListener("click", () => {
+    // body and window have same viewport dimensions for this app
+    let windowWidth = window.innerWidth;
+
+    if (windowWidth <= 750) {
+      if (menubarOverlay.classList.contains("dark-background-overlay")) {
+        removeClass(menubarOverlay, "dark-background-overlay");
+        addClass(menubarOverlay, "hide");
+      } else {
+        removeClass(menubarOverlay, "hide");
+        addClass(menubarOverlay, "dark-background-overlay");
+      }
+    }
+
+    toggleClass(menubar, "closed");
+  });
+}
+
+// If menu is open in mobile view, close it when other overlays appear
+function closeMobileMenu() {
+  const menubarOverlay = document.querySelector(".dark-background-overlay"),
+    menubar = document.querySelector(".menu-bar");
+
+  console.log(menubarOverlay);
+  // If the menuOverlay does not exist, it is closed and no action is required
+  if (!menubarOverlay) return;
+
+  toggleClass(menubar, "closed");
+  removeClass(menubarOverlay, "dark-background-overlay");
+  addClass(menubarOverlay, "hide");
 }
 
 function displayNewProjectOverlayForm() {
   let newProjectButton = document.querySelector(".new-project-button");
 
   newProjectButton.addEventListener("click", () => {
-    document.body.append(newProjectOverlayForm());
+    closeMobileMenu();
+    
+    const newProjectOverlayFormComponent = newProjectOverlayForm();
+    document.body.append(newProjectOverlayFormComponent);
 
     let newProjectNameNode = document.querySelector("#new-project-name"),
       newProjectAddButton = document.querySelector(
         ".new-project-form-add-button"
       );
 
+    createCloseOverlayListener(newProjectOverlayFormComponent);
     cancelAddingNewProject();
     addNewProject();
     missingValueAggressiveValidation(newProjectNameNode, newProjectAddButton);
@@ -173,4 +209,9 @@ function updateMainContentHeading(text) {
   mainContentHeading.textContent = text;
 }
 
-export { menuController, changeTaskViewListener, updateMainContentHeading };
+export {
+  menuController,
+  changeTaskViewListener,
+  updateMainContentHeading,
+  closeMobileMenu,
+};

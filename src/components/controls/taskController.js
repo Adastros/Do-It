@@ -2,7 +2,7 @@ import { taskForm } from "../appMainContent/taskForm.js";
 import { taskItem } from "../appMainContent/taskItem/taskItem.js";
 import { projectList } from "../menubar/project/projectList.js";
 import { getTaskSortMethod } from "./taskSortingMethods.js";
-import { updateMainContentHeading } from "./menuController.js";
+import { updateMainContentHeading, closeMobileMenu } from "./menuController.js";
 import {
   saveTaskItem,
   getTaskItem,
@@ -15,6 +15,7 @@ import {
   missingValueAggressiveValidation,
   addTaskButtonListener,
   createCancelButtonListener,
+  createCloseOverlayListener,
   saveTaskButtonListener,
 } from "./formControls.js";
 import {
@@ -37,6 +38,8 @@ function addNewTaskButtonListener() {
   let addNewTaskButton = document.querySelector(".add-new-task-button");
 
   addNewTaskButton.addEventListener("click", () => {
+    closeMobileMenu();
+
     let newTaskForm = taskForm("Add Task", createTaskItemObj()),
       newTaskFormCancelButton = newTaskForm.querySelector(
         ".form-cancel-button"
@@ -49,7 +52,8 @@ function addNewTaskButtonListener() {
         ".form-add-or-save-task-button"
       );
 
-    // Activate listeners for form buttons
+    // Activate listeners for form overlay and buttons
+    createCloseOverlayListener(newTaskForm);
     createCancelButtonListener(newTaskForm, newTaskFormCancelButton);
     addTaskButtonListener(newTaskForm);
     missingValueAggressiveValidation(formTaskHeader, formAddTaskButton);
