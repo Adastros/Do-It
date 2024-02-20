@@ -91,6 +91,7 @@ function AddEditButtonListener(editButton, taskItemId) {
       );
 
     // Set listeners for task edit form
+    createCloseOverlayListener(taskEditForm);
     createCancelButtonListener(taskEditForm, newTaskFormCancelButton);
     saveTaskButtonListener(taskEditForm, taskItemId);
     missingValueAggressiveValidation(formTaskHeader, formAddTaskButton);
